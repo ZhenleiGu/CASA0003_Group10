@@ -494,8 +494,9 @@
     const map = new mapboxgl.Map({
         container: 'map', // container ID
         style: 'mapbox://styles/mapbox/light-v10', // style URL
-        center: [-0.133273, 51.524351], // starting position [lng, lat]
-        zoom: 1 // starting zoom
+        center: [-30.133273, 41.524351], // starting position [lng, lat]
+        zoom: 1.2, // starting zoom
+        cooperativeGestures: true
     });
     
     var filterYear = [ "==", [ "get", "year" ],'2010'];
@@ -581,7 +582,7 @@
             type: 'fill',
             source: {
               type: 'geojson',
-              data: 'new_map.geojson' // replace this with the url of your own geojson
+              data: 'small_map.geojson' // replace this with the url of your own geojson
             },
             "filter" : ['all', filterYear, filterItem],
 //            "filter" : ['food',
