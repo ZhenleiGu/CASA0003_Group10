@@ -1,0 +1,396 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>Category</title>
+<meta name="viewport" content="initial-scale=1,maximum-scale=1,user-scalable=no">
+<link href="https://api.mapbox.com/mapbox-gl-js/v2.8.2/mapbox-gl.css" rel="stylesheet">
+<script src="https://api.mapbox.com/mapbox-gl-js/v2.8.2/mapbox-gl.js"></script>
+<style>
+body { margin: 0; padding: 0; }
+#map { position: absolute; top: 0; bottom: 0; width: 100%; }
+</style>
+</head>
+<body>
+    
+    
+<style>
+    .legend {
+    font-family: Arial, sans-serif;
+    background-color: rgba(255, 255, 255, 0.712);
+    border-radius: 3px;
+    /* bottom: 30px; */
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+    font: 12px/20px 'Helvetica Neue', Arial, Helvetica, sans-serif;
+    padding: 10px;
+    position: absolute;
+    left:10px;
+    /* right: 10px; */
+    top:10px;
+    z-index: 1;
+    }
+ 
+    .legend h4 {
+    margin: 0 0 10px;
+    }
+ 
+    .legend div span {
+    border-radius: 50%;
+    display: inline-block;
+    height: 10px;
+    margin-right: 5px;
+    width: 10px;
+    }
+
+    .mapboxgl-popup-content {
+        /* overflow-y: scroll; */
+        max-height: 280px;
+        width: 100%;
+        background-color: #ffffff;
+        font-family: 'Open Sans', sans-serif;
+        
+    }
+
+    .mapboxgl-popup-content h2 {
+        color:rgb(70, 70, 70);
+    }
+
+    .mapboxgl-popup-content h3 {
+        color:rgb(70, 70, 70);
+    }
+
+    .mapboxgl-popup-content table {
+      /*border:1px solid rgb(92, 91, 91);*/
+      text-align: center;
+      width:33%;
+      color:rgb(70, 70, 70);
+      border-collapse: collapse;
+    }
+
+    .mapboxgl-popup-content tr {
+        border-bottom: 1px solid rgb(224, 224, 224);
+    }
+
+    /* .mapboxgl-popup-content tr:hover  {
+         background-color: #a3b9b9;
+    } */
+
+    .mapboxgl-popup-content th {
+      color:rgb(70, 70, 70);
+      /*border:1px solid rgb(92, 91, 91);*/
+      padding: 5px;
+      text-align: center;
+      width:33%;
+    }
+
+    .mapboxgl-popup-content td {
+      /*border:1px solid rgb(92, 91, 91);*/
+      padding: 5px;
+      text-align: center;
+      width:33%;
+      color:rgb(70, 70, 70);
+    }
+    
+/*
+.mapboxgl-popup{
+    transform:none !important;
+     top: 15%;
+    left: 10px;
+}
+*/
+    .mapboxgl-popup-anchor-top .mapboxgl-popup-tip,
+    .mapboxgl-popup-anchor-bottom .mapboxgl-popup-tip,
+    .mapboxgl-popup-anchor-center .mapboxgl-popup-tip,
+    .mapboxgl-popup-anchor-left .mapboxgl-popup-tip,
+    .mapboxgl-popup-anchor-right .mapboxgl-popup-tip,
+    .mapboxgl-popup-anchor-bottom-right .mapboxgl-popup-tip,
+    .mapboxgl-popup-anchor-bottom-left .mapboxgl-popup-tip,
+    .mapboxgl-popup-anchor-top-right .mapboxgl-popup-tip, 
+    .mapboxgl-popup-anchor-top-left .mapboxgl-popup-tip{
+        display:none !important;}
+        
+    .filter-group {
+    font: 12px/20px 'Helvetica Neue', Arial, Helvetica, sans-serif;
+    font-weight: 600;
+    position: absolute;
+    top: 200px;
+    left: 10px;
+    z-index: 1;
+    border-radius: 3px;
+    width: 120px;
+    color: rgb(70, 70, 70);
+    }
+
+    .filter-group input[type='checkbox']:first-child + label {
+    border-radius: 3px 3px 0 0;
+    }
+
+    .filter-group label:last-child {
+    border-radius: 0 0 3px 3px;
+    border: none;
+    }
+
+    .filter-group input[type='checkbox'] {
+    display: none;
+    }
+
+    .filter-group input[type='checkbox'] + label {
+    background-color: #3386c0;
+    display: block;
+    cursor: pointer;
+    padding: 10px;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.25);
+    }
+
+    .filter-group input[type='checkbox'] + label {
+    background-color: #f3f3f3e7;
+    text-transform: capitalize;
+    }
+
+    .filter-group input[type='checkbox'] + label:hover
+    .filter-group input[type='checkbox']:checked + label {
+    background-color: rgba(255, 255, 255, 0.712);
+    }
+
+    .filter-group input[type='checkbox']:checked + label:before {
+    content: '✔';
+    margin-right: 5px;
+}
+
+
+</style>
+
+<div id="map"></div>
+
+<nav id="filter-group" class="filter-group"></nav>
+
+<div id="state-legend" class="legend">
+<h1 style="color:rgb(70, 70, 70);font-family:verdana">The Most Imported Food Products</h1>
+<!-- <div><span style="background-color: hsl(248, 67%, 63%)"></span>Ingredients</div>
+<div><span style="background-color: hsl(136, 23%, 61%)"></span>Fruit and Vegetables</div>
+<div><span style="background-color: hsl(338, 47%, 81%)"></span>Meat</div>
+<div><span style="background-color: hsl(26, 75%, 63%)"></span>Misc</div>
+<div><span style="background-color: hsl(2, 70%, 61%)"></span>Confectionary</div>
+<div><span style="background-color: hsl(101, 30%, 42%)"></span>Cereals, grains and seeds</div>
+<div><span style="background-color: hsl(400, 32%, 52%)"></span>Dairy</div>
+<div><span style="background-color: hsl(190 ,55%, 62%)"></span>Drink</div>
+<div><span style="background-color: hsl(0, 100%, 100%)"></span>Null</div> -->
+<label style="color:rgb(70, 70, 70);font-family:Monospace;font-size:12px;font-style:italic;">
+    Click on the map to see detailed imported products. <br \>
+    Selection box below help to filter the categories.
+</label>
+<br \>
+<p class="credit" style="color:gray; font-size:10px;font-weight: bold; font-family:Monospace;">
+    Category Data: <a href="https://www.uktradeinfo.com/trade-data/ots-custom-table/" style="color:grey; font-size:9px;">UK Trade Info</a> &nbsp;&nbsp;&nbsp;
+    Shape Data: <a href="https://www.naturalearthdata.com/downloads/50m-cultural-vectors/50m-admin-0-countries-2/" style="color:grey; font-size:9px;">Natural Earth</a>
+    <br \>
+    Image: <a href="rawpixel.com" style="color:grey; font-size:9px;">rawpixel</a> &nbsp;
+    <a href="https://www.vectorstock.com/" style="color:grey; font-size:9px;">VectorStock</a> &nbsp;
+    <a href="https://www.vecteezy.com/" style="color:grey; font-size:9px;">Vecteezy</a> &nbsp;
+    <a href="https://www.freepik.com/home" style="color:grey; font-size:9px;">freepik</a> &nbsp;
+</p>
+</div>
+
+<script>
+	mapboxgl.accessToken = 'pk.eyJ1IjoiZ29kd2luZ3UiLCJhIjoiY2ttaGpqbTIyMDd3YjJxbXUwNmRoZXBqZyJ9.wj6eUX4MZn91_nqZ3BeOGA';
+    const map = new mapboxgl.Map({
+        container: 'map',
+        style: 'mapbox://styles/mapbox/light-v10',
+        center: [0, 53],
+        zoom: 1
+    });
+    let hoveredStateId = null;
+
+    // load data
+    map.on('load', () => {
+        map.addSource('states', {
+            'type': 'geojson',
+            'data': 'map.geojson'
+        });
+
+        // The feature-state dependent fill-opacity expression will render the hover effect
+        // when a feature's hover state is set to true.
+//        map.addLayer({
+//            'id': 'state-fills',
+//            'type': 'fill',
+//            'source': 'states',
+//            'layout': {},
+//            'paint': {
+//                'fill-color': '#627BC1',
+//                'fill-opacity': [
+//                    'case',
+//                    ['boolean', ['feature-state', 'hover'], false],
+//                    1,
+//                    0.5
+//                ]
+//            }
+//        });
+        
+        
+    const filterGroup = document.getElementById('filter-group');   
+    var list = ["Ingredients",
+                  "Fruit and Vegetables",
+                  "Meat",
+                  "Misc",
+                  "Confectionary",
+                  "Dairy",
+                  "Drink",
+                  "Cereals, grains and seeds"]
+
+    var mypopup = new mapboxgl.Popup();
+    var color_list = ["hsl(248, 67%, 63%)",
+                      "hsl(136, 23%, 61%)",
+                      "hsl(338, 47%, 81%)",
+                      "hsl(26, 75%, 63%)",
+                      "hsl(2, 70%, 61%)",
+                      "hsl(400, 32%, 52%)",
+                      "hsl(190 ,55%, 62%)",
+                      "hsl(212, 23%, 52%)"];
+    var color_position = 0;
+    
+    for (const c of list){
+        map.addLayer(
+            {
+                'id': c,
+                'source': 'states',
+                //'maxzoom': zoomThreshold,
+                'type': 'fill',
+                'filter': ['==', 'Category', c],
+                // only include features for which the "isState"
+                // property is "true"
+                //'filter': ['==', 'isState', true],
+                'paint': {
+                    'fill-color': [
+                      "match",
+                      ["get", "Category"],
+                      "Ingredients",
+                      "hsl(248, 67%, 63%)",
+                      "Fruit and Vegetables",
+                      "hsl(136, 23%, 61%)",
+                      "Meat",
+                      "hsl(338, 47%, 81%)",
+                      "Misc",
+                      "hsl(26, 75%, 63%)",
+                      "Confectionary",
+                      "hsl(2, 70%, 61%)",
+                      "Dairy",
+                      "hsl(400, 32%, 52%)",
+                      "Drink",
+                      "hsl(190 ,55%, 62%)",
+                      "Cereals, grains and seeds",
+                      "hsl(212, 23%, 52%)",
+                      "hsla(0, 0%, 0%, 0)"
+                    ],
+                'fill-opacity': [
+                        'case',
+                        ['boolean', ['feature-state', 'hover'], false],
+                        0.5,
+                        0.8
+                    ]
+                }
+                },
+            'waterway-label'
+            );
+        
+            const input = document.createElement('input');
+            input.type = 'checkbox';
+            input.id = c;
+            input.value = c;
+            input.checked = true;
+            console.log(input)
+            filterGroup.appendChild(input);
+            
+            const label = document.createElement('label');
+            label.setAttribute('for', c);
+            const color = 'color:'+ color_list[color_position];
+            label.setAttribute('style', color)
+            label.textContent = c;
+            filterGroup.appendChild(label);
+
+            input.addEventListener('change', (e) => {
+                map.setLayoutProperty(
+                c,
+                'visibility',
+                e.target.checked ? 'visible' : 'none'
+                );
+            });
+            map.on('click', c, function (e) {
+            mypopup
+                .setLngLat(e.lngLat)
+                .setHTML("<h2>"+"Country: " + e.features[0].properties.Country + "</h2> "+
+                "<table style=width:100%;>"+  "<tr>" +
+                      "<th>Category</th>"+
+                       "<th>Item</th>" + 
+                        "<th>Pic</th>"+
+                    "</tr>"+
+                    "<tr>"+
+                      "<td>"+e.features[0].properties.Category+"</td>"+
+                      "<td>"+e.features[0].properties.Item+"</td>"+
+                      "<td>"+'<img src="'+"./pic/"+ e.features[0].properties.Item + ".jpg" +'" style="width:100px;height:100px;">'+"</td>"+
+                      "</tr>"+
+                      "</table>"
+                )
+                .addTo(map);
+            });
+
+
+            // Change the cursor to a pointer when the mouse is over the stations layer.
+              map.on('mouseenter', c, function () {
+              map.getCanvas().style.cursor = 'pointer';
+            });
+
+            // Change it back to a pointer when it leaves and remove the popup window.
+            map.on('mouseleave', c, function () {
+                map.getCanvas().style.cursor = '';
+                //mypopup.remove();
+            });
+        
+            // When the user moves their mouse over the state-fill layer, we'll update the
+            // feature state for the feature under the mouse.
+            map.on('mousemove', c, (e) => {
+                if (e.features.length > 0) {
+                    if (hoveredStateId !== null) {
+                        map.setFeatureState(
+                            { source: 'states', id: hoveredStateId },
+                            { hover: false}
+                        );
+                    }
+                    hoveredStateId = e.features[0].id;
+                    map.setFeatureState(
+                        { source: 'states', id: hoveredStateId },
+                        { hover: true}
+                    );
+                }
+            });
+        
+            // When the mouse leaves the state-fill layer, update the feature state of the
+            // previously hovered feature.
+            map.on('mouseleave', c, () => {
+                if (hoveredStateId !== null) {
+                    map.setFeatureState(
+                        { source: 'states', id: hoveredStateId },
+                        { hover: false}
+                    );
+                }
+                hoveredStateId = null;
+            });
+            
+            color_position = color_position + 1 ;
+        
+    }
+        
+    map.addLayer({
+            'id': 'state-borders',
+            'type': 'line',
+            'source': 'states',
+            'layout': {},
+            'paint': {
+                'line-color': '#627BC1',
+                'line-width': 1.5
+            }
+        });      
+    });
+</script>
+
+</body>
+</html>
