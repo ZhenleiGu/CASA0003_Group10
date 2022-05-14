@@ -7,7 +7,7 @@
 
 </head>
 <body>
-    <div id="5058e9904be04b1692454753c58664c0" class="chart-container" style="width:900px; height:500px;"></div>
+    <div id="5058e9904be04b1692454753c58664c0" class="chart-container" style="width:550px; height:480px;"></div>
     <script>
         var chart_5058e9904be04b1692454753c58664c0 = echarts.init(
             document.getElementById('5058e9904be04b1692454753c58664c0'), 'white', {renderer: 'canvas'});
@@ -20,6 +20,9 @@
     "animationDurationUpdate": 300,
     "animationEasingUpdate": "cubicOut",
     "animationDelayUpdate": 0,
+    grid: {
+       top: '100px',
+    },
     "color": [
         "#c23531",
         "#2f4554",
@@ -762,7 +765,7 @@
                 "Fish": true
             },
             "show": true,
-            "padding": 5,
+            "padding": 40,
             "itemGap": 10,
             "itemWidth": 25,
             "itemHeight": 14
