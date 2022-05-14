@@ -1,0 +1,816 @@
+<html>
+<head>
+    <title>Food import</title>
+    <meta name="viewport" content="initial-scale=1.0, user-scalable=no" />
+    <link href="https://api.mapbox.com/mapbox-gl-js/v2.7.0/mapbox-gl.css" rel="stylesheet">
+    <script src="https://api.mapbox.com/mapbox-gl-js/v2.7.0/mapbox-gl.js"></script>
+    <script charset="utf-8" src="https://d3js.org/d3.v4.min.js"></script>
+    <style>
+
+        body { margin: 0; padding: 0; }
+
+
+        #title {
+            position: absolute;
+            background-color: #fff;
+            box-shadow:0 1px 2px rgba(0, 0, 0, 0.20);
+            border-radius: 3px;
+            padding: 15px;
+            margin-top: 15px;
+            margin-left: 15px;
+        }
+
+        #title h2 {
+            line-height: 24px;
+            margin: 0;
+        }
+
+        #title p.credit {
+           margin: 10px 0 0 0;
+           padding: 0;
+        }
+
+        #map { position: absolute; top: 0; bottom: 0; width: 100%; };
+        
+        
+
+    </style>
+</head>
+
+    
+<body>
+
+<style>
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    }
+
+    #map {
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      width: 100%;
+    }
+
+    h1 {
+      font-size: 20px;
+      line-height: 30px;
+    }
+
+    h2 {
+      font-size: 14px;
+      line-height: 20px;
+      margin-bottom: 10px;
+    }
+
+    a {
+      text-decoration: none;
+      color: #2dc4b2;
+    }
+
+    #console {
+      font: 12px/20px 'Verdana', Monospace, Monospace, Monospace;
+      position: absolute;
+      width: 360px;
+      min-width: 360px;
+      width: 240px;
+      margin: 10px;
+      padding: 10px 20px;
+      background-color: rgba(255, 255, 255, 0.712);
+    }
+    
+    .session {
+      margin-bottom: 20px;
+    }
+
+    .session table {
+    border: none;
+    width: 100%;
+    }
+
+    .session h2 {
+    line-height: 24px;
+    display: block;
+    margin: 0 0 10px;
+}
+
+    .session label {
+        font: 18px/20px 'Helvetica Neue', Arial, Helvetica, sans-serif;
+        display: block;
+        /* vertical-align: middle; */
+        margin: 0 0 0 10px;
+        padding: 0;
+    }
+
+    .session .legend .bar {
+        height: 10px;
+        width: 100%;
+        background: linear-gradient(to right, #FCA107, #7F3121);
+    }
+
+    .session input {
+        background-color: transparent;
+        display: inline-block;
+        width: 100%;
+        min-width: 220px;
+        position: relative;
+        margin: 6px 0 0 0;
+        cursor: ew-resize;
+    }
+
+    .session p.credit {
+      margin: 0;
+      padding: 0;
+
+    }
+
+    .row {
+      height: 12px;
+      width: 100%;
+    }
+
+    .colors {
+      background: linear-gradient(to right, #2dc4b2, #3bb3c3, #669ec4, #8b88b6, #a2719b, #aa5e79);
+      margin-bottom: 5px;
+    }
+
+    .label {
+      width: 15%;
+      display: inline-block;
+      text-align: center;
+    }
+    
+    body {
+      margin: 0;
+      padding: 0;
+    }
+
+    h2,
+    h3 {
+      margin: 10px;
+      font-size: 18px;
+    }
+
+    h3 {
+      font-size: 16px;
+    }
+
+    p {
+      margin: 10px;
+    }
+
+    /**
+    * Create a position for the map
+    * on the page */
+    #map {
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      width: 100%;
+    }
+
+    /**
+    * Set rules for how the map overlays
+    * (information box and legend) will be displayed
+    * on the page. */
+    .map-overlay {
+      position: absolute;
+      bottom: -10;
+      right:10;
+      background: #fff;
+      margin-right: 20px;
+      font-family: Arial, sans-serif;
+      overflow: auto;
+      border-radius: 3px;
+      width: 150px;
+      min-width: 150px;
+      height:165px;
+      min-height: 165px;
+      background-color: rgba(224, 224, 224, 0.712);
+    }
+
+    #features {
+      top: 0;
+      height: 100px;
+      margin-top: 20px;
+      width: 250px;
+    }
+
+    #legend {
+      padding: 10px;
+      box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+      line-height: 18px;
+      height: 150px;
+      margin-bottom: 40px;
+      width: 100px;
+    }
+
+    .legend-key {
+      display: inline-block;
+      border-radius: 20%;
+      width: 10px;
+      height: 10px;
+      margin-right: 5px;
+    }
+    form {
+      display: flex;
+      flex-wrap: wrap;
+      flex-direction: column;
+    }
+
+    label {
+      display: flex;
+      cursor: pointer;
+      font-weight: 50;
+      position: relative;
+      overflow: hidden;
+      margin-bottom: 0.375em;
+      /* Accessible outline */
+      /* Remove comment to use */
+      /*
+        &:focus-within {
+            outline: .125em solid $primary-color;
+        }
+      */
+    }
+    label input {
+      position: absolute;
+      left: -9999px;
+    }
+
+    label input:checked + span {
+      background-color: #f1d99b;
+      width: 8em;
+    }
+    label input:checked + span:before {
+      box-shadow: inset 0 0 0 0.4375em hsl(45, 64%, 66%);
+    }
+    label span {
+      display: flex;
+      align-items: center;
+      padding: 0.375em 0.75em 0.375em 0.375em;
+      border-radius: 99em;
+      transition: 0.25s ease;
+      width: 8em;
+    }
+    label span:hover {
+      background-color: #ecd79d;
+    }
+    label span:before {
+      display: flex;
+      flex-shrink: 0;
+      content: "";
+      background-color: #fff;
+      width: 1.5em;
+      height: 1.5em;
+      border-radius: 50%;
+      margin-right: 0;
+      transition: 0.25s ease;
+      box-shadow: inset 0 0 0 0.125em #8f71398e;
+    }
+
+    .container {
+      /* position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0; */
+      width: 70%;
+      padding: -9999px;
+      margin: 0rem;
+      display: flex;
+    }
+
+    .custom-select{
+      position: relative;
+      display: block;
+      max-width: 400px;
+      min-width: 180px;
+      border: 1px solid #cac9cc;
+      background-color: #9b9b9b7c;
+      z-index: 10;
+    }
+    
+
+
+    .mapboxgl-popup-content {
+        /* overflow-y: scroll; */
+        max-height: 280px;
+        width: 100%;
+        background-color: #d8d8d8ce;
+        font-family: 'Open Sans', sans-serif;
+        
+    }
+
+    .mapboxgl-popup-content h2 {
+        color:rgb(70, 70, 70);
+    }
+
+    .mapboxgl-popup-content h3 {
+        color:rgb(70, 70, 70);
+    }
+
+    .mapboxgl-popup-content table {
+      /*border:1px solid rgb(92, 91, 91);*/
+      text-align: center;
+      width:33%;
+      color:rgb(70, 70, 70);
+      border-collapse: collapse;
+    }
+
+    .mapboxgl-popup-content tr {
+        border-bottom: 1px solid rgb(224, 224, 224);
+    }
+
+    .mapboxgl-popup-content tr:hover  {
+        background-color: #a3b9b9;
+    }
+
+    .mapboxgl-popup-content th {
+      color:rgb(70, 70, 70);
+      /*border:1px solid rgb(92, 91, 91);*/
+      padding: 5px;
+      text-align: center;
+      width:33%;
+    }
+
+    .mapboxgl-popup-content td {
+      /*border:1px solid rgb(92, 91, 91);*/
+      padding: 5px;
+      text-align: center;
+      width:33%;
+      color:rgb(70, 70, 70);
+    }
+    
+
+    /* The Modal (background) */
+    .modal {
+      display: none; /* Hidden by default */
+      position: fixed; /* Stay in place */
+      z-index: 1; /* Sit on top */
+      padding-top: 100px; /* Location of the box */
+      left: 200px;
+      top: 200px;
+      width: 500px; /* Full width */
+      height: 500px; /* Full height */
+    }
+
+    /* Modal Content */
+    .modal-content {
+      background-color: #fefefecc;
+      overflow: hidden;
+      /* margin: auto;
+      padding: 0px;
+      border: 0px solid #888;
+      width: 100%; */
+    }
+
+    /* The Close Button */
+    .close {
+      color: #aaaaaa;
+      float: right;
+      font-size: 28px;
+      font-weight: bold;
+    }
+
+    .close:hover,
+    .close:focus {
+      color: #000;
+      text-decoration: none;
+      cursor: pointer;
+    }
+
+</style>
+<div id="map"></div> 
+<div id='console'>
+    <h1  style="color:rgb(70, 70, 70);font-size:25px;">Import Value (m$)</h1>
+    <div class='session' id='sliderbar'>
+      <table><tr><td>
+        <input id='slider' class='row' type='range' min='2010' max='2019' step='1' value='2010' />
+        </td><td> 
+        <label style="color:rgb(70, 70, 70);font-family:georgia,garamond,serif;font-size:18px;font-style:italic;">Year: </label>
+        <label id='active-hour' style="color:rgb(70, 70, 70);font-family:georgia,garamond,serif;font-size:20px;font-style:italic;">2010</label>
+        <label style="color:rgb(70, 70, 70);font-size:9px;font-family:georgia,garamond,serif;">Slide the bar to change year</label>
+          </td></tr></table>
+    </div>
+    <div class='session'>
+    <table><tr><td>
+      <h2 style="color:rgb(70, 70, 70);">Select to see differnet categories</h2>
+
+      <!-- <label style="color:rgb(70, 70, 70);font-size:9px;font-family:georgia,garamond,serif;">Select to see </label> -->
+      </td></tr>
+      <tr><td>
+      <div class="container" id="filters">
+        <form>
+        <label for='total'>
+          <input id='total' type='radio' name='toggle' value=0 checked='checked'>
+          <span style="color:rgb(70, 70, 70);font-family:georgia,garamond,serif;font-size:15px;font-style:italic;"> Total Food </span>
+        </label>
+        <label for="coffee">
+          <input id='coffee' type='radio' name='toggle' value=1>
+          <span style="color:rgb(70, 70, 70);font-family:georgia,garamond,serif;font-size:15px;font-style:italic;"> Coffee </span>
+        </label>
+        <label for="tea">
+        <input id='tea' type='radio' name='toggle' value=2>
+        <span style="color:rgb(70, 70, 70);font-family:georgia,garamond,serif;font-size:15px;font-style:italic;"> Tea </span>
+        </label>
+      <label for="veg">
+        <input id='veg' type='radio' name='toggle' value=3>
+        <span style="color:rgb(70, 70, 70);font-family:georgia,garamond,serif;font-size:15px;font-style:italic;"> Vegetable </span>
+      </label>
+      <label for="seafood">
+        <input id='seafood' type='radio' name='toggle' value=4>
+        <span style="color:rgb(70, 70, 70);font-family:georgia,garamond,serif;font-size:15px;font-style:italic;"> Seafood </span>
+      </label>
+      <p style="color:rgb(70, 70, 70);font-size:11px;font-family:georgia,garamond,serif;width: 350px;">Put Mouse on the Map to See the Detail Values for Each Country </p>
+      <!-- <iframe id="barchart" src="chart/coffee.html" height="auto" width="auto" frameBorder="0"></iframe> -->
+    </form>
+        </div></td></tr>
+        </table>
+
+    <button id="myBtn">Open Bar Chart</button>
+    <!-- The Modal -->
+    <div id="myModal" class="modal">
+      <!-- Modal content -->
+      <div class="modal-content">
+        <span class="close">&times;</span>
+        <!-- <p>Some text in the Modal..</p> -->
+        <p><iframe id="barchart" src="chart/total.html" frameBorder="0" height="380px" width="500px" ></iframe></p>
+      </div>
+    </div>
+    <br >
+    <p class="credit" style="color:gray; font-size:10px;font-weight: bold; font-family:Monospace;">
+      Suicide Data: <a href="https://data.london.gov.uk/dataset/suicide-mortality-rates-borough" style="color:grey;font-size:9px;">London Datastore</a>
+      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+      Borough Data: <a href="https://data.gov.uk/dataset/248f5f04-23cf-4470-9216-0d0be9b877a8/london-borough-profiles-and-atlas/datafile/1e5d5226-a1a7-4097-afbf-d3bd39226c39/preview" style="color:grey; font-size:9px;">GOV.UK</a>
+  </p>
+    </div>
+</div>
+    
+    <div class='map-overlay' id='legend'></div>
+    
+</body>
+    
+<script>
+    mapboxgl.accessToken = 'pk.eyJ1IjoiZ29kd2luZ3UiLCJhIjoiY2ttaGpqbTIyMDd3YjJxbXUwNmRoZXBqZyJ9.wj6eUX4MZn91_nqZ3BeOGA';
+    const map = new mapboxgl.Map({
+        container: 'map', // container ID
+        style: 'mapbox://styles/mapbox/light-v10', // style URL
+        center: [-0.133273, 51.524351], // starting position [lng, lat]
+        zoom: 1 // starting zoom
+    });
+    
+    var filterYear = [ "==", [ "get", "year" ],'2010'];
+    var filterItem = [ "==", [ "get", "item" ],'total'];
+    var itemslist = ['total','coffee','tea','veg','seafood'];
+    var item = 0
+    var total_filter = [
+                    'interpolate',
+                    ['linear'],
+                    ['number', ['get', 'value']],
+                    0,'#fff5f0', 
+                    5000000,'#fee0d2',
+                    50000000,'#fcbba1',
+                    100000000,'#fc9272',
+                    500000000,'#fb6a4a',
+                    1000000000,'#ef3b2c',
+                    5000000000,'#cb181d',
+                    10000000000,'#a50f15',
+                    100000000000,'#67000d'
+                    ];
+    var coffee_filter = [
+                    'interpolate',
+                    ['linear'],
+                    ['number', ['get', 'value']],
+                    0,'#ffffe5', 
+                    1000000,'#fee6ce',
+                    5000000,'#fdd0a2',
+                    10000000,'#fdae6b',
+                    50000000,'#fd8d3c',
+                    100000000,'#f16913',
+                    500000000,'#d94801',
+                    1000000000,'#a63603',
+                    5000000000,'#7f2704'
+                    ]
+    var tea_filter = [
+                    'interpolate',
+                    ['linear'],
+                    ['number', ['get', 'value']],
+                    0,'#f7fcf5', 
+                    1000000,'#e5f5e0',
+                    5000000,'#c7e9c0',
+                    10000000,'#a1d99b',
+                    50000000,'#74c476',
+                    100000000,'#41ab5d',
+                    500000000,'#238b45',
+                    1000000000,'#006d2c',
+                    5000000000,'#00441b'
+                    ]
+    var veg_filter = [
+                    'interpolate',
+                    ['linear'],
+                    ['number', ['get', 'value']],
+                    0,'#fcfbfd', 
+                    1000000,'#efedf5',
+                    5000000,'#dadaeb',
+                    10000000,'#bcbddc',
+                    50000000,'#9e9ac8',
+                    100000000,'#807dba',
+                    500000000,'#6a51a3',
+                    1000000000,'#54278f',
+                    5000000000,'#3f007d'
+                    ]
+    var sea_filter = [
+                    'interpolate',
+                    ['linear'],
+                    ['number', ['get', 'value']],
+                    0, '#f7fbff', 
+                    1000000, '#deebf7',
+                    5000000,'#c6dbef',
+                    10000000,'#9ecae1',
+                    50000000,'#6baed6',
+                    100000000,'#4292c6',
+                    500000000,'#2171b5',
+                    1000000000,'#08519c',
+                    5000000000,'#08306b'
+                    ]
+    
+    
+    map.on('load', function() {
+        console.log(filterYear)
+        map.addLayer({
+            id: 'food',
+            type: 'fill',
+            source: {
+              type: 'geojson',
+              data: './new_map.geojson' // replace this with the url of your own geojson
+            },
+            "filter" : ['all', filterYear, filterItem],
+//            "filter" : ['food',
+//                        ["==", [ "get", "item" ], 'tea'],
+//                        
+//                        ["==", [ "get", "year" ], '2012'] ],
+            paint: {
+              'fill-color': [
+                "case",
+                ["==", ["get", "item"], 'total'],
+                    total_filter,
+                    ["case",["==", ["get", "item"], 'coffee'],
+                            coffee_filter,
+                            ["case",["==", ["get", "item"], 'tea'],
+                                tea_filter,
+                                ["case",["==", ["get", "item"], 'veg'],
+                                    veg_filter,
+                                    sea_filter
+                                ]
+                            ]   
+                    ]
+                       
+              ],
+              'fill-opacity': 0.7,
+            },
+            
+            
+          },'waterway-label');
+        });
+    
+        
+        document.getElementById('slider').addEventListener('input', (event) => {
+          const year = parseInt(event.target.value);
+          //map.setFilter('food', [ "==", [ "get", "year" ],  String(year)]);
+          filterYear = [ "==", [ "get", "year" ], String(year)];
+          console.log(filterItem)
+          map.setFilter('food', ['all', filterYear, filterItem]);
+          document.getElementById('active-hour').innerText = year;
+        });
+        
+        document.getElementById('filters').addEventListener('change', (event) => {
+          item = event.target.value;
+          filterItem = [ "==", [ "get", "item" ], String(itemslist[item])];
+          console.log(filterYear)
+          map.setFilter('food', ['all', filterYear, filterItem]);
+          //map.setFilter('food', [ "==", [ "get", "item" ],  String(day)]);
+        });
+        
+        
+        const layers = [
+          [' 0-5M',
+          ' 5-50M',
+          ' 50-100M',
+          ' 100-500M',
+          ' 500-1000M',
+          ' 1000-5000M',
+          ' 5000-10000M',
+          ' 10000-100000M',
+          ' 100000M+'], //total
+
+          [' 0-1M',
+          ' 1-5M',
+          ' 5-10M',
+          ' 10-50M',
+          ' 50-100M',
+          ' 100-500M',
+          ' 500-1000M',
+          ' 1000-5000M',
+          ' 5000M+'], //coffee
+            
+          [' 0-1M',
+          ' 1-5M',
+          ' 5-10M',
+          ' 10-50M',
+          ' 50-100M',
+          ' 100-500M',
+          ' 500-1000M',
+          ' 1000-5000M',
+          ' 5000M+'], //tea
+            
+          [' 0-1M',
+          ' 1-5M',
+          ' 5-10M',
+          ' 10-50M',
+          ' 50-100M',
+          ' 100-500M',
+          ' 500-1000M',
+          ' 1000-5000M',
+          ' 5000M+'], //veg
+          
+          [' 0-1M',
+          ' 1-5M',
+          ' 5-10M',
+          ' 10-50M',
+          ' 50-100M',
+          ' 100-500M',
+          ' 500-1000M',
+          ' 1000-5000M',
+          ' 5000M+'], //seafood
+        ];
+        const colors = [
+            [
+              '#fff5f0',
+              '#fee0d2',
+              '#fcbba1',
+              '#fc9272',
+              '#fb6a4a',
+              '#ef3b2c',
+              '#cb181d',
+              '#a50f15',
+              '#67000d'
+            ], //total
+            [
+              '#fff5eb',
+              '#fee6ce',
+              '#fdd0a2',
+              '#fdae6b',
+              '#fd8d3c',
+              '#f16913',
+              '#d94801',
+              '#a63603',
+              '#7f2704', 
+            ], //coffee
+            [
+              '#f7fcf5',
+              '#e5f5e0',
+              '#c7e9c0',
+              '#a1d99b',
+              '#74c476',
+              '#41ab5d',
+              '#238b45',
+              '#006d2c',
+              '#00441b'       
+            ],//tea
+            [
+              '#fcfbfd',
+              '#efedf5',
+              '#dadaeb',
+              '#bcbddc',
+              '#9e9ac8',
+              '#807dba',
+              '#6a51a3',
+              '#54278f',
+              '#3f007d'
+            ],//veg
+            [
+              '#f7fbff',
+              '#deebf7',
+              '#c6dbef',
+              '#9ecae1',
+              '#6baed6',
+              '#4292c6',
+              '#2171b5',
+              '#08519c',
+              '#08306b'
+            ]//seafood
+        ];
+    
+        const legend = document.getElementById('legend');
+        
+        function deleteChild() { 
+            var el = document.getElementById('legend');
+            var childs = el.childNodes;
+            for(var i = childs .length - 1; i >= 0; i--) {
+                 el.removeChild(childs[i]);
+            }
+        } 
+        
+        layers[0].forEach((layer, i) => {
+          const color = colors[0][i];
+          const it = document.createElement('div');
+          const key = document.createElement('span');
+          key.className = 'legend-key';
+          key.style.backgroundColor = color;
+
+          const value = document.createElement('span');
+          value.innerHTML = `${layer}`;
+          it.appendChild(key);
+          it.appendChild(value);
+          legend.appendChild(it);
+        });
+        
+        document.getElementById('filters').addEventListener('change', (event) => {
+            item = event.target.value;
+            console.log(layers[item]);
+            deleteChild();
+            const legend = document.getElementById('legend');
+            layers[item].forEach((layer, i) => {
+              const color = colors[item][i];
+              const it = document.createElement('div');
+              const key = document.createElement('span');
+              key.className = 'legend-key';
+              key.style.backgroundColor = color;
+              const value = document.createElement('span');
+              value.innerHTML = `${layer}`;
+              it.appendChild(key);
+              it.appendChild(value);
+              legend.appendChild(it);
+              console.log(legend)
+            });
+        });
+
+        // Get the modal
+          var modal = document.getElementById("myModal");
+
+          // Get the button that opens the modal
+          var btn = document.getElementById("myBtn");
+
+          // Get the <span> element that closes the modal
+          var span = document.getElementsByClassName("close")[0];
+
+          // When the user clicks the button, open the modal 
+          btn.onclick = function() {
+            modal.style.display = "block";
+          }
+
+          // When the user clicks on <span> (x), close the modal
+          span.onclick = function() {
+            modal.style.display = "none";
+          }
+
+          // When the user clicks anywhere outside of the modal, close it
+          window.onclick = function(event) {
+            if (event.target == modal) {
+              modal.style.display = "none";
+            }
+          }
+
+        var popup = new mapboxgl.Popup();
+        map.on('mousemove', 'food', (e) => {
+        // Copy coordinates array.
+            popup
+            .setLngLat(e.lngLat)
+            .setHTML(
+              "<h2>"+"Year: " +e.features[0].properties.year + "</h2>"+
+              "<table style=width:100%;>"+  "<tr>" +
+                  "<th>Country</th>"+
+                   "<th>Item</th>" + 
+                   "<th>Value (Million)</th>" +
+                "</tr>"+
+                "<tr>"+
+                  "<td>"+e.features[0].properties.Country+"</td>"+
+                  "<td>"+e.features[0].properties.item+"</td>"+
+                  "<td>"+(e.features[0].properties.value/1000000).toFixed(2)+"</td>"+
+                  "</tr>"+
+                  "</table>")
+            .addTo(map);
+        });
+
+            // Change it back to a pointer when it leaves and remove the popup window.
+    map.on('mouseleave', 'food', function () {
+            map.getCanvas().style.cursor = '';
+            popup.remove();
+    });
+    
+        map.on('mouseenter', 'food', () => {
+            map.getCanvas().style.cursor = 'pointer';
+        });
+
+        // Change it back to a pointer when it leaves.
+            map.on('mouseleave', 'food', () => {
+            map.getCanvas().style.cursor = '';
+        });
+        
+        
+</script>
+
+</html>

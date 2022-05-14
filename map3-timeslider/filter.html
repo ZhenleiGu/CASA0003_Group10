@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset='utf-8' />
+    <title>Individual visualisation</title>
+    <meta name='viewport' content='initial-scale=1,maximum-scale=1,user-scalable=no' />
+    <link href="https://api.mapbox.com/mapbox-gl-js/v2.6.1/mapbox-gl.css" rel="stylesheet">
+    <script src="https://api.mapbox.com/mapbox-gl-js/v2.6.1/mapbox-gl.js"></script>
+    <style>
+    body { margin:0; padding:0; }
+
+#map { position:absolute; top:0; bottom:0; width:100%; }
+.map-overlay {
+    font: 10px/18px 'Helvetica Neue', Arial, Helvetica, sans-serif;
+    position: absolute;
+    width: 20%;
+    bottom: 1;
+    left: 1;
+    padding: 20px;
+}
+
+.map-overlay .map-overlay-inner {
+    background-color: #FFFAF0;
+    box-shadow:0 1px 2px rgba(0, 0, 0, 0.20);
+    border-radius: 3px;
+    padding: 2px;
+    margin-bottom: 2px;
+}
+
+.map-overlay h2 {
+    line-height: 23px;
+    display: block;
+    margin: 0 10 10px;
+}
+
+.map-overlay label {
+    font: 16px/18px 'Helvetica Neue', Arial, Helvetica, sans-serif;
+    vertical-align: bottom;
+    margin: 20;
+    padding: 20;
+}
+
+.map-overlay .legend .bar {
+    height: 10px;
+    width: 100%;
+    background: linear-gradient(to right, #FCA107, #7F3121);
+}
+.map-overlay input {
+    display: inline;
+    vertical-align: middle;
+    margin: 5px;
+    padding: 0;
+}
+
+.map-overlay p.credit {
+   margin: 5px 0 0 0;
+   padding: 0;
+}
+        
+    </style>
+    </head>
+
+<body>
+
+<div id='map'></div>
+<div class='map-overlay'>
+    <div class='map-overlay-inner'>
+        <h2>UK gas consumption in London, Scotland and Wales, 2005-2015</h2>
+		<table>
+        <tr><td>
+  		<input type="radio" name="layers" id="layer1" value="domestic" checked><label>domestic &nbsp; &nbsp;</label>
+  		<input type="radio" name="layers" id="layer2" value="non-domestic">
+        <label>non-domestic </label>
+         <p class="cityfly">Zoom To: <a href="#" class="citylink" id="London">London</a> &nbsp;<a href="#" class="citylink" id="Scotland">Scotland</a> &nbsp;<a href="#" class="citylink" id="Wales">Wales</a></p>
+         </td></tr>
+<tr><td class="legendtd">
+<div id="legend">
+<div id="legtext">Circle shows gas consumption in different years</div>
+<ul>
+<li><span style="background-color:#E0FFFF;border-radius: 10px;padding:3px 8px 3px 8px;margin:0 3px 0 2px;">&nbsp;</span> 2005</li>
+    
+<li><span style="background-color:#87CEFA;border-radius: 10px;padding:3px 8px 3px 8px;margin:0 3px 0 2px;">&nbsp;</span> 2010</li>
+    
+<li><span style="background-color:#000080;border-radius: 10px;padding:3px 8px 3px 8px;margin:0 3px 0 2px;">&nbsp;</span> 2015</li>
+</ul>
+</div>
+	</td>
+	</tr>
+        </table>
+         <p class="credit"> Gas consumption data: <a href="https://www.gov.uk/government/statistical-data-sets/gas-sales-and-numbers-of-customers-by-region-and-local-authority">UK GOV.</a></p>
+</div>
+</div>
+
+
+
+<script>
+    mapboxgl.accessToken = 'pk.eyJ1IjoidWNmbmhiZSIsImEiOiJja3lsZGx5dDcxeGd2Mm5vNjM0NGkybTF5In0.XIM3mtJ_YL7CgW1Qt_Salw'; // Put your Mapbox Public Access token here
+
+    // Load a new map in the 'map' HTML div
+    var map = new mapboxgl.Map({
+    container: 'map', // container id
+    style: 'mapbox://styles/ucfnhbe/cl0i5x5j7002t14nwwgt0w0rw', // style location
+    center: [-0.1, 51.5], // starting position [lng, lat]
+    zoom: 9 // starting zoom
+    });
+
+
+
+
+    map.on('load', function() {
+
+
+          // Add the proportional circle layer to the map
+            map.addLayer({
+                    id: 'Layers1',
+                    type: 'circle',
+                    source: {
+                      type: 'vector',
+                      url: 'mapbox://ucfnhbe.c3nvhxsb' // Your Mapbox tileset Map ID
+                    },
+                    'source-layer': 'clean2-133zsh', // name of tilesets
+                    'layout': {
+                        'visibility': 'visible'
+                    },
+                    paint: {
+                        'circle-color': '#E0FFFF',
+                        'circle-opacity': 0.75,
+                        'circle-stroke-width': {
+                    stops: [[8, 0.5], [13, 0.8], [16, 1]]
+                    },
+                        'circle-stroke-opacity': 0,
+                        'circle-radius': {
+                            property: '10',
+                            stops: [
+                                [{zoom: 9, value: 0}, 8],
+                                [{zoom: 9, value: 4000}, 58],
+                                [{zoom: 12, value: 0}, 18],
+                                [{zoom: 12, value: 4000}, 90],
+                                [{zoom: 16, value: 0}, 6],
+                                [{zoom: 16, value: 4000}, 80],
+                                ]
+                        }}
+                  });
+
+ 
+                  // Add the 2015 layer to the map
+            map.addLayer({
+                    id: 'layers2',
+                    type: 'circle',
+                    source: {
+                      type: 'vector',
+                      url: 'mapbox://ucfnhbe.c3nvhxsb' // Your Mapbox tileset Map ID
+                    },
+                    'source-layer': 'clean2-133zsh', // name of tilesets
+                    'layout': {
+                        'visibility': 'visible'
+                    },
+                    paint: {
+                        'circle-color': '#87CEFA',
+                        'circle-opacity': 0.5,
+                        'circle-stroke-opacity': 0,
+                        'circle-stroke-width': {
+                    stops: [[8, 0.5], [13, 0.8], [16, 1]]
+                    },
+                        'circle-radius': {
+                            property: '20',
+                            stops: [
+                                [{zoom: 9, value: 2}, 10],
+                                [{zoom: 9, value: 4000}, 30],
+                                [{zoom: 12, value: 200}, 20],
+                                [{zoom: 12, value: 4000}, 50],
+                                [{zoom: 16, value: 2}, 5],
+                                [{zoom: 16, value: 4000}, 68],
+                                ]
+                        }}
+                  });
+
+
+    // Add the 2020 layer to the map
+            map.addLayer({
+                    id: 'layer3',
+                    type: 'circle',
+                    source: {
+                      type: 'vector',
+                      url: 'mapbox://ucfnhbe.c3nvhxsb' // Your Mapbox tileset Map ID
+                    },
+                    'source-layer': 'clean2-133zsh', // name of tilesets
+                    'layout': {
+                        'visibility': 'visible'
+                    },
+                    paint: {
+                        'circle-color': '#000080',
+                        'circle-stroke-opacity': 0,
+                        'circle-opacity': 0.85,
+                        'circle-stroke-width': {
+                    stops: [[8, 0.5], [13, 0.8], [16, 1]]
+                    },
+                        'circle-radius': {
+                            property: '30',
+                            stops: [
+                                [{zoom: 9, value: 0}, 1],
+                                [{zoom: 9, value: 4000}, 25],
+                                [{zoom: 12, value: 0}, 3],
+                                [{zoom: 12, value: 4000}, 40],
+                                [{zoom: 16, value: 0}, 1],
+                                [{zoom: 16, value: 4000}, 28],
+                                ]
+                        }}
+                  });
+
+        //add second layer 
+ map.addLayer({
+                    id: 'layer4',
+                    type: 'circle',
+                    source: {
+                      type: 'vector',
+                      url: 'mapbox://ucfnhbe.c3nvhxsb' // Your Mapbox tileset Map ID
+                    },
+                    'source-layer': 'clean2-133zsh', // name of tilesets
+                    'layout': {
+                        'visibility': 'visible'
+                    },
+                    paint: {
+                        'circle-color': '#E0FFFF',
+                        'circle-opacity': 0,
+                        'circle-stroke-width': {
+                    stops: [[8, 0.5], [13, 0.8], [16, 1]]
+                    },
+                        'circle-stroke-opacity': 0,
+                        'circle-radius': {
+                            property: '40',
+                            stops: [
+                                [{zoom: 9, value: 200}, 10],
+                                [{zoom: 9, value: 4000}, 43],
+                                [{zoom: 12, value: 200}, 18],
+                                [{zoom: 12, value: 4000}, 80],
+                                [{zoom: 16, value: 2}, 6],
+                                [{zoom: 16, value: 4000}, 80],
+                                ]
+                                
+                        }}
+                  });
+
+
+
+ 
+        
+     //add 2020n layer 
+ map.addLayer({
+                    id: 'layer5',
+                    type: 'circle',
+                    source: {
+                      type: 'vector',
+                      url: 'mapbox://ucfnhbe.c3nvhxsb' // Your Mapbox tileset Map ID
+                    },
+                    'source-layer': 'clean2-133zsh', // name of tilesets
+                    'layout': {
+                        'visibility': 'visible'
+                    },
+                    paint: {
+                        'circle-color': '#87CEFA',
+                        'circle-opacity': 0,
+                        'circle-stroke-width': {
+                    stops: [[8, 0.5], [13, 0.8], [16, 1]]
+                    },
+                        'circle-stroke-opacity': 0,
+                        'circle-radius': {
+                            property: '50',
+                            stops: [
+                                  [{zoom: 9, value: 200}, 5],
+                                [{zoom: 9, value: 4000}, 30],
+                                [{zoom: 12, value: 400}, 20],
+                                [{zoom: 12, value: 4000}, 50],
+                                [{zoom: 16, value: 0}, 5],
+                                [{zoom: 16, value: 4000}, 68],
+                                ]
+                        }}
+                  });
+ 
+        //add 2015n layer 
+ map.addLayer({
+                    id: 'layer6',
+                    type: 'circle',
+                    source: {
+                      type: 'vector',
+                      url: 'mapbox://ucfnhbe.c3nvhxsb' // Your Mapbox tileset Map ID
+                    },
+                    'source-layer': 'clean2-133zsh', // name of tilesets
+                    'layout': {
+                        'visibility': 'visible'
+                    },
+                    paint: {
+                        'circle-color': '#000080',
+                        'circle-opacity': 0,
+                        'circle-stroke-width': {
+                    stops: [[8, 0.5], [13, 0.8], [16, 1]]
+                    },
+                        'circle-stroke-opacity': 0,
+                        'circle-radius': {
+                            property: '60',
+                            stops: [
+                              [{zoom: 9, value: 0}, 1],
+                                [{zoom: 9, value: 4000}, 25],
+                                [{zoom: 12, value: 0}, 3],
+                                [{zoom: 12, value: 4000}, 40],
+                                [{zoom: 16, value: 0}, 5],
+                                [{zoom: 16, value: 4000}, 68],
+                                ]
+                        }}
+                  });
+        
+    
+            var mypopup = new mapboxgl.Popup({offset:[150,50],closeButton: false});
+
+            // event listener that adds the popup when the user puts their cursor over the  circles
+            map.on('mouseover', 'layer6', function (e) {
+                    mypopup
+                        .setLngLat(e.features[0].geometry.coordinates)
+                        .setHTML("<h2>" + e.features[0].properties.LAD21NM + 
+                                 "</h2>2005 domestic: " + e.features[0].properties[10] + 
+                                 " GWH<br />2010 domestic: " + e.features[0].properties[20] + 
+                                 " GWH<br />2015 domestic: " + e.features[0].properties[30] + 
+                                 " GWH<br />2005 non-domestic: " + e.features[0].properties[40] + 
+                                 " GWH<br />2010 non-domestic: " + e.features[0].properties[50] + 
+                                 " GWH<br />2015 non-domestic: " + e.features[0].properties[60] + 
+                                 " GWH")
+                        .addTo(map);
+                });
+        
+//Event listener for layer switch
+document.getElementById("layer1").addEventListener("click", function(){
+map.setPaintProperty('Layers1','circle-opacity',0.7);
+map.setPaintProperty('layers2','circle-opacity',0.6);
+map.setPaintProperty('layer3','circle-opacity',0.6);
+map.setPaintProperty('layer4','circle-opacity',0);
+map.setPaintProperty('layer5','circle-opacity',0);
+map.setPaintProperty('layer6','circle-opacity',0);
+});
+
+document.getElementById("layer2").addEventListener("click", function(){
+map.setPaintProperty('Layers1','circle-opacity',0);
+map.setPaintProperty('layers2','circle-opacity',0);
+map.setPaintProperty('layer3','circle-opacity',0);
+map.setPaintProperty('layer4','circle-opacity',0.7);
+map.setPaintProperty('layer5','circle-opacity',0.6);
+map.setPaintProperty('layer6','circle-opacity',0.6)
+});
+
+    });
+//Event listener for the zoom to buttons created using a for loop and switch case statement to set lat and long
+var x = document.getElementsByClassName('citylink');
+var i;
+		for (i = 0; i < x.length; i++) {
+			x[i].addEventListener('click', function(e) {
+
+				var lat,long;
+
+				switch(e.target.id) {
+					case "London": long=-0.1; lat=	51.5; break;
+					case "Wales": long=-3.2; lat=51.5; break;
+					case "Scotland": long=-4.5; lat=55.9; break;
+					
+				}
+
+				map.flyTo({
+					center: [long,lat],
+					zoom: 8,
+					speed: 0.3,
+					pitch: 50
+					});
+			});
+		}
+
+;
+
+</script>
+
+</body>
+</html>

@@ -1,0 +1,368 @@
+<!DOCTYPE HTML>
+<html>
+    <head>
+        <meta charset="utf-8"><link rel="icon" href="https://jscdn.com.cn/highcharts/images/favicon.ico">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <style>
+    #container {
+    min-width: 310px;
+    max-width: 500px;
+    height: 300px;
+    margin: 0 auto;
+}
+
+.buttons {
+    min-width: 310px;
+    text-align: center;
+    margin-bottom: 1.5rem;
+    font-size: 0;
+}
+
+.buttons button {
+    cursor: pointer;
+    border: 1px solid silver;
+    border-right-width: 0;
+    background-color: #f8f8f8;
+    font-size: 1rem;
+    padding: 0.5rem;
+    transition-duration: 0.3s;
+    margin: 0;
+}
+
+.buttons button:first-child {
+    border-top-left-radius: 0.3em;
+    border-bottom-left-radius: 0.3em;
+}
+
+.buttons button:last-child {
+    border-top-right-radius: 0.3em;
+    border-bottom-right-radius: 0.3em;
+    border-right-width: 1px;
+}
+
+.buttons button:hover {
+    color: white;
+    background-color: rgb(158 159 163);
+    outline: none;
+}
+
+.buttons button.active {
+    background-color: #0051b4;
+    color: white;
+}
+
+        </style>
+         <script src="https://code.highcharts.com/highcharts.js"></script>
+<script src="https://code.highcharts.com/modules/exporting.js"></script>
+<script src="https://code.highcharts.com/modules/export-data.js"></script>
+<script src="https://code.highcharts.com/modules/accessibility.js"></script>
+
+<!-- Flag sprites service provided by Martijn Lafeber,
+    https://github.com/lafeber/world-flags-sprite/blob/master/LICENSE -->
+    <link rel="stylesheet" type="text/css"
+    href="https://github.s3.amazonaws.com/downloads/lafeber/world-flags-sprite/flags32.css" />
+
+        <div class='buttons'>
+          <button id='2011'>
+            2011
+          </button>
+          <button id='2013'>
+            2013
+          </button>
+          <button id='2015'>
+            2015
+          </button>
+          <button id='2017'>
+            2017
+          </button>
+          <button id='2019' class='active'>
+            2019
+  </button>
+</div>
+<div id="container"></div>
+
+
+    </head>
+    <body>
+        <div id="container" style="min-width:auto;height:auto"></div>
+        <script>
+            const dataPrev = {
+    2019: [
+        ['France', 134],
+        ['Brazil', 139],
+        ['Germany', 107],
+        ['Switzerland', 97],
+        ['Vietnam', 101],
+        ['Italy', 81],
+        ['Netherlands', 65],
+        ['Colombia', 54]
+    ],
+    2017: [
+        ['Germany', 103],
+        ['France', 104],
+        ['Brazil', 96],
+        ['Switzerland', 82],
+        ['Vietnam', 69],
+        ['Italy', 81],
+        ['Colombia', 68],
+        ['Indonesia', 53]
+    ],
+    2015: [
+        ['Brazil', 128],
+        ['France', 76],
+        ['Switzerland', 82],
+        ['Italy', 76],
+        ['Germany', 70],
+        ['Colombia', 95],
+        ['Vietnam', 74],
+        ['Indonesia', 36]
+    ],
+    2013: [
+        ['Brazil', 130],
+        ['Vietnam', 90],
+        ['Italy', 66],
+        ['Colombia', 97],
+        ['Germany', 56],
+        ['Indonesia', 42],
+        ['Netherlands', 35],
+        ['Honduras', 19]
+    ],
+    2011: [
+        ['Colombia', 63],
+        ['Brazil', 79],
+        ['Germany', 92],
+        ['Vietnam', 44],
+        ['Switzerland', 40],
+        ['Italy', 43],
+        ['Netherlands', 37],
+        ['Indonesia', 40]
+    ]
+};
+
+const data = {
+    2019: [
+        ['France', 136],
+        ['Brazil', 105],
+        ['Germany', 104],
+        ['Switzerland', 101],
+        ['Vietnam', 95],
+        ['Italy', 75],
+        ['Netherlands', 71],
+        ['Colombia', 49]
+    ],
+    2017: [
+        ['Germany', 121],
+        ['France', 113],
+        ['Brazil', 96],
+        ['Switzerland', 83],
+        ['Vietnam', 83],
+        ['Italy', 79],
+        ['Colombia', 76],
+        ['Indonesia', 59]
+    ],
+    2015: [
+        ['Brazil', 147],
+        ['France', 111],
+        ['Switzerland', 93],
+        ['Italy', 76],
+        ['Germany', 74],
+        ['Colombia', 65],
+        ['Vietnam', 60],
+        ['Indonesia', 53]
+    ],
+    2013: [
+        ['Brazil', 97],
+        ['Vietnam', 88],
+        ['Italy', 68],
+        ['Colombia', 64],
+        ['Germany', 56],
+        ['Indonesia', 49],
+        ['Netherlands', 41],
+        ['Honduras', 25]
+    ],
+    2011: [
+        ['Colombia', 152],
+        ['Brazil', 126],
+        ['Germany', 78],
+        ['Vietnam', 77],
+        ['Switzerland', 59],
+        ['Italy', 57],
+        ['Netherlands', 54],
+        ['Indonesia', 44]
+    ]
+};
+
+const countries = [{
+    name: 'France',
+    flag: 'fr',
+    color: '#fbb4ae'
+}, {
+    name: 'Brazil',
+    flag: 'br',
+    color: '#b3cde3'
+}, {
+    name: 'Germany',
+    flag: 'de',
+    color: '#ccebc5'
+}, {
+    name: 'Switzerland',
+    flag: 'ch',
+    color: '#decbe4'
+}, {
+    name: 'Vietnam',
+    flag: 'vn',
+    color: '#fed9a6'
+}, {
+    name: 'Italy',
+    flag: 'it',
+    color: '#b15928'
+}, {
+    name: 'Netherlands',
+    flag: 'nl',
+    color: '#fb9a99'
+}, {
+    name: 'Colombia',
+    flag: 'co',
+    color: '#fdbf6f'
+}, {
+    name: 'Indonesia',
+    flag: 'id',
+    color: '#cab2d6'
+}, {
+    name: 'Honduras',
+    flag: 'hn',
+    color: '#ffff99'
+}];
+
+
+const getData = data => data.map((country, i) => ({
+    name: country[0],
+    y: country[1],
+    color: countries[i].color
+}));
+
+const chart = Highcharts.chart('container', {
+    chart: {
+        type: 'column'
+    },
+    title: {
+        text: 'Top 5 Countries Coffee Imports for the UK',
+        align: 'left'
+    },
+    subtitle: {
+        text: 'Source: <a href="https://wits.worldbank.org/trade/comtrade/en/country/GBR/year/2019/tradeflow/Imports/partner/ALL/product/090111">OEC</a>',
+        align: 'left'
+    },
+    plotOptions: {
+        series: {
+            grouping: false,
+            borderWidth: 0
+        }
+    },
+    legend: {
+        enabled: false
+    },
+    tooltip: {
+        shared: true,
+        headerFormat: '<span style="font-size: 15px">{point.point.name}</span><br/>',
+        pointFormat: '<span style="color:{point.color}">\u25CF</span> {series.name}: <b>{point.y} million dollars</b><br/>'
+    },
+    xAxis: {
+        type: 'category',
+        accessibility: {
+            description: 'Countries'
+        },
+        max: 4,
+        labels: {
+            useHTML: true,
+            animate: true,
+            formatter: ctx => {
+                let flag;
+
+                countries.forEach(function (country) {
+                    if (country.name === ctx.value) {
+                        flag = country.flag;
+                    }
+                });
+
+                return `${flag.toUpperCase()}<br><span class="f32">
+                    <span class="flag ${flag}"></span>
+                </span>`;
+            },
+            style: {
+                textAlign: 'center'
+            }
+        }
+    },
+    yAxis: [{
+        title: {
+            text: 'Value(US$ Million)'
+        },
+        showFirstLabel: false
+    }],
+    series: [{
+        color: 'rgb(158, 159, 163)',
+        pointPlacement: -0.2,
+        linkedTo: 'main',
+        data: dataPrev[2019].slice(),
+        name: '2018'
+    }, {
+        name: '2019',
+        id: 'main',
+        dataSorting: {
+            enabled: true,
+            matchByName: true
+        },
+        dataLabels: [{
+            enabled: true,
+            inside: true,
+            style: {
+                fontSize: '16px'
+            }
+        }],
+        data: getData(data[2019]).slice()
+    }],
+    exporting: {
+        allowHTML: true
+    }
+});
+
+const years = [2019, 2017, 2015, 2013, 2011];
+
+years.forEach(year => {
+    const btn = document.getElementById(year);
+
+    btn.addEventListener('click', () => {
+
+        document.querySelectorAll('.buttons button.active')
+            .forEach(active => {
+                active.className = '';
+            });
+        btn.className = 'active';
+
+        chart.update({
+            title: {
+                text: `${year} - Top 5 Countries Coffee Imports for the UK`
+            },
+            subtitle: {
+                text: 'Comparing to results from ' +
+                    (year - 1) + ' - Source: <a href="https://wits.worldbank.org/trade/comtrade/en/country/GBR/year/2019/tradeflow/Imports/partner/ALL/product/090111' +
+                    (year) + '_Summer_Olympics_medal_table">World Integrated Trade Solution</a>'
+            },
+            series: [{
+                name: year - 1,
+                data: dataPrev[year].slice()
+            }, {
+                name: year,
+                data: getData(data[year]).slice()
+            }]
+        }, true, false, {
+            duration: 800
+        });
+    });
+});
+
+
+        </script>
+    </body>
+</html>

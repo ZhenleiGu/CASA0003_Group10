@@ -1,0 +1,364 @@
+<!DOCTYPE HTML>
+<html>
+    <head>
+        <meta charset="utf-8"><link rel="icon" href="https://jscdn.com.cn/highcharts/images/favicon.ico">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <style>
+#container {
+    min-width: 310px;
+    max-width: 500px;
+    height: 300px;
+    margin: 0 auto;
+}
+
+.buttons {
+    min-width: 310px;
+    text-align: center;
+    margin-bottom: 1.5rem;
+    font-size: 0;
+}
+
+.buttons button {
+    cursor: pointer;
+    border: 1px solid silver;
+    border-right-width: 0;
+    background-color: #f8f8f8;
+    font-size: 1rem;
+    padding: 0.5rem;
+    transition-duration: 0.3s;
+    margin: 0;
+}
+
+.buttons button:first-child {
+    border-top-left-radius: 0.3em;
+    border-bottom-left-radius: 0.3em;
+}
+
+.buttons button:last-child {
+    border-top-right-radius: 0.3em;
+    border-bottom-right-radius: 0.3em;
+    border-right-width: 1px;
+}
+
+.buttons button:hover {
+    color: white;
+    background-color: rgb(158 159 163);
+    outline: none;
+}
+
+.buttons button.active {
+    background-color: #0051b4;
+    color: white;
+}
+
+        </style>
+         <script src="https://code.highcharts.com/highcharts.js"></script>
+<script src="https://code.highcharts.com/modules/exporting.js"></script>
+<script src="https://code.highcharts.com/modules/export-data.js"></script>
+<script src="https://code.highcharts.com/modules/accessibility.js"></script>
+
+<!-- Flag sprites service provided by Martijn Lafeber,
+    https://github.com/lafeber/world-flags-sprite/blob/master/LICENSE -->
+    <link rel="stylesheet" type="text/css"
+    href="https://github.s3.amazonaws.com/downloads/lafeber/world-flags-sprite/flags32.css" />
+
+        <div class='buttons'>
+          <button id='2011'>
+            2011
+          </button>
+          <button id='2013'>
+            2013
+          </button>
+          <button id='2015'>
+            2015
+          </button>
+          <button id='2017'>
+            2017
+          </button>
+          <button id='2019' class='active'>
+            2019
+  </button>
+</div>
+<div id="container"></div>
+
+
+    </head>
+    <body>
+        <div id="container" style="min-width:auto;height:auto"></div>
+        <script>
+            const dataPrev = {
+    2019: [
+        ['Netherlands', 3649],
+        ['Spain', 2591],
+        ['Germany', 1295],
+        ['France', 1194],
+        ['Belgium', 719],
+        ['South Africa', 751],
+        ['Italy', 727],
+        ['United States', 708]
+    ],
+    2017: [
+        ['Netherlands', 3274],
+        ['Spain', 2563],
+        ['Germany', 1170],
+        ['France', 1076],
+        ['United States', 766],
+        ['South Africa', 608],
+        ['Italy', 659],
+        ['Belgium', 646]
+    ],
+    2015: [
+        ['Netherlands', 3875],
+        ['Spain', 2447],
+        ['France', 1255],
+        ['Germany', 1255],
+        ['Belgium', 830],
+        ['United States', 728],
+        ['Italy', 752],
+        ['South Africa', 633]
+    ],
+    2013: [
+        ['Netherlands', 3349],
+        ['Spain', 2074],
+        ['France', 1369],
+        ['Germany', 944],
+        ['Belgium', 761],
+        ['Italy', 643],
+        ['South Africa', 525],
+        ['United States', 573]
+    ],
+    2011: [
+        ['Netherlands', 3462],
+        ['Spain', 1915],
+        ['France', 1148],
+        ['Germany', 899],
+        ['Belgium', 716],
+        ['Italy', 670],
+        ['United States', 545],
+        ['Brazil', 534]
+    ]
+};
+
+const data = {
+    2019: [
+        ['Netherlands', 3379],
+        ['Spain', 2637],
+        ['Germany', 1300],
+        ['France', 1023],
+        ['Belgium', 716],
+        ['South Africa', 660],
+        ['Italy', 640],
+        ['United States', 610]
+    ],
+    2017: [
+        ['Netherlands', 3380],
+        ['Spain', 2503],
+        ['Germany', 1234],
+        ['France', 1118],
+        ['United States', 747],
+        ['South Africa', 690],
+        ['Italy', 682],
+        ['Belgium', 674]
+    ],
+    2015: [
+        ['Netherlands', 3392],
+        ['Spain', 2493],
+        ['France', 1212],
+        ['Germany', 1193],
+        ['Belgium', 716],
+        ['United States', 710],
+        ['Italy', 707],
+        ['South Africa', 618]
+    ],
+    2013: [
+        ['Netherlands', 3844],
+        ['Spain', 2426],
+        ['France', 1597],
+        ['Germany', 1246],
+        ['Belgium', 875],
+        ['Italy', 625],
+        ['South Africa', 642],
+        ['United States', 625]
+    ],
+    2011: [
+        ['Netherlands', 3839],
+        ['Spain', 2176],
+        ['France', 1287],
+        ['Germany', 961],
+        ['Belgium', 852],
+        ['Italy', 708],
+        ['United States', 679],
+        ['Brazil', 556]
+    ]
+};
+
+const countries = [{
+    name: 'Netherlands',
+    flag: 'nl',
+    color: '#fbb4ae'
+}, {
+    name: 'Spain',
+    flag: 'es',
+    color: '#b3cde3'
+}, {
+    name: 'France',
+    flag: 'fr',
+    color: '#ccebc5'
+}, {
+    name: 'Germany',
+    flag: 'de',
+    color: '#decbe4'
+}, {
+    name: 'Belgium',
+    flag: 'be',
+    color: '#fed9a6'
+}, {
+    name: 'Italy',
+    flag: 'it',
+    color: '#b15928'
+}, {
+    name: 'United States',
+    flag: 'us',
+    color: '#fb9a99'
+}, {
+    name: 'Brazil',
+    flag: 'br',
+    color: '#fdbf6f'
+}, {
+    name: 'South Africa',
+    flag: 'za',
+    color: '#b2df8a'
+}];
+
+
+const getData = data => data.map((country, i) => ({
+    name: country[0],
+    y: country[1],
+    color: countries[i].color
+}));
+
+const chart = Highcharts.chart('container', {
+    chart: {
+        type: 'column'
+    },
+    title: {
+        text: 'Top 5 Countries Vegetable Imports for the UK',
+        align: 'left'
+    },
+    subtitle: {
+        text: 'Source: <a href="https://wits.worldbank.org/CountryProfile/en/Country/GBR/Year/LTST/TradeFlow/Import/Partner/by-country/Product/06-15_Vegetable">World Integrated Trade Solution</a>',
+        align: 'left'
+    },
+    plotOptions: {
+        series: {
+            grouping: false,
+            borderWidth: 0
+        }
+    },
+    legend: {
+        enabled: false
+    },
+    tooltip: {
+        shared: true,
+        headerFormat: '<span style="font-size: 15px">{point.point.name}</span><br/>',
+        pointFormat: '<span style="color:{point.color}">\u25CF</span> {series.name}: <b>{point.y} million dollars</b><br/>'
+    },
+    xAxis: {
+        type: 'category',
+        accessibility: {
+            description: 'Countries'
+        },
+        max: 4,
+        labels: {
+            useHTML: true,
+            animate: true,
+            formatter: ctx => {
+                let flag;
+
+                countries.forEach(function (country) {
+                    if (country.name === ctx.value) {
+                        flag = country.flag;
+                    }
+                });
+
+                return `${flag.toUpperCase()}<br><span class="f32">
+                    <span class="flag ${flag}"></span>
+                </span>`;
+            },
+            style: {
+                textAlign: 'center'
+            }
+        }
+    },
+    yAxis: [{
+        title: {
+            text: 'Value(US$ Million)'
+        },
+        showFirstLabel: false
+    }],
+    series: [{
+        color: 'rgb(158, 159, 163)',
+        pointPlacement: -0.2,
+        linkedTo: 'main',
+        data: dataPrev[2019].slice(),
+        name: '2018'
+    }, {
+        name: '2019',
+        id: 'main',
+        dataSorting: {
+            enabled: true,
+            matchByName: true
+        },
+        dataLabels: [{
+            enabled: true,
+            inside: true,
+            style: {
+                fontSize: '16px'
+            }
+        }],
+        data: getData(data[2019]).slice()
+    }],
+    exporting: {
+        allowHTML: true
+    }
+});
+
+const years = [2019, 2017, 2015, 2013, 2011];
+
+years.forEach(year => {
+    const btn = document.getElementById(year);
+
+    btn.addEventListener('click', () => {
+
+        document.querySelectorAll('.buttons button.active')
+            .forEach(active => {
+                active.className = '';
+            });
+        btn.className = 'active';
+
+        chart.update({
+            title: {
+                text: `${year} - Top 5 Countries Vegetable Imports for the UK`
+            },
+            subtitle: {
+                text: 'Comparing to results from ' +
+                    (year - 1) + ' - Source: <a href="https://wits.worldbank.org/CountryProfile/en/Country/GBR/Year/LTST/TradeFlow/Import/Partner/by-country/Product/06-15_Vegetable' +
+                    (year) + '_Summer_Olympics_medal_table">World Integrated Trade Solution</a>'
+            },
+            series: [{
+                name: year - 1,
+                data: dataPrev[year].slice()
+            }, {
+                name: year,
+                data: getData(data[year]).slice()
+            }]
+        }, true, false, {
+            duration: 800
+        });
+    });
+});
+
+
+        </script>
+    </body>
+</html>
