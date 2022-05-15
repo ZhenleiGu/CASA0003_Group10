@@ -3,7 +3,8 @@
 /* ==========================================================================
 HTML5 display definitions
 ========================================================================== */
-/* //check which box extent
+
+/* 
 *{
     outline: solid #f00 1px !important;
     background: #000 !important;
@@ -32,7 +33,8 @@ Base
  
 html { font-size: 100%; /* 1 */
 	-webkit-text-size-adjust: 100%; /* 2 */
--ms-text-size-adjust: 100%; /* 2 */ }
+-ms-text-size-adjust: 100%; /* 2 */
+}
 html, html a { -webkit-font-smoothing: antialiased; text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.004); }
 /* * Addresses `font-family` inconsistency between `textarea` and other form
 * elements. */
@@ -271,7 +273,7 @@ a.expand { display: block; position: absolute; z-index: 100; text-align: center;
 .overlay-effect .img.hover .overlay { height: 100%; opacity: 1; }
 .img img { width: -webkit-calc(100% + 40px) !important; width: calc(100% + 40px) !important; -webkit-transition: opacity 0.35s, -webkit-transform 0.35s; transition: opacity 0.35s, transform 0.35s; -moz-transition: opacity 0.35s, -moz-transform 0.35s; -o-transition: opacity 0.35s, -o-transform 0.35s; -webkit-transform: translate3d(-40px, 0, 0); transform: translate3d(-40px, 0, 0); -ms-transform: translate3d(-40px, 0, 0); }
 .img:hover img { -webkit-transform: translate3d(0, 0, 0); transform: translate3d(0, 0, 0); -ms-transform: translate3d(-40px, 0, 0); }
-.designs { position: absolute; left: 0; right: 0; margin-left: auto; margin-right: auto; top: -50px; }
+.designs { position: absolute; left: 0; right: 0; margin-left: auto; margin-right: auto; top: -1%; }
 /* ==========================================================================
 Subscribe
 ========================================================================== */
@@ -331,3 +333,4 @@ Waypoints
 .delay-05s { animation-delay: 0.5s; -webkit-animation-delay: 0.5s; }
 .delay-1s { animation-delay: 1s; -webkit-animation-delay: 1s; }
 /* .wp3 { background: url('../img/iphone-bg.png') no-repeat center center; background-position: 200px 10px; height: 100%; } */
+
