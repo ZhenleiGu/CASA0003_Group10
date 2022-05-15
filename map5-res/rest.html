@@ -1,4 +1,4 @@
-    <!DOCTYPE html>
+<!DOCTYPE html>
 <html>
 <head>
 <meta charset="utf-8">
@@ -63,8 +63,8 @@ body { margin: 0; padding: 0; }
     font: 12px/20px 'Helvetica Neue', Arial, Helvetica, sans-serif;
     font-weight: 600;
     position: absolute;
-    top: 10px;
-    left: 10px;
+    top: 130px;
+    left: 25px;
     z-index: 1;
     border-radius: 3px;
     width: 120px;
@@ -89,17 +89,17 @@ body { margin: 0; padding: 0; }
     display: block;
     cursor: pointer;
     padding: 10px;
-    border-bottom: 1px solid rgba(0, 0, 0, 0.25);
+    border-bottom: 1px solid rgba(223, 217, 217, 0.25);
     }
 
     .filter-group input[type='checkbox'] + label {
-    background-color: #f3f3f3d0;
+    background-color: #f1f1f1f6;
     text-transform: capitalize;
     }
 
     .filter-group input[type='checkbox'] + label:hover
     .filter-group input[type='checkbox']:checked + label {
-    background-color: #f3f3f3c0;
+    background-color: #9b9797e8;
     }
 
     .filter-group input[type='checkbox']:checked + label:before {
@@ -125,8 +125,143 @@ body { margin: 0; padding: 0; }
     bottom: 0;
     width: 100%;
     }
+
+    .map-overlay {
+    font: 12px/20px 'Verdana', Monospace, Monospace, Monospace;
+    position: absolute;
+    width: 380px;
+    min-width: 380px;
+    top: 0;
+    left: 0;
+    padding: 10px;
+}
+
+    .map-overlay .map-overlay-inner {
+        background-color: rgba(224, 224, 224, 0.849);
+        box-shadow:0 1px 2px rgba(0, 0, 0, 0.20);
+        border-radius: 3px;
+        padding: 10px;
+        margin-bottom: 10px;
+    }
+
+    .map-overlay table {
+        border: none;
+        width: 100%;
+    }
+
+    .map-overlay h2 {
+        line-height: 24px;
+        display: block;
+        margin: 0 0 10px;
+    }
+
+    .map-overlay label {
+        font: 18px/20px 'Helvetica Neue', Arial, Helvetica, sans-serif;
+        display: block;
+        /* vertical-align: middle; */
+        margin: 0 0 0 10px;
+        padding: 0;
+    }
+
+    .map-overlay .legend .bar {
+        height: 10px;
+        width: 100%;
+        background: linear-gradient(to right, #FCA107, #7F3121);
+    }
+
+    .map-overlay input {
+        background-color: transparent;
+        display: inline-block;
+        width: 100%;
+        min-width: 220px;
+        position: relative;
+        margin: 6px 0 0 0;
+        cursor: ew-resize;
+    }
+
+    .map-overlay p.credit {
+    margin: 0;
+    padding: 0;
+    }
+
+
+.rounded-rect {
+background: white;
+border-radius: 10px;
+box-shadow: 0 0 50px -25px black;
+}
+ 
+.flex-center {
+position: absolute;
+top:30px;
+display: flex;
+justify-content: center;
+align-items: center;
+}
+ 
+.flex-center.left {
+left:-10px;
+}
+ 
+.flex-center.right {
+right: -14.7px;
+}
+ 
+.sidebar-content {
+position: auto;
+width: 100%;
+height: 100%;
+font-family: Arial, Helvetica, sans-serif;
+font-size: 32px;
+color: gray;
+}
+ 
+.sidebar-toggle {
+position: absolute;
+width: 1.3em;
+height: 1.3em;
+overflow: visible;
+display: flex;
+justify-content: center;
+align-items: center;
+}
+ 
+.sidebar-toggle.left {
+right: -1.5em;
+}
+ 
+.sidebar-toggle.right {
+left: -1.5em;
+}
+ 
+.sidebar-toggle:hover {
+color: #4b90a5;
+cursor: pointer;
+}
+ 
+.sidebar {
+transition: transform 1s;
+z-index: 1;
+width: 330px;
+height: 80%;
+}
+ 
+/*
+The sidebar styling has them "expanded" by default, we use CSS transforms to push them offscreen
+The toggleSidebar() function removes this class from the element in order to expand it.
+*/
+.left.collapsed {
+transform: translateX(-295px);
+}
+ 
+.right.collapsed {
+transform: translateX(295px);
+}
+
 </style>
 </head>
+
+
 <body>
 <!-- Load the `mapbox-gl-geocoder` plugin. -->
 <script src="https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-geocoder/v5.0.0/mapbox-gl-geocoder.min.js"></script>
@@ -139,29 +274,65 @@ body { margin: 0; padding: 0; }
 </div>
 <nav id="filter-group" class="filter-group"></nav>
 
+
+
+
+
+<div class='map-overlay top' style="left:15px;width: 300px;">
+    <div class='map-overlay-inner'>
+        <h2 style="color:rgba(70, 70, 70, 0.842);font-size:24px">International restaurants</h2>
+        <!-- <p><iframe id="piechart" src="rest_pie.html" frameBorder="0" height="400px" width="500px" ></iframe></p> -->
+		 <label style="color:rgb(70, 70, 70);font-family:Monospace;font-size:11px;font-style:italic;">
+          Click on the map to see restaurant infomation. <br \>
+          Selection box below help to filter restarant types.
+         </label>
+         <p class="credit" style="color:gray; font-size:10px;font-weight: bold; font-family:Monospace;">
+            Restaurant Data: <a href="https://overpass-api.de/" style="color:grey;font-size:9px;">Overpass API</a>
+            &nbsp;&nbsp;&nbsp;&nbsp;
+            Shape Data: <a href="https://www.naturalearthdata.com/downloads/50m-cultural-vectors/50m-admin-0-countries-2/" style="color:grey; font-size:9px;">Natural Earth</a>
+        </p>
+</div>
+</div>
+
+
+    <div id="right" class="sidebar flex-center right collapsed">
+    <div class="sidebar-content rounded-rect flex-center">
+        <p><iframe id="piechart" src="rest_pie.html" frameBorder="0" height="600px" width="420px" ></iframe></p>
+    <div class="sidebar-toggle rounded-rect right" onclick="toggleSidebar('right')">
+    &larr;
+    </div>
+    </div>
+    </div>
+    </div>
+
+
+
+
 <script>
+
 	mapboxgl.accessToken = 'pk.eyJ1IjoiamFtaWVodSIsImEiOiJja3lsZjlkMjYzNXZpMndwOGE0aGwzY285In0.87je73KELufjdRX76fYOEA';
     const beforeMap = new mapboxgl.Map({
         container: 'before',
         style: 'mapbox://styles/mapbox/light-v10',
-        center: [-0.13628, 51.52452],
+        center: [-0.133273, 51.524351],
         zoom: 12.2,
     });
     
     const afterMap = new mapboxgl.Map({
         container: 'after',
         style: 'mapbox://styles/mapbox/dark-v10',
-        center: [-0.13628, 51.52452],
+        center: [-0.133273, 51.524351],
         zoom: 12.3,
     });
     
     // Add the control to the map.
-    beforeMap.addControl(
+    afterMap.addControl(
         new MapboxGeocoder({
         accessToken: mapboxgl.accessToken,
         mapboxgl: mapboxgl
         })
     );
+
 
     beforeMap.on('load', () => {
         // Add a geojson point source.
@@ -187,14 +358,20 @@ body { margin: 0; padding: 0; }
             'Middle_eastern',
             'Other'];
         var color_list = [
-        "hsl(248, 67%, 63%)",
-                      "hsl(136, 23%, 61%)",
-                      "hsl(338, 47%, 81%)",
-                      "hsl(26, 75%, 63%)",
-                      "hsl(2, 70%, 61%)",
-                      "hsl(400, 32%, 52%)",
-                      "hsl(190 ,55%, 62%)",
-                      "hsl(212, 23%, 52%)"];
+            '#fbb03b',
+            '#304eba',
+            '#223b53',
+            '#e3c749',
+            '#e55e5e',
+            '#3bb2d0',
+            '#5ca33e',
+            '#8da2b8',
+            '#abc9b6',
+            '#e6d0ac',
+            '#c9c079',
+            '#4f6348',
+            '#8479ab',
+            '#e08d63'];
         var color_position = 0;
         
         for (const c of list){
@@ -229,9 +406,9 @@ body { margin: 0; padding: 0; }
                     ['match',
                         ['get', 'cuisine'],
                         'Italian','#fbb03b',
-                        'Asian','#e8cea5',
+                        'Asian','#304eba',
                         'European','#223b53',
-                        'Japanese','#f7da54',
+                        'Japanese','#e3c749',
                         'Indian','#e55e5e',
                         'Chinese','#3bb2d0',
                         'French','#5ca33e',
@@ -251,6 +428,10 @@ body { margin: 0; padding: 0; }
             'waterway-label'
             );
             
+            afterMap.on('load', () => {
+            toggleSidebar('right');
+            });
+            
             const input = document.createElement('input');
             input.type = 'checkbox';
             input.id = c;
@@ -261,11 +442,12 @@ body { margin: 0; padding: 0; }
             
             const label = document.createElement('label');
             label.setAttribute('for', c);
-            const color = 'color:"' + color_list[color_position] + '"';
+            const color = 'color:' + color_list[color_position];
             label.setAttribute('style', color)
             label.textContent = c;
             filterGroup.appendChild(label);
             console.log(color)
+
             input.addEventListener('change', (e) => {
                 beforeMap.setLayoutProperty(
                 c,
@@ -274,7 +456,7 @@ body { margin: 0; padding: 0; }
                 );
             });
             
-            
+            color_position = color_position + 1 ;
             
             
             
@@ -390,6 +572,24 @@ body { margin: 0; padding: 0; }
     // mousemove: true
     });
 
+    new mapboxgl.Marker().setLngLat(center).addTo(afterMap);
+    
+    function toggleSidebar(id) {
+    const elem = document.getElementById(id);
+    // Add or remove the 'collapsed' CSS class from the sidebar element.
+    // Returns boolean "true" or "false" whether 'collapsed' is in the class list.
+    const collapsed = elem.classList.toggle('collapsed');
+    const padding = {};
+    // 'id' is 'right' or 'left'. When run at start, this object looks like: '{left: 300}';
+    padding[id] = collapsed ? 0 : 300; // 0 if collapsed, 300 px if not. This matches the width of the sidebars in the .sidebar CSS class.
+    // Use `map.easeTo()` with a padding option to adjust the map's center accounting for the position of sidebars.
+    afterMap.easeTo({
+    padding: padding,
+    duration: 1000 // In ms. This matches the CSS transition duration property.
+    });
+    }
+
+    
         
 
 
