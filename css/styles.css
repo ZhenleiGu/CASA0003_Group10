@@ -3,6 +3,13 @@
 /* ==========================================================================
 HTML5 display definitions
 ========================================================================== */
+/* //check which box extent
+*{
+    outline: solid #f00 1px !important;
+    background: #000 !important;
+    color: #fff !important;
+} */
+
  
 /* * Corrects `block` display not defined in IE 6/7/8/9 and Firefox 3. */
  
@@ -213,7 +220,7 @@ nav ul li a:hover, nav ul li a:focus { text-decoration: none; color: rgba(255, 2
 Hero
 ========================================================================== */
 
-.hero { background: url('../img/white.png') no-repeat center center; -webkit-background-size: cover; -moz-background-size: cover; -o-background-size: cover; background-size: cover; padding: 65px 0 180px 0; height: auto; }
+.hero { background: url('../img/white.png') no-repeat center center; -webkit-background-size: cover; -moz-background-size: cover; -o-background-size: cover; background-size: cover; padding: 50px 0 180px 0; height: auto; }
 .hero h1 {font-size: 100px; letter-spacing: 12px; margin: 10px; font-weight:bold;}
 .hero h1 span { color: #9e9e9e; display: inline-block; }
 .hero p { letter-spacing: 1px; }
@@ -314,7 +321,7 @@ ul.legals li:last-child::after { content: ""; }
 /* ==========================================================================
 FlexSlider Custom CSS
 ========================================================================== */
-#servicesSlider { margin-top: 80px; }
+#servicesSlider { margin-top: 80px; margin-left: 80px; }
 ul.slides li { margin-top: 10px; }
 /* ==========================================================================
 Waypoints
