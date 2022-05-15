@@ -18,15 +18,6 @@
         left: 1;
         padding: 20px;
     }
-    
-    .map-overlay1 {
-        font: 10px/18px 'Helvetica Neue', Arial, Helvetica, sans-serif;
-        position: absolute;
-        width: 30%;
-        bottom: 1;
-        right: -650px;
-        padding: 20px;
-    }
 
     .map-overlay .map-overlay-inner {
         background-color: #FFFAF0;
@@ -78,9 +69,6 @@
 </head>
 <body>
 <div id="map"></div>
-    
-    
-
 <div class='map-overlay top'>
     <div class='map-overlay-inner'>
         <h1 style="color:rgb(70, 70, 70);font-family:verdana">UKUKUKU</h1>
@@ -88,29 +76,13 @@
         <p id='d' style="color:rgb(70, 70, 70);font-family:verdana">Put the mouse on the route for more information</p>
     </div>
 </div>
-
-    
-    
-    
-    
-<div class='map-overlay top'>
-    <div class='map-overlay1'>
-    <div class='map-overlay-inner'style="width: 400px; height: 690px;color:rgba(70, 70, 70, 0.842);">
-         <p><iframe id="table1" src="peu.html" frameBorder="0" height="800px" width="400px" ></iframe></p>
-
-        </div>
-    </div>
-</div>
-    
-
-
 <script>
 	mapboxgl.accessToken = 'pk.eyJ1IjoiZ29kd2luZ3UiLCJhIjoiY2ttaGpqbTIyMDd3YjJxbXUwNmRoZXBqZyJ9.wj6eUX4MZn91_nqZ3BeOGA';
     const map = new mapboxgl.Map({
         container: 'map',
         style: 'mapbox://styles/godwingu/cl36hk3sn008a15qftcp2gw2v',
-        center: [170, 20],
-        zoom: 0.7,
+        center: [0, 20],
+        zoom: 1.5,
         cooperativeGestures: true
     });
     let hoveredStateId = null;
@@ -118,16 +90,6 @@
     const point = {
         'type': 'FeatureCollection',
         'features': [
-                        {
-                'type': 'Feature',
-                'properties': {"country":"England",
-                               'iconSize': [30, 18],
-                              'url':'https://www.crwflags.com/art/countries/uk.gif'},
-                'geometry': {
-                    'type': 'Point',
-                    'coordinates': [-0.118092,51.509865],
-                }
-            },
             {
                 'type': 'Feature',
                 'properties': {"country":"Spain",
@@ -151,7 +113,7 @@
             {
                 'type': 'Feature',
                 'properties': {"country":"New Zealand",
-                               'iconSize': [30, 15],
+                               'iconSize': [30, 16],
                               'url':'https://www.crwflags.com/fotw/images/n/nz.gif'},
                 'geometry': {
                     'type': 'Point',
@@ -303,35 +265,7 @@
         
     }
     });
-    //Slide Show effect between Statistics
-var slideIndex = 1;
-showSlides(slideIndex);
-
-// Next/previous controls
-function plusSlides(n) {
-  showSlides(slideIndex += n);
-}
-
-// Thumbnail image controls
-function currentSlide(n) {
-  showSlides(slideIndex = n);
-}
-
-function showSlides(n) {
-  var i;
-  var slides = document.getElementsByClassName("mySlides");
-  var dots = document.getElementsByClassName("dot");
-  if (n > slides.length) {slideIndex = 1}
-  if (n < 1) {slideIndex = slides.length}
-  for (i = 0; i < slides.length; i++) {
-      slides[i].style.display = "none";
-  }
-  for (i = 0; i < dots.length; i++) {
-      dots[i].className = dots[i].className.replace(" active", "");
-  }
-  slides[slideIndex-1].style.display = "block";
-  dots[slideIndex-1].className += " active";
-}
+    
     
 </script>
 
