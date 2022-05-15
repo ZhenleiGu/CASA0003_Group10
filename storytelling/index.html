@@ -1,0 +1,1040 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>Effects of globalisation on the UK economy.</title>
+    <meta name="viewport" content="initial-scale=1,maximum-scale=1,user-scalable=no">
+    <link rel="icon" type="image/x-icon" href="https://raw.githubusercontent.com/mapbox/assembly/publisher-staging/src/svgs/mapbox.svg">
+    <script src="https://api.tiles.mapbox.com/mapbox-gl-js/v2.7.0/mapbox-gl.js"></script>
+    <link href="https://api.tiles.mapbox.com/mapbox-gl-js/v2.7.0/mapbox-gl.css" rel="stylesheet">
+    <script src="https://unpkg.com/intersection-observer@0.12.0/intersection-observer.js"></script>
+    <script src="https://unpkg.com/scrollama"></script>
+    <script type="text/javascript" src="https://assets.pyecharts.org/assets/echarts.min.js"></script>
+
+    <style>
+        body {
+          margin: 0;
+          padding: 0;
+          font-family: sans-serif;
+        }
+        a,
+        a:hover,
+        a:visited {
+          color: #0071bc;
+        }
+        #map {
+          top: 0;
+          height: 100vh;
+          width: 100vw;
+          position: fixed;
+        }
+  
+        .mapboxgl-popup {
+          max-width: 400px;
+          font: 12px/20px "Helvetica Neue", Arial, Helvetica, sans-serif;
+        }
+  
+        /* #mapInset {
+          bottom: 50px;
+          right: 30px;
+          height: 180px;
+          width: 250px;
+          max-width: 100%;
+          position: fixed;
+          z-index: 1;
+          opacity: 1;
+          transition: opacity 0.5s ease-in-out;
+          pointer-events: none;
+        } */
+        #header {
+          margin: auto;
+          width: 100%;
+          position: relative;
+          z-index: 5;
+        }
+        #header h1,
+        #header h2,
+        #header p {
+          margin: 0;
+          padding: 2vh 2vw;
+          text-align: center;
+        }
+        #footer {
+          width: 100%;
+          min-height: 5vh;
+          padding-top: 2vh;
+          padding-bottom: 2vh;
+          text-align: center;
+          line-height: 25px;
+          font-size: 13px;
+          position: relative;
+          z-index: 5;
+        }
+        #features {
+          padding-top: 10vh;
+          padding-bottom: 10vh;
+        }
+        .hidden {
+          visibility: hidden;
+        }
+        .centered {
+          width: 80vw;
+          margin: 0 auto;
+        }
+        .lefty {
+          width: 470px;
+          margin-left: 3vw;
+        }
+        .righty {
+          width: 45vw;
+          margin-left: 55vw;
+        }
+        .fully {
+          width: 100%;
+          margin: auto;
+        }
+        .light {
+          color: #444;
+          background-color: #fafafa;
+        }
+        .dark {
+          color: #fafafa;
+          background-color: #444;
+        }
+        .step {
+          padding-bottom: 50vh;
+          /* margin-bottom: 10vh; */
+          opacity: 0.25;
+        }
+        .step.active {
+          opacity: 0.9;
+        }
+  
+        .step div:nth-child(1) {
+          padding: 10px 10px;
+          line-height: 25px;
+          font-size: 13px;
+        }
+  
+        .step img {
+          width: 100%;
+        }
+  
+        @media (max-width: 550px) {
+          .centered,
+          .lefty
+          .righty,
+          .fully {
+            width: 90vw;
+            margin: 0 auto;
+          }
+        }
+  
+        /* Fix issue on mobile browser where scroll breaks  */
+        .mapboxgl-canvas-container.mapboxgl-touch-zoom-rotate.mapboxgl-touch-drag-pan,
+        .mapboxgl-canvas-container.mapboxgl-touch-zoom-rotate.mapboxgl-touch-drag-pan
+        .mapboxgl-canvas {
+          touch-action: unset;
+        }
+      </style>
+  <!-- Animate a point along a route -->
+      
+      <style>
+          .overlay {
+          position: absolute;
+          top: 10px;
+          left: 10px;
+          }
+  
+          .overlay button {
+          font: 600 12px/20px 'Helvetica Neue', Arial, Helvetica, sans-serif;
+          background-color: #3386c0;
+          color: #fff;
+          display: inline-block;
+          margin: 0;
+          padding: 10px 20px;
+          border: none;
+          cursor: pointer;
+          border-radius: 3px;
+          }
+  
+          .overlay button:hover {
+          background-color: #4ea0da;
+          }
+      </style>
+
+
+      <!-- Show polygon information on click -->   
+    <script>
+      // Create a new map.
+      map.on("load", () => {
+        // Add a source for the state polygons.
+        map.addSource("countries", {
+          type: "geojson",
+          data: "./a.geojson",
+        });
+
+        // Add a layer showing the country polygons.
+        map.addLayer({
+          id: "countries-layer",
+          type: "fill",
+          source: "countries",
+          paint: {
+            "fill-color": "rgba(200, 100, 240, 0.4)",
+            "fill-outline-color": "rgba(200, 100, 240, 1)",
+          },
+        });
+
+        // When a click event occurs on a feature in the country layers,
+        // open a popup at the location of the click, with description
+        // HTML from the click event's properties.
+        map.on("click", "countries-layer", (e) => {
+          new mapboxgl.Popup()
+            .setLngLat(e.lngLat)
+            .setHTML(e.features[0].properties.name)
+            .addTo(map);
+        });
+
+        // Change the cursor to a pointer when
+        // the mouse is over the states layer.
+        map.on("mouseenter", "countries-layer", () => {
+          map.getCanvas().style.cursor = "pointer";
+        });
+
+        // Change the cursor back to a pointer
+        // when it leaves the states layer.
+        map.on("mouseleave", "countries-layer", () => {
+          map.getCanvas().style.cursor = "";
+        });
+      });
+    </script>
+
+        
+      
+<!-- Animate a point along a route -->
+    <script src="https://unpkg.com/@turf/turf@6/turf.min.js"></script>
+      
+  </head>
+    
+  <body>
+    <div id="map"></div>
+    <div id="mapInset"></div>
+    <div id="story">
+      <div id="features">
+       <!-- UK -->
+        <div id="slug-style-id" class="step lefty active" data-scrollama-index="0" >
+          <div class="light">
+              <h1>United Kingdom</h1>
+            <p style = text-indent:25px;>
+                In 2020 United Kingdom was the number 5 economy in the world in terms of GDP (current US$), the number 11 in total exports,
+                the number 4 in total imports, the number 24 economy in terms of GDP per capita (current US$) and the number 13 most complex economy according to the Economic Complexity Index (ECI).
+            </p><p style = text-indent:25px>
+                The top imports of United Kingdom are Gold ($83.7B), Cars ($32.8B), Broadcasting Equipment ($15.8B), Packaged Medicaments ($14.8B), and Crude Petroleum ($14.8B), importing mostly from Germany ($74.4B), China ($73.1B), United States ($48.6B), Netherlands ($40.3B), and France ($30.3B).
+            </p><p style = text-indent:25px>
+                In 2020, United Kingdom was the world's biggest importer of Preserved Meat ($878M), Fermented Milk Products ($531M), Ceramic Bricks ($139M), Other Vegetable Residues and Waste ($126M), and Non-Retail Carded Wool Yarn ($64M).
+            </p>
+        </div>            
+        </div>  
+        <!-- Asia -->
+        <!-- China -->
+            <div id="first-identifier" class="step lefty active" data-scrollama-index="1">
+            <div class="light"> 
+              <div
+                id="AS"
+                class="chart-container"
+                style="width: 500px; height: 300px;">
+                <p><iframe id="barchart" src="chart/china.html" frameBorder="0" height="350px" width="500px" ></iframe></p>
+            </div>
+                <h1>China</h1>
+                <p style = text-indent:25px>
+                In 2020, China exported $73.1B to United Kingdom. The main products that 
+                China exported to United Kingdom are Broadcasting Equipment ($7.28B), Computers ($6.62B), and Other Cloth Articles ($4.43B). During the last 25 years the exports of China to United Kingdom have increased at an annualized rate of 13.4%, from $3.18B in 1995 to $73.1B in 2020.
+                </p><p style = text-indent:25px>
+                In November 2021, the top exports of China to United Kingdom were Telephones ($744M), Computers ($670M), Cars ($267M), Light Fixtures ($236M), and Models and Stuffed Animals ($192M). In November 2021 the top imports of China from United Kingdom were Cars ($627M), Crude Petroleum ($593M), Beauty Products ($216M), Packaged Medicaments ($138M), and Gas Turbines ($64M).</br>
+                 </p>
+              </div>
+            </div>
+
+        <!-- Singapore -->
+            <div id="third-identifier" class="step lefty active" data-scrollama-index="3">
+          <div class="light">
+            <div
+            id="AS2"
+            class="chart-container"
+            style="width: 500px; height: 300px;">
+            <p><iframe id="singapore" src="chart/sin.html" frameBorder="0" height="350px" width="500px" ></iframe></p>
+        </div>
+                
+            <h1>Singapore</h1>
+              <p style = text-indent:25px>
+                In 2020, Singapore exported $2.86B to United Kingdom. 
+                The main products that Singapore exported to United Kingdom are Gold ($1.28B), Gas Turbines ($370M), and Precious Metal Scraps ($131M). 
+                During the last 25 years the exports of Singapore to United Kingdom have decreased at an annualized rate of 0.83%, from $3.52B in 1995 to $2.86B in 2020.</br>
+                </p>
+              </div>      
+            </div>
+             </div>
+
+        <!-- North America -->
+        <!-- US -->
+            <div id="fourth-identifier" class="step lefty active" data-scrollama-index="4" >
+          <div class="light">
+              <div
+                id="NA"
+                class="chart-container"
+                style="width: 500px; height: 300px">
+                <p><iframe id="US" src="chart/US.html" frameBorder="0" height="350px" width="500px" ></iframe></p>
+              </div>
+              <h1 >United States</h1>
+                <p style = text-indent:25px>
+                In 2020, United States exported $48.6B to United Kingdom. The main products that United States exported to United Kingdom are Gold ($6.31B), Crude Petroleum ($3.89B), and Gas Turbines ($3.25B). During the last 25 years the exports of United States to United Kingdom have increased at an annualized rate of 2.05%, from $29.3B in 1995 to $48.6B in 2020.</br>
+              </p><p style = text-indent:25px>
+                In January 2022, the top exports of United States to United Kingdom were Gold ($605M), Crude Petroleum ($590M), Aircraft Parts ($522M), Petroleum Gas ($458M), and Packaged Medicaments ($291M). In January 2022 the top imports of United States from United Kingdom were Cars ($388M), Commodities not elsewhere specified ($332M), Packaged Medicaments ($213M), Gas Turbines ($166M), and Crude Petroleum ($136M).</br>
+              </p>
+              </div>
+              
+            </div>
+          </div>
+
+        <!-- Canada -->
+            <div id="fifth-identifier" class="step lefty active" data-scrollama-index="5">
+          <div class="light">
+
+              <div
+                id="NA1"
+                class="chart-container"
+                style="width: 500px; height: 300px"
+                ><p><iframe id="US" src="chart/canada.html" frameBorder="0" height="350px" width="500px" ></iframe></p>
+              </div>
+                <h1>Canada</h1>
+                <p style = text-indent:25px>
+                In 2020, Canada exported $13.2B to United Kingdom. The main products that Canada exported to United Kingdom are Gold ($9.62B), Crude Petroleum ($424M), and Iron Ore ($270M). During the last 25 years the exports of Canada to United Kingdom have increased at an annualized rate of 5.88%, from $3.16B in 1995 to $13.2B in 2020.</br>
+                </p><p style = text-indent:25px>
+                In November 2021, the top exports of Canada to United Kingdom were Gold (C$854M), Planes, Helicopters, and/or Spacecraft (C$85.2M), Crude Petroleum (C$69.9M), Radioactive Chemicals (C$39.3M), and Wheat (C$19.5M). In November 2021 the top imports of Canada from United Kingdom were Cars (C$83.6M), Silver (C$51M), Gas Turbines (C$48.3M), Packaged Medicaments (C$45.5M), and Hard Liquor (C$31.3M).</br>              
+              </p>
+              </div>
+              
+            </div>
+          </div>
+        
+        <!-- Europe -->
+        <!-- Germany -->
+            <div id="sixth-identifier" class="step lefty active" data-scrollama-index="6">
+            <div class="light">
+              <div
+                id="EU"
+                class="chart-container"
+                style="width: 500px; height: 300px"
+                ><p><iframe id="US" src="chart/Germany.html" frameBorder="0" height="350px" width="500px" ></iframe></p></div>
+                <h1>Germany</h1>
+                <p style = text-indent:25px>
+                In 2020, Germany exported $74.4B to United Kingdom. The main products that Germany exported to United Kingdom are Cars ($13.3B), Vehicle Parts ($2.88B), and Packaged Medicaments ($2.53B). During the last 25 years the exports of Germany to United Kingdom have increased at an annualized rate of 2.55%, from $39.6B in 1995 to $74.4B in 2020. </br>
+                </p><p style = text-indent:25px>
+                In November 2021, the top exports of Germany to United Kingdom were Motor cars and motor caravans (€806M), Chassis, bodies, engines etc. for motor... (€535M), Pharmaceutical products (€332M), Machinery for electricity production, distribution (€241M), and Articles of plastic (€199M). In November 2021 the top imports of Germany from United Kingdom were Motor cars and motor caravans (€312M), Petroleum oil and petroleum gases (€281M), Pharmaceutical products (€219M), Aircraft (€105M), and Chassis, bodies, engines etc. for motor vehicles (€99.5M).
+                 </br>
+                </p>
+              </div>
+            </div>
+            </div>
+        
+        <!-- Netherlands -->
+            <div id="seventh-identifier" class="step lefty active" data-scrollama-index="7">
+            <div class="light">
+              <div
+                id="EU1"
+                class="chart-container"
+                style="width:500px; height: 300px"
+                >
+                <p><iframe id="EUchart" src="chart/Netherlands.html" frameBorder="0" height="380px" width="500px" ></iframe></p>
+            </div>
+            <h1>Netherlands</h1>
+            <p style = text-indent:25px>
+                In 2020, Netherlands exported $40.3B to United Kingdom. The main products that Netherlands exported to United Kingdom are Broadcasting Equipment ($2.58B), Refined Petroleum ($1.48B), and Computers ($1.48B). During the last 25 years the exports of Netherlands to United Kingdom have increased at an annualized rate of 3.65%, from $16.4B in 1995 to $40.3B in 2020.</br>
+              </p>
+              </div>
+            </div>
+            </div>
+
+        <!-- France -->
+            <div id="eighth-identifier" class="step lefty active" data-scrollama-index="8">
+            <div class="light">
+              <div
+                id="EU2"
+                class="chart-container"
+                style="width: 500px; height: 300px"
+                ><p><iframe id="US" src="chart/France.html" frameBorder="0" height="350px" width="500px" ></iframe></p></div>
+                <h1>France</h1>
+                <p style = text-indent:25px>
+                In 2020, France exported $30.3B to United Kingdom. The main products that France exported to United Kingdom are Planes, Helicopters, and/or Spacecraft ($1.66B), Wine ($1.34B), and Packaged Medicaments ($1.19B). During the last 25 years the exports of France to United Kingdom have increased at an annualized rate of 0.56%, from $26.4B in 1995 to $30.3B in 2020.</br>
+              </p>
+              </div>
+            </div>
+            </div>
+
+        <!-- South America -->
+        <!-- Brazil -->
+            <div id="ninth-identifier" class="step lefty active" data-scrollama-index="9">
+          <div class="light">
+              <div
+                id="SA"
+                class="chart-container"
+                style="width: 500px; height: 300px"
+                ><p><iframe id="Brazil" src="chart/Brazil.html" frameBorder="0" height="350px" width="500px" ></iframe></p>
+              </div>
+                    <h1>Brazil</br></h1>
+                    <p style = text-indent:25px>
+                    In 2020, Brazil exported $2.61B to United Kingdom. The main products that Brazil exported to United Kingdom are Gold ($653M), Soybeans ($218M), and Other Prepared Meat ($211M). During the last 25 years the exports of Brazil to United Kingdom have increased at an annualized rate of 2.47%, from $1.42B in 1995 to $2.61B in 2020. In March 2022, the top exports of Brazil to United Kingdom were Gold ($73.8M), Soybeans ($28.4M), Hydrogen ($21.8M), Coffee ($18M), and Other Prepared Meat ($16.6M). In March 2022 the top imports of Brazil from United Kingdom were Petroleum Gas ($31.5M), Packaged Medicaments ($17.5M), Hard Liquor ($10.6M), Nitrile Compounds ($8.84M), and Machinery Having Individual Functions ($6.56M).</br>
+                  </p>
+                  </div>
+            
+            </div>
+          </div>
+
+        <!-- Chile -->
+            <div id="tenth-identifier" class="step lefty active" data-scrollama-index="10">
+          <div class="light">
+              <div
+                id="SA1"
+                class="chart-container"
+                style="width: 500px; height: 300px"
+                ><p><iframe id="Chile" src="chart/Chile.html" frameBorder="0" height="350px" width="500px" ></iframe></p>
+              </div>
+                    <h1>Chile</h1>
+                    <p style = text-indent:25px>
+                    In 2020, Chile exported $614M to United Kingdom. The main products that Chile exported to United Kingdom are Wine ($221M), Other Fruits ($68.1M), and Grapes ($60.7M). During the last 25 years the exports of Chile to United Kingdom have decreased at an annualized rate of 2.23%, from $1.08B in 1995 to $614M in 2020.In September 2021, the top exports of Chile to United Kingdom were Wine ($19.1M), Commodities not elsewhere specified ($3.93M), Precious Metal Scraps ($3.92M), Tropical Fruits ($2.93M), and Kaolin Coated Paper ($2.59M). In September 2021 the top imports of Chile from United Kingdom were Tractors ($10.1M), Delivery Trucks ($5.41M), Packaged Medicaments ($4.15M), Non-Knit Women's Suits ($3.28M), and Other Edible Preparations ($2.95M).</br>
+                  </p>
+                  </div>
+                </div>
+            </div>
+          </div>
+ 
+        <!-- Africa -->
+        <!-- Kenya -->
+            <div id="eleventh-identifier" class="step lefty active" data-scrollama-index="11">
+          <div class="light">
+              <div
+                id="AF"
+                class="chart-container"
+                style="width: 500px; height: 300px"
+                ><p><iframe id="Kenya" src="chart/AF.html" frameBorder="0" height="350px" width="500px" ></iframe></p>
+              </div>
+              <h1>Kenya</br></h1>
+              <p style = text-indent:25px>
+                In 2020, Kenya exported $435M to United Kingdom. The main products that Kenya exported to United Kingdom are Tea ($141M), Cut Flowers ($108M), and Legumes ($30.5M). During the last 25 years the exports of Kenya to United Kingdom have increased at an annualized rate of 2.45%, from $238M in 1995 to $435M in 2020.</br>
+              </p>
+              </div>
+            
+            </div>
+          </div>
+
+        <!-- Oceania -->
+        <!-- Australia -->
+            <div id="twelfth-identifier" class="step lefty active" data-scrollama-index="12">
+          <div class="light">
+
+              <div
+                id="OC"
+                class="chart-container"
+                style="width: 500px; height: 300px"
+                ><p><iframe id="Australia" src="chart/OC.html" frameBorder="0" height="350px" width="500px" ></iframe></p>
+              </div>
+              <h1>
+                Australia</br></h1>
+                <p style = text-indent:25px>
+                In 2020, Australia exported $10B to United Kingdom. The main products that Australia exported to United Kingdom are Gold ($8.25B), Wine ($350M), and Raw Lead ($336M). During the last 25 years the exports of Australia to United Kingdom have increased at an annualized rate of 7.35%, from $1.71B in 1995 to $10B in 2020.</br>
+              </p>
+              </div>
+            
+            </div>
+          </div>
+
+      </div>
+    </div>
+
+  
+
+<!-- Animate a point along a route  -->   
+
+    <div class="overlay">
+    <button id="replay">Replay</button>
+    </div>
+
+    <script src="./config.js"></script>
+
+    <script>
+      var initLoad = true;
+      var layerTypes = {
+        fill: ["fill-opacity"],
+        line: ["line-opacity"],
+        circle: ["circle-opacity", "circle-stroke-opacity"],
+        symbol: ["icon-opacity", "text-opacity"],
+        raster: ["raster-opacity"],
+        "fill-extrusion": ["fill-extrusion-opacity"],
+        heatmap: ["heatmap-opacity"],
+      };
+
+      var alignments = {
+        left: "lefty",
+        center: "centered",
+        right: "righty",
+        full: "fully",
+      };
+
+      function getLayerPaintType(layer) {
+        var layerType = map.getLayer(layer).type;
+        return layerTypes[layerType];
+      }
+
+      function setLayerOpacity(layer) {
+        var paintProps = getLayerPaintType(layer.layer);
+        paintProps.forEach(function (prop) {
+          var options = {};
+          if (layer.duration) {
+            var transitionProp = prop + "-transition";
+            options = { duration: layer.duration };
+            map.setPaintProperty(layer.layer, transitionProp, options);
+          }
+          map.setPaintProperty(layer.layer, prop, layer.opacity, options);
+        });
+      }
+
+      var story = document.getElementById("story");
+      var features = document.createElement("div");
+      features.setAttribute("id", "features");
+
+      var header = document.createElement("div");
+
+      if (config.title) {
+        var titleText = document.createElement("h1");
+        titleText.innerText = config.title;
+        header.appendChild(titleText);
+      }
+
+      if (config.subtitle) {
+        var subtitleText = document.createElement("h2");
+        subtitleText.innerText = config.subtitle;
+        header.appendChild(subtitleText);
+      }
+
+      if (config.byline) {
+        var bylineText = document.createElement("p");
+        bylineText.innerText = config.byline;
+        header.appendChild(bylineText);
+      }
+
+      if (header.innerText.length > 0) {
+        header.classList.add(config.theme);
+        header.setAttribute("id", "header");
+        story.appendChild(header);
+      }
+
+    //   var footer = document.createElement("div");
+
+    //   if (config.footer) {
+    //     var footerText = document.createElement("p");
+    //     footerText.innerHTML = config.footer;
+    //     footer.appendChild(footerText);
+    //   }
+
+    //   if (footer.innerText.length > 0) {
+    //     footer.classList.add(config.theme);
+    //     footer.setAttribute("id", "footer");
+    //     story.appendChild(footer);
+    //   }
+
+      mapboxgl.accessToken = config.accessToken;
+
+      const transformRequest = (url) => {
+        const hasQuery = url.indexOf("?") !== -1;
+        const suffix = hasQuery
+          ? "&pluginName=scrollytellingV2"
+          : "?pluginName=scrollytellingV2";
+        return {
+          url: url + suffix,
+        };
+      };
+
+      var map = new mapboxgl.Map({
+        container: "map",
+        style: config.style,
+        center: config.chapters[0].location.center,
+        zoom: config.chapters[0].location.zoom,
+        bearing: config.chapters[0].location.bearing,
+        pitch: config.chapters[0].location.pitch,
+        interactive: false,
+        transformRequest: transformRequest,
+        projection: config.projection,
+      });
+
+        // Create a inset map if enabled in config.js
+        if (config.inset) {
+        var insetMap = new mapboxgl.Map({
+          container: "mapInset", // container id
+          style: "mapbox://styles/mapbox/light-v10", //hosted style id
+          center: config.chapters[0].location.center,
+          // Hardcode above center value if you want insetMap to be static.
+          zoom: 1.4, // starting zoom
+          hash: false,
+          interactive: false,
+          attributionControl: false,
+          //Future: Once official mapbox-gl-js has globe view enabled,
+          //insetmap can be a globe with the following parameter.
+          //projection: 'globe'
+        });
+      }
+
+      if (config.showMarkers) {
+        var marker = new mapboxgl.Marker({ color: config.markerColor });
+        marker.setLngLat(config.chapters[0].location.center).addTo(map);
+      }
+
+      // instantiate the scrollama
+      var scroller = scrollama();
+   
+
+      map.on("load", function () {
+        if (config.use3dTerrain) {
+          map.addSource("mapbox-dem", {
+            type: "raster-dem",
+            url: "mapbox://styles/swpractice22/cl24evbdi000f14o5qhv8bege",
+            tileSize: 512,
+            maxzoom: 14,
+          });
+          // add the DEM source as a terrain layer with exaggerated height
+          map.setTerrain({ source: "mapbox-dem", exaggeration: 1.5 });
+
+          // add a sky layer that will show when the map is highly pitched
+          map.addLayer({
+            id: "sky",
+            type: "sky",
+            paint: {
+              "sky-type": "atmosphere",
+              "sky-atmosphere-sun": [0.0, 0.0],
+              "sky-atmosphere-sun-intensity": 15,
+            },
+          });
+        }
+/*Singapore
+        map.addSource("Singapore", {
+          type: "geojson",
+          data: {
+            type: "Feature",
+            properties: {
+              description:
+                "<strong>Singapore</strong><p>test</p>",
+            },
+            geometry: {
+              type: "Polygon",
+              coordinates: [
+                [
+                  [103.99053955078125, 1.3832907676696777], [103.9979476928711, 1.3698608875274658], [103.99413299560547, 1.3552775382995605], [103.98497009277344, 1.3441665172576904], [103.95997619628906, 1.3208332061767578], [103.8419189453125, 1.2590276002883911], [103.79830932617188, 1.259443998336792], [103.64691925048828, 1.3046523332595825], [103.64094543457031, 1.3183329105377197], [103.643310546875, 1.3313884735107422], [103.67108154296875, 1.3931939601898193], [103.67774963378906, 1.4036107063293457], [103.68440246582031, 1.4111106395721436], [103.69913482666016, 1.4236105680465698], [103.71359252929688, 1.4294438362121582], [103.80413818359375, 1.4449996948242188], [103.81719970703125, 1.445277452468872], [103.82942199707031, 1.4436109066009521], [103.84831237792969, 1.4347219467163086], [103.87940979003906, 1.417222023010254], [103.89400482177734, 1.4074996709823608], [103.96774291992188, 1.3872220516204834], [103.99053955078125, 1.3832907676696777],
+                ],
+              ],
+            },
+          },
+        });
+
+        // Add a new layer to visualize the polygon.
+        map.addLayer({
+          id: "Singapore",
+          type: "fill",
+          source: "Singapore", // reference the data source
+          layout: {},
+          paint: {
+            "fill-color": "#0080ff", // blue color fill
+            "fill-opacity": 0.5,
+          },
+        });
+
+        map.on("mouseenter", "Singapore", (e) => {
+          // Change the cursor style as a UI indicator.
+          map.getCanvas().style.cursor = "pointer";
+
+          // Copy coordinates array.
+          const coordinates = e.features[0].geometry.coordinates[0][0];
+          const description = e.features[0].properties.description;
+
+          // Ensure that if the map is zoomed out such that multiple
+          // copies of the feature are visible, the popup appears
+          // over the copy being pointed to.
+          while (Math.abs(e.lngLat.lng - coordinates[0]) > 180) {
+            coordinates[0] += e.lngLat.lng > coordinates[0] ? 360 : -360;
+          }
+
+          // Populate the popup and set its coordinates
+          // based on the feature found.
+          popup.setLngLat(coordinates).setHTML(description).addTo(map);
+        });
+*/
+         
+        map.on("mouseenter", "places", (e) => {
+          // Change the cursor style as a UI indicator.
+          map.getCanvas().style.cursor = "pointer";
+
+          // Copy coordinates array.
+          const coordinates = e.features[0].geometry.coordinates.slice();
+          const description = e.features[0].properties.description;
+
+          // Ensure that if the map is zoomed out such that multiple
+          // copies of the feature are visible, the popup appears
+          // over the copy being pointed to.
+          while (Math.abs(e.lngLat.lng - coordinates[0]) > 180) {
+            coordinates[0] += e.lngLat.lng > coordinates[0] ? 360 : -360;
+          }
+
+          // Populate the popup and set its coordinates
+          // based on the feature found.
+          popup.setLngLat(coordinates).setHTML(description).addTo(map);
+        });
+
+        // Create a popup, but don't add it to the map yet.
+        const popup = new mapboxgl.Popup({
+          closeButton: false,
+          closeOnClick: false,
+        });
+        map.on("mouseleave", "places", () => {
+          map.getCanvas().style.cursor = "";
+          popup.remove();
+        });
+          
+/*        map.on("mouseleave", "Singapore", () => {
+          map.getCanvas().style.cursor = "";
+          popup.remove();
+        });
+*/
+// As the map moves, grab and update bounds in inset map.
+if (config.inset) {
+          map.on("move", getInsetBounds);
+        }
+        // setup the instance, pass callback functions
+        scroller
+          .setup({
+            step: ".step",
+            offset: 0.5,
+            progress: true,
+          })
+          .onStepEnter(async (response) => {
+            var chapter = config.chapters.find(
+              (chap) => chap.id === response.element.id
+            );
+            response.element.classList.add("active");
+            map[chapter.mapAnimation || "flyTo"](chapter.location);
+
+            if (config.inset) {
+              if (chapter.location.zoom < 5) {
+                insetMap.flyTo({ center: chapter.location.center, zoom: 0 });
+              } else {
+                insetMap.flyTo({ center: chapter.location.center, zoom: 3 });
+              }
+            }
+            if (config.showMarkers) {
+              marker.setLngLat(chapter.location.center);
+            }
+            if (chapter.onChapterEnter.length > 0) {
+              chapter.onChapterEnter.forEach(setLayerOpacity);
+            }
+            if (chapter.callback) {
+              window[chapter.callback]();
+            }
+            if (chapter.rotateAnimation) {
+              map.once("moveend", () => {
+                const rotateNumber = map.getBearing();
+                map.rotateTo(rotateNumber + 180, {
+                  duration: 30000,
+                  easing: function (t) {
+                    return t;
+                  },
+                });
+              });
+            }
+          })
+          .onStepExit((response) => {
+            var chapter = config.chapters.find(
+              (chap) => chap.id === response.element.id
+            );
+            response.element.classList.remove("active");
+            if (chapter.onChapterExit.length > 0) {
+              chapter.onChapterExit.forEach(setLayerOpacity);
+            }
+          });
+
+      });
+
+      //Helper functions for insetmap
+      function getInsetBounds() {
+        let bounds = map.getBounds();
+
+        let boundsJson = {
+          type: "FeatureCollection",
+          features: [
+            {
+              type: "Feature",
+              properties: {},
+              geometry: {
+                type: "Polygon",
+                coordinates: [
+                  [
+                    [bounds._sw.lng, bounds._sw.lat],
+                    [bounds._ne.lng, bounds._sw.lat],
+                    [bounds._ne.lng, bounds._ne.lat],
+                    [bounds._sw.lng, bounds._ne.lat],
+                    [bounds._sw.lng, bounds._sw.lat],
+                  ],
+                ],
+              },
+            },
+          ],
+        };
+
+        if (initLoad) {
+          addInsetLayer(boundsJson);
+          initLoad = false;
+        } else {
+          updateInsetLayer(boundsJson);
+        }
+      }
+
+      function addInsetLayer(bounds) {
+        insetMap.addSource("boundsSource", {
+          type: "geojson",
+          data: bounds,
+        });
+
+        insetMap.addLayer({
+          id: "boundsLayer",
+          type: "fill",
+          source: "boundsSource", // reference the data source
+          layout: {},
+          paint: {
+            "fill-color": "#fff", 
+            "fill-opacity": 0.2,
+          },
+        });
+        // Add a black outline around the polygon.
+        insetMap.addLayer({
+          id: "outlineLayer",
+          type: "line",
+          source: "boundsSource",
+          layout: {},
+          paint: {
+            "line-color": "#000",
+            "line-width": 1,
+          },
+        });
+      }
+
+      function updateInsetLayer(bounds) {
+        insetMap.getSource("boundsSource").setData(bounds);
+      }
+
+      // setup resize event
+      window.addEventListener("resize", scroller.resize);
+    </script>
+
+<!-- Animate a point along a route -->  
+ 
+  <script>
+    // China
+    const origin = [105.88597, 35.14203] ;
+    // Japan
+    const origin1 = [140.32102, 36.20331] ; 
+    // Singapore
+    const origin2 = [103.85338, 1.33280] ;
+    // US
+    const origin3 = [-98.02535, 39.05059] ;
+    // Canada
+    const origin4 = [-109.15288, 59.85914] ; 
+    // Germany
+    const origin5 = [10.65355, 50.96338] ;
+    // Netherlands
+    const origin6 = [5.73171, 52.05367] ;
+    // France
+    const origin7 = [3.95916, 47.20650] ; 
+    // Brazil
+    const origin8 = [-52.54898, -13.01003] ;
+    // Chile
+    const origin9 = [-70.32699, -25.91699] ; 
+    // Kenya
+    const origin10 = [37.99519, 0.06608] ;
+    // Australia
+    const origin11 = [137.33283, -24.80944] ; 
+      
+      
+      
+    // UK
+    const destination = [-2.30685, 54.25695];
+
+    // A simple line from origin to destination.
+    const route = {
+    'type': 'FeatureCollection',
+    'features': [
+    {
+    'type': 'Feature',
+    'geometry': {
+    'type': 'LineString',
+    'coordinates': [
+                    [origin, destination],
+                    [origin1, destination],
+                    [origin2, destination],
+                    [origin3, destination],
+                    [origin4, destination],
+                    [origin5, destination],
+                    [origin6, destination],
+                    [origin7, destination],
+                    [origin8, destination],
+                    [origin9, destination],
+                    [origin10, destination],
+                    [origin11, destination]
+        
+            
+        ]
+    }
+    }
+    ]
+    };
+
+    // Coordinates are initially set to origin.
+    const point = {
+    'type': 'FeatureCollection',
+    'features': [
+    {
+    'type': 'Feature',
+    'properties': {},
+    'geometry': {
+    'type': 'Point',
+    'coordinates': [origin,
+                    origin1,
+                    origin2,
+                    origin3,
+                    origin4,
+                    origin5,
+                    origin6,
+                    origin7,
+                    origin8,
+                    origin9,
+                    origin10,
+                    origin11
+                   ]
+    }
+    }
+    ]
+    };
+
+    // Calculate the distance in kilometers between route start/end point.
+    const lineDistance = turf.length(route.features[0]);
+
+    const arc = [];
+
+    // Number of steps to use in the arc and animation, more steps means
+    // a smoother arc and animation, but too many steps will result in a
+    // low frame rate
+    const steps = 500;
+
+    // Draw an arc between the `origin` & `destination` of the two points
+    for (let i = 0; i < lineDistance; i += lineDistance / steps) {
+    const segment = turf.along(route.features[0], i);
+    arc.push(segment.geometry.coordinates);
+    }
+
+    // Update the route with calculated arc coordinates
+    route.features[0].geometry.coordinates = arc;
+
+    // Used to increment the value of the point measurement against the route.
+    let counter = 0;
+
+    map.on('load', () => {
+    // Add a source and layer displaying a point which will be animated in a circle.
+    map.addSource('route', {
+    'type': 'geojson',
+    'data': route
+    });
+
+    map.addSource('point', {
+    'type': 'geojson',
+    'data': point
+    });
+
+    map.addLayer({
+    'id': 'route',
+    'source': 'route',
+    'type': 'line',
+    'paint': {
+    'line-width': 2,
+    'line-color': '#007cbf'
+    }
+    });
+
+    map.addLayer({
+    'id': 'point',
+    'source': 'point',
+    'type': 'symbol',
+    'layout': {
+    // This icon is a part of the Mapbox Streets style.
+    // To view all images available in a Mapbox style, open
+    // the style in Mapbox Studio and click the "Images" tab.
+    // To add a new image to the style at runtime see
+    // https://docs.mapbox.com/mapbox-gl-js/example/add-image/
+    'icon-image': 'airport-15',
+    'icon-rotate': ['get', 'bearing'],
+    'icon-rotation-alignment': 'map',
+    'icon-allow-overlap': true,
+    'icon-ignore-placement': true
+    }
+    });
+
+    function animate() {
+    const start =
+    route.features[0].geometry.coordinates[
+    counter >= steps ? counter - 1 : counter
+    ];
+    const end =
+    route.features[0].geometry.coordinates[
+    counter >= steps ? counter : counter + 1
+    ];
+    if (!start || !end) return;
+
+    // Update point geometry to a new position based on counter denoting
+    // the index to access the arc
+    point.features[0].geometry.coordinates =
+    route.features[0].geometry.coordinates[counter];
+
+    // Calculate the bearing to ensure the icon is rotated to match the route arc
+    // The bearing is calculated between the current point and the next point, except
+    // at the end of the arc, which uses the previous point and the current point
+    point.features[0].properties.bearing = turf.bearing(
+    turf.point(start),
+    turf.point(end)
+    );
+
+    // Update the source with this new data
+    map.getSource('point').setData(point);
+
+    // Request the next frame of animation as long as the end has not been reached
+    if (counter < steps) {
+    requestAnimationFrame(animate);
+    }
+
+    counter = counter + 1;
+    }
+
+    document.getElementById('replay').addEventListener('click', () => {
+    // Set the coordinates of the original point back to origin
+    point.features[0].geometry.coordinates = origin;
+
+    // Update the source layer
+    map.getSource('point').setData(point);
+
+    // Reset the counter
+    counter = 0;
+
+    // Restart the animation
+    animate(counter);
+    });
+
+    // Start the animation
+    animate(counter);
+    });
+    </script>
+
+  </body>
+</html>
