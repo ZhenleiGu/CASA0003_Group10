@@ -71,9 +71,9 @@
 <div id="map"></div>
 <div class='map-overlay top'>
     <div class='map-overlay-inner'>
-        <h1>UKUKUKU</h1>
-        <h2 id='d_c'>Introduction。。。。。。。。。。。。</h2>
-        <p id='d'>Put the mouse on the route for more information</p>
+        <h1 style="color:rgb(70, 70, 70);font-family:verdana">UKUKUKU</h1>
+        <h2 id='d_c' style="color:rgb(70, 70, 70);font-family:verdana">Introduction。。。。。。。。。。。。</h2>
+        <p id='d' style="color:rgb(70, 70, 70);font-family:verdana">Put the mouse on the route for more information</p>
     </div>
 </div>
 <script>
@@ -192,7 +192,8 @@
                         'Brazil','#2E8B57',
                         /* other */ '#ccc'
                     ],
-                'line-width': 7
+                'line-width': 6,
+                'line-opacity': 0.6
             }
         });
         
@@ -220,7 +221,8 @@
             if (e.features.length > 0) {
                 hoveredStateId = e.features[0].layer.id;
                 console.log(hoveredStateId)
-                map.setPaintProperty(hoveredStateId, 'line-width', 12);
+                map.setPaintProperty(hoveredStateId, 'line-width', 10);
+                map.setPaintProperty(hoveredStateId, 'line-opacity', 0.9)
                 const d_name = e.features[0].layer.id;
                 const name = list1[d_name];
                 const description = list2[d_name];
@@ -232,7 +234,8 @@
         
         map.on('mouseleave', c, () => {
             if (hoveredStateId !== null) {
-                map.setPaintProperty(hoveredStateId, 'line-width', 7);
+                map.setPaintProperty(hoveredStateId, 'line-width', 6);
+                map.setPaintProperty(hoveredStateId, 'line-opacity', 0.6)
                 document.getElementById('d_c').innerHTML = introduction;
                 document.getElementById('d').innerHTML = putmouseon;
             }
