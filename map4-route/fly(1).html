@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>Add a line to a map using a GeoJSON source</title>
+<meta name="viewport" content="initial-scale=1,maximum-scale=1,user-scalable=no">
+<link href="https://api.mapbox.com/mapbox-gl-js/v2.8.2/mapbox-gl.css" rel="stylesheet">
+<script src="https://api.mapbox.com/mapbox-gl-js/v2.8.2/mapbox-gl.js"></script>
+<style>
+    body { margin: 0; padding: 0; }
+
+    #map { position:absolute; top:0; bottom:0; width:100%; }
+    .map-overlay {
+        font: 10px/18px 'Helvetica Neue', Arial, Helvetica, sans-serif;
+        position: absolute;
+        width: 30%;
+        bottom: 1;
+        left: 1;
+        padding: 20px;
+    }
+
+    .map-overlay .map-overlay-inner {
+        background-color: #FFFAF0;
+        box-shadow:0 1px 2px rgba(0, 0, 0, 0.20);
+        border-radius: 3px;
+        padding: 2px;
+        margin-bottom: 2px;
+    }
+
+    .map-overlay h2 {
+        line-height: 23px;
+        display: block;
+        margin: 0 10 10px;
+    }
+
+    .map-overlay label {
+        font: 16px/18px 'Helvetica Neue', Arial, Helvetica, sans-serif;
+        vertical-align: bottom;
+        margin: 20;
+        padding: 20;
+    }
+
+    .map-overlay .legend .bar {
+        height: 10px;
+        width: 100%;
+        background: linear-gradient(to right, #FCA107, #7F3121);
+    }
+    .map-overlay input {
+        display: inline;
+        vertical-align: middle;
+        margin: 5px;
+        padding: 0;
+    }
+
+    .map-overlay p.credit {
+       margin: 5px 0 0 0;
+       padding: 0;
+    }
+/*
+    .marker {
+        display: block;
+        border: none;
+        border-radius: 50%;
+        cursor: pointer;
+        padding: 0;
+    }
+*/
+</style>
+</head>
+<body>
+<div id="map"></div>
+    
+    
+
+<div class='map-overlay top'>
+    <div class='map-overlay-inner'>
+        <h1 style="color:rgb(70, 70, 70);font-family:verdana">UKUKUKU</h1>
+        <h2 id='d_c' style="color:rgb(70, 70, 70);font-family:verdana">Introduction。。。。。。。。。。。。</h2>
+        <p id='d' style="color:rgb(70, 70, 70);font-family:verdana">Put the mouse on the route for more information</p>
+    </div>
+</div>
+    
+    <div class='map-overlay top' style="left:800px;width: 400px;color:rgba(70, 70, 70, 0.842);">
+    <div class='map-overlay-inner'style="left:900px;width: 400px; height: 690px;color:rgba(70, 70, 70, 0.842);">
+         <p><iframe id="table1" src="peu.html" frameBorder="0" height="800px" width="400px" ></iframe></p>
+        </div>
+    </div>
+
+<script>
+	mapboxgl.accessToken = 'pk.eyJ1IjoiZ29kd2luZ3UiLCJhIjoiY2ttaGpqbTIyMDd3YjJxbXUwNmRoZXBqZyJ9.wj6eUX4MZn91_nqZ3BeOGA';
+    const map = new mapboxgl.Map({
+        container: 'map',
+        style: 'mapbox://styles/godwingu/cl36hk3sn008a15qftcp2gw2v',
+        center: [170, 20],
+        zoom: 0.7,
+        cooperativeGestures: true
+    });
+    let hoveredStateId = null;
+    
+    const point = {
+        'type': 'FeatureCollection',
+        'features': [
+                        {
+                'type': 'Feature',
+                'properties': {"country":"England",
+                               'iconSize': [30, 18],
+                              'url':'https://www.crwflags.com/art/countries/uk.gif'},
+                'geometry': {
+                    'type': 'Point',
+                    'coordinates': [-0.118092,51.509865],
+                }
+            },
+            {
+                'type': 'Feature',
+                'properties': {"country":"Spain",
+                               'iconSize': [30, 21],
+                              'url':'https://www.crwflags.com/fotw/images/e/es.gif'},
+                'geometry': {
+                    'type': 'Point',
+                    'coordinates': [-3.141733267247247,40.40870769590359],
+                }
+            },
+            {
+                'type': 'Feature',
+                'properties': {"country":"Brazil",
+                               'iconSize': [30, 21],
+                              'url':'https://www.crwflags.com/fotw/images/b/br1.gif'},
+                'geometry': {
+                    'type': 'Point',
+                    'coordinates': [-52.367007837474404,-9.35009837890955]
+                }
+            },
+            {
+                'type': 'Feature',
+                'properties': {"country":"New Zealand",
+                               'iconSize': [30, 16],
+                              'url':'https://www.crwflags.com/fotw/images/n/nz.gif'},
+                'geometry': {
+                    'type': 'Point',
+                    'coordinates': [172.34288094324887,-41.566883015432595]
+                }
+            },
+            {   
+                'type': 'Feature',
+                'properties': {"country":"Israel",
+                               'iconSize': [30, 22],
+                              'url':'https://www.crwflags.com/fotw/images/i/il.gif'},
+                'geometry': {
+                    'type': 'Point',
+                    'coordinates': [34.81194391835848,31.85001971506628]
+                }
+            }
+        ]
+    };
+    
+    map.on('load', () => {
+        map.addSource('routes', {
+            'type': 'geojson',
+            'data': './route.geojson'
+        });
+        
+        map.addSource('point', {
+            'type': 'geojson',
+            'data': point
+        });
+    for (const marker of point.features) {
+        // Create a DOM element for each marker.
+        const el = document.createElement('div');
+        const width = marker.properties.iconSize[0];
+        const height = marker.properties.iconSize[1];
+        const url = marker.properties.url;
+        console.log(url);
+        el.className = 'marker';
+        el.style.backgroundImage = `url(${url})`;
+        el.style.width = `${width}px`;
+        el.style.height = `${height}px`;
+        el.style.backgroundSize = '100%';
+        
+        new mapboxgl.Marker(el)
+        .setLngLat(marker.geometry.coordinates)
+        .addTo(map);
+        }
+    
+    var introduction = 'Introduction';
+    var putmouseon = 'Put the mouse on the route for more information';
+    var name_list = ['Spain','Israel','New Zealand','Brazil'];
+    var list1 = ['Spain','Israel','New Zealand','Brazil'];
+    var list2 = ['<h3>Tomatoes</h3>Per tonne of loose tomatoes delivered to the RDC, PEU and GWP of UK produce were four and three times greater, respectively, than for Spanish produce.  Abiotic resource use was c. 35 % greater for UK production, mainly due to energy consumption and the greater resources needed to build the permanent greenhouses. In contrast, the eutrophication and acidification potentials of Spanish produce were both c. twice as large as those of UK produce. Pesticide use was seven times greater for Spanish production, while water use was 50 % greater. As a result, the UK relies more on imports for tomatoes than on home-grown production.<br><h3>Strawberries</h3>Post-farm gate PEU and GWP were three and four times greater for Spanish produce than for UK. The PEU and GWP associated with transport from Spain accounted for only c. 22 % and 30 % of the totals for Spanish produce, respectively. While imported strawberries from Spain appear to have smaller PEU and GWP burdens than UK production, the substantial use of irrigation water has potentially led to water supply and contamination concerns in Spain, and there may be increases in energy use and GWP as a result of future growth in water demand. On balance, therefore, British imported strawberries are almost on a par with their native counterparts.',
+                 'Per tonne of early potatoes delivered to the RDC, the PEU and GWP of early potatoes from Israel were c. 4 and 1.7 times greater than for UK produce. This is due to the greater energy intensity associated with irrigation (water supply), smaller yields (compared with UK main crop) and greater transport. Eutrophication and acidification potentials, abiotic resource and water use were all greater for Israeli production, although pesticide and land use were less. As a result, the UK relies more on imports for potatoes than on home-grown production. ',
+                 '<h3>SApple</h3>Due to the energy required for transport to the UK, total PEU and GWP were 2.2 and 3.1 times greater for apples produced in NZ than in the UK. Post-farm gate GWP from NZ production was dominated by transport to the UK (80 %), albeit some of those emissions arose from the need to chill the apples during transport. For UK produce storage (29 %), packaging (26 %) and processing (23 %) were of similar importance. As a result, the UK relies more on imports for apples than on home-grown production.<br><h3>Lamb</h3>The main burdens of PEU and GHG emission pre-farm gate are about 30 % less in NZ than the UK. Abiotic resource use and land requirement were about 50 % and about 80 % greater for UK production due to the greater land required for less productive pastures in the UK and a requirement, for some flocks, of housing during lambing. Since pesticides are not applied to sheep pastures in either country and requirements for water are the same, there were no differences in the consumption of those resources. On balance, therefore, British imported lamb is almost on a par with their native counterparts.',
+                 
+                 '<h3>Poultry</h3>The burdens of primary production are broadly similar between Brazil and the UK, but energy use is c. 25 % less in Brazil and GWP c. 17 % less. Total PEU from the production of poultry in Brazil, at 24.7 GJ/t, was c. 18 % greater than that for the UK (20.9 GJ/t). The total eutrophication and acidification potentials were c. two and four times greater from production in Brazil. Other impacts were similar since production in both countries is mainly in large units, in which the birds are reared indoors thus generating similar requirements for land, water and abiotic inputs. On balance, therefore, British imported poultry is almost on a par with their native counterparts.<br><h3>Beef</h3>source of GWP from pre-farm gate production. Our estimates of the PEU required for beef processing, at c. 1.8 GJ/t for the UK and c. 4.1 GJ/t in Brazil were within the range of results quoted in earlier work. Acidification (*5) and eutrophication (+50 %) were much greater from rearing beef in the UK than in Brazil. Abiotic resource use was c. eight times greater from production in the UK, since beef cattle are typically housed indoors for 5–6 months of the year requiring infrastructure such as buildings, yards etc. As a result, the UK relies more on imports for beef than on home-grown production.'
+                 ]
+    for (const c in name_list){
+        c_name = name_list[c]
+        console.log(c_name)
+        map.addLayer({
+            'id': c,
+            'type': 'line',
+            'source': 'routes',
+            'layout': {
+                'line-join': 'round',
+                'line-cap': 'round'
+            },
+            'filter': ['==', 'country', c_name],
+            'paint': {
+                'line-color': ['match',
+                        ['get', 'country'],
+                        'Spain','#CC0000', 
+                        'Israel','#0357FF',
+                        'New Zealand','#000080',
+                        'Brazil','#2E8B57',
+                        /* other */ '#ccc'
+                    ],
+                'line-width': 6,
+                'line-opacity': 0.6
+            }
+        });
+        
+//        map.addLayer({
+//            'id': c_name+'p',
+//            'source': 'point',
+//            'type': 'symbol',
+//            'filter': ['==', 'country', c_name],
+//            'layout': {
+//                // This icon is a part of the Mapbox Streets style.
+//                // To view all images available in a Mapbox style, open
+//                // the style in Mapbox Studio and click the "Images" tab.
+//                // To add a new image to the style at runtime see
+//                // https://docs.mapbox.com/mapbox-gl-js/example/add-image/
+//                'icon-image': 'airport-15',
+//                'icon-rotate': ['get', 'bearing'],
+//                'icon-rotation-alignment': 'map',
+//                'icon-allow-overlap': true,
+//                'icon-ignore-placement': true
+//            }
+//        });
+        
+        map.on('mousemove', c, (e) => {
+        console.log(e.features[0].layer)
+            if (e.features.length > 0) {
+                hoveredStateId = e.features[0].layer.id;
+                console.log(hoveredStateId)
+                map.setPaintProperty(hoveredStateId, 'line-width', 10);
+                map.setPaintProperty(hoveredStateId, 'line-opacity', 0.9)
+                const d_name = e.features[0].layer.id;
+                const name = list1[d_name];
+                const description = list2[d_name];
+                document.getElementById('d_c').innerHTML = name;
+                document.getElementById('d').innerHTML = description;
+            }
+            
+        });
+        
+        map.on('mouseleave', c, () => {
+            if (hoveredStateId !== null) {
+                map.setPaintProperty(hoveredStateId, 'line-width', 6);
+                map.setPaintProperty(hoveredStateId, 'line-opacity', 0.6)
+                document.getElementById('d_c').innerHTML = introduction;
+                document.getElementById('d').innerHTML = putmouseon;
+            }
+            hoveredStateId = null;
+        });
+        
+        map.on('mouseenter', c, () => {
+                map.getCanvas().style.cursor = 'pointer';
+            });
+
+            // Change it back to a pointer when it leaves.
+        map.on('mouseleave', c_name , () => {
+            map.getCanvas().style.cursor = '';
+        });
+        
+        
+        map.on('click', c , (e) => {
+            d_name = e.features[0].layer.id;
+            const name = list1[d_name];
+            const description = list2[d_name];
+            document.getElementById('d_c').innerHTML = name;
+            document.getElementById('d').innerHTML = description;
+            
+        });
+        
+        
+        
+    }
+    });
+    
+    
+</script>
+
+</body>
+</html>
