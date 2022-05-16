@@ -4,8 +4,8 @@
 <meta charset="utf-8">
 <title>Add a line to a map using a GeoJSON source</title>
 <meta name="viewport" content="initial-scale=1,maximum-scale=1,user-scalable=no">
-<link href="https://api.mapbox.com/mapbox-gl-js/v2.8.2/mapbox-gl.css" rel="stylesheet">
-<script src="https://api.mapbox.com/mapbox-gl-js/v2.8.2/mapbox-gl.js"></script>
+<link href="https://api.mapbox.com/mapbox-gl-js/v2.7.0/mapbox-gl.css" rel="stylesheet">
+<script src="https://api.mapbox.com/mapbox-gl-js/v2.7.0/mapbox-gl.js"></script>
 <style>
     body { margin: 0; padding: 0; }
 
@@ -74,6 +74,45 @@
         padding: 0;
     }
 */
+    .container {
+      overflow: hidden;
+    }
+
+    .filterDiv {
+      float: left;
+      background-color: #2196F3;
+      color: #ffffff;
+      width: 100px;
+      line-height: 100px;
+      text-align: center;
+      margin: 2px;
+      display: none; /* Hidden by default */
+    }
+
+    /* The "show" class is added to the filtered elements */
+    .show {
+      display: block;
+    }
+
+    /* Style the buttons */
+    .btn {
+      border: none;
+      outline: none;
+      padding: 12px 16px;
+      background-color: #f1f1f1;
+      cursor: pointer;
+    }
+
+    /* Add a light grey background on mouse-over */
+    .btn:hover {
+      background-color: #ddd;
+    }
+
+    /* Add a dark background to the active button */
+    .btn.active {
+      background-color: #666;
+      color: white;
+    }
 </style>
 </head>
 <body>
@@ -84,7 +123,7 @@
 <div class='map-overlay top'>
     <div class='map-overlay-inner'>
         <h1 style="color:rgb(70, 70, 70);font-family:verdana">What Food Should We choose?<br > Home Grow or Import? </h1>
-        <h2 id='d_c' style="color:rgb(70, 70, 70);font-family:verdana">Introduction。。。。。。。。。。。。</h2>
+        <h2 id='d_c' style="color:rgb(70, 70, 70);font-family:verdana">Webb et al.(2013) assessed seven foods from four countries from an environmental perspective. The PEU and GWP of food imported and produced in the UK were compared considering the transportation cost. Thus, we can get the impact of different food imports from different countries on the environment and its rationality.</h2>
         <p id='d' style="color:rgb(70, 70, 70);font-family:verdana">Put the mouse on the route for more information</p>
     </div>
 </div>
@@ -95,8 +134,12 @@
     
 <div class='map-overlay top'>
     <div class='map-overlay1'>
-    <div class='map-overlay-inner'style="width: 400px; height: 690px;color:rgba(70, 70, 70, 0.842);">
-         <iframe id="table1" src="peu.html" frameBorder="0" height="690px" width="400px"></iframe>
+        <div id="myBtnContainer">
+              <button id='peu' class="btn active"> PEU</button>
+              <button id='co2' class="btn"> GWP</button>
+            </div>
+        <div class='map-overlay-inner'style="width: 400px; height: 700px;color:rgba(70, 70, 70, 0.842);">
+             <iframe id="table1" src="peu.html" frameBorder="0" height="6990px" width="400px"></iframe>
 
         </div>
     </div>
@@ -109,8 +152,8 @@
     const map = new mapboxgl.Map({
         container: 'map',
         style: 'mapbox://styles/godwingu/cl36hk3sn008a15qftcp2gw2v',
-        center: [170, 20],
-        zoom: 0.7,
+        center: [0, 20],
+        zoom: 0.4,
         cooperativeGestures: true
     });
     let hoveredStateId = null;
@@ -199,7 +242,7 @@
         .addTo(map);
         }
     
-    var introduction = 'Introduction';
+    var introduction = 'Webb et al.(2013) assessed seven foods from four countries from an environmental perspective. The PEU and GWP of food imported and produced in the UK were compared considering the transportation cost. Thus, we can get the impact of different food imports from different countries on the environment and its rationality.';
     var putmouseon = 'Put the mouse on the route for more information';
     var name_list = ['Spain','Israel','New Zealand','Brazil'];
     var list1 = ['Spain','Israel','New Zealand','Brazil'];
@@ -304,34 +347,47 @@
     }
     });
     //Slide Show effect between Statistics
-var slideIndex = 1;
-showSlides(slideIndex);
-
-// Next/previous controls
-function plusSlides(n) {
-  showSlides(slideIndex += n);
-}
-
-// Thumbnail image controls
-function currentSlide(n) {
-  showSlides(slideIndex = n);
-}
-
-function showSlides(n) {
-  var i;
-  var slides = document.getElementsByClassName("mySlides");
-  var dots = document.getElementsByClassName("dot");
-  if (n > slides.length) {slideIndex = 1}
-  if (n < 1) {slideIndex = slides.length}
-  for (i = 0; i < slides.length; i++) {
-      slides[i].style.display = "none";
-  }
-  for (i = 0; i < dots.length; i++) {
-      dots[i].className = dots[i].className.replace(" active", "");
-  }
-  slides[slideIndex-1].style.display = "block";
-  dots[slideIndex-1].className += " active";
-}
+//    var slideIndex = 1;
+//    showSlides(slideIndex);
+//
+//    // Next/previous controls
+//    function plusSlides(n) {
+//      showSlides(slideIndex += n);
+//    }
+//
+//    // Thumbnail image controls
+//    function currentSlide(n) {
+//      showSlides(slideIndex = n);
+//    }
+//
+//    function showSlides(n) {
+//      var i;
+//      var slides = document.getElementsByClassName("mySlides");
+//      var dots = document.getElementsByClassName("dot");
+//      if (n > slides.length) {slideIndex = 1}
+//      if (n < 1) {slideIndex = slides.length}
+//      for (i = 0; i < slides.length; i++) {
+//          slides[i].style.display = "none";
+//      }
+//      for (i = 0; i < dots.length; i++) {
+//          dots[i].className = dots[i].className.replace(" active", "");
+//      }
+//      slides[slideIndex-1].style.display = "block";
+//      dots[slideIndex-1].className += " active";
+//    }
+    
+    document.getElementById('peu').addEventListener("click", function() {
+      console.log('111');
+      document.getElementById("table1").src = "peu.html";
+      document.getElementById("peu").className = 'btn active';
+      document.getElementById("co2").className = 'btn'
+    });
+    
+    document.getElementById('co2').addEventListener("click", function() {
+      document.getElementById("table1").src = "co2.html";
+      document.getElementById("peu").className = 'btn';
+      document.getElementById("co2").className = 'btn active'
+    });
     
 </script>
 
