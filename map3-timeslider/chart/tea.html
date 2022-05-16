@@ -75,7 +75,7 @@
           <button id='2017'>
             2017
           </button>
-          <button id='2019' class='active'>
+          <button id='2019'>
             2019
   </button>
 </div>
@@ -369,7 +369,17 @@ years.forEach(year => {
         });
     });
 });
+        var queryString = localStorage.getItem("jsyear"); 
+        console.log('click',queryString)
+        document.getElementById(queryString).click();
+        window.addEventListener('storage', function(e) {
+          if(e.storageArea===localStorage) {
+            var queryString = localStorage.getItem("jsyear"); 
+            console.log('click',queryString)
+            document.getElementById(queryString).click();  
+          }
 
+        }); 
 
         </script>
     </body>

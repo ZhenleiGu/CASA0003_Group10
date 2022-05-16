@@ -75,7 +75,7 @@
           <button id='2017'>
             2017
           </button>
-          <button id='2019' class='active'>
+          <button id='2019'>
             2019
   </button>
 </div>
@@ -337,6 +337,7 @@ const chart = Highcharts.chart('container', {
 
 const years = [2019, 2017, 2015, 2013, 2011];
 
+            
 years.forEach(year => {
     const btn = document.getElementById(year);
 
@@ -369,6 +370,18 @@ years.forEach(year => {
         });
     });
 });
+            var queryString = localStorage.getItem("jsyear"); 
+            console.log('click',queryString)
+            document.getElementById(queryString).click();
+            
+            window.addEventListener('storage', function(e) {
+              if(e.storageArea===localStorage) {
+                var queryString = localStorage.getItem("jsyear"); 
+                console.log('click',queryString)
+                document.getElementById(queryString).click();  
+              }
+
+            }); 
 
 
         </script>
