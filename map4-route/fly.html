@@ -139,7 +139,7 @@
               <button id='co2' class="btn"> GWP</button>
             </div>
         <div class='map-overlay-inner'style="width: 400px; height: 700px;color:rgba(70, 70, 70, 0.842);">
-             <iframe id="table1" src="peu.html" frameBorder="0" height="6990px" width="400px"></iframe>
+             <iframe id="table1" src="peu.html" frameBorder="0" height="699px" width="400px"></iframe>
 
         </div>
     </div>
@@ -242,7 +242,7 @@
         .addTo(map);
         }
     
-    var introduction = 'Webb et al.(2013) assessed seven foods from four countries from an environmental perspective. The PEU and GWP of food imported and produced in the UK were compared considering the transportation cost. Thus, we can get the impact of different food imports from different countries on the environment and its rationality.';
+//    var introduction = 'Webb et al.(2013) assessed seven foods from four countries from an environmental perspective. The PEU and GWP of food imported and produced in the UK were compared considering the transportation cost. Thus, we can get the impact of different food imports from different countries on the environment and its rationality.';
     var putmouseon = 'Put the mouse on the route for more information';
     var name_list = ['Spain','Israel','New Zealand','Brazil'];
     var list1 = ['Spain','Israel','New Zealand','Brazil'];
@@ -296,7 +296,18 @@
 //                'icon-ignore-placement': true
 //            }
 //        });
-        
+        document.getElementById('peu').addEventListener("click", function() {
+          console.log('111');
+          document.getElementById("table1").src = "peu.html";
+          document.getElementById("peu").className = 'btn active';
+          document.getElementById("co2").className = 'btn'
+        });
+
+        document.getElementById('co2').addEventListener("click", function() {
+          document.getElementById("table1").src = "co2.html";
+          document.getElementById("peu").className = 'btn';
+          document.getElementById("co2").className = 'btn active'
+        });
         map.on('mousemove', c, (e) => {
         console.log(e.features[0].layer)
             if (e.features.length > 0) {
@@ -376,18 +387,7 @@
 //      dots[slideIndex-1].className += " active";
 //    }
     
-    document.getElementById('peu').addEventListener("click", function() {
-      console.log('111');
-      document.getElementById("table1").src = "peu.html";
-      document.getElementById("peu").className = 'btn active';
-      document.getElementById("co2").className = 'btn'
-    });
     
-    document.getElementById('co2').addEventListener("click", function() {
-      document.getElementById("table1").src = "co2.html";
-      document.getElementById("peu").className = 'btn';
-      document.getElementById("co2").className = 'btn active'
-    });
     
 </script>
 
