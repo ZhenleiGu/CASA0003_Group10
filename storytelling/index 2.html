@@ -1,10 +1,12 @@
 <!DOCTYPE html>
 <html>
-  <head>
+
+<head>
     <meta charset="utf-8" />
     <title>Effects of globalisation on the UK economy.</title>
     <meta name="viewport" content="initial-scale=1,maximum-scale=1,user-scalable=no">
-    <link rel="icon" type="image/x-icon" href="https://raw.githubusercontent.com/mapbox/assembly/publisher-staging/src/svgs/mapbox.svg">
+    <link rel="icon" type="image/x-icon"
+        href="https://raw.githubusercontent.com/mapbox/assembly/publisher-staging/src/svgs/mapbox.svg">
     <script src="https://api.tiles.mapbox.com/mapbox-gl-js/v2.7.0/mapbox-gl.js"></script>
     <link href="https://api.tiles.mapbox.com/mapbox-gl-js/v2.7.0/mapbox-gl.css" rel="stylesheet">
     <script src="https://unpkg.com/intersection-observer@0.12.0/intersection-observer.js"></script>
@@ -13,26 +15,29 @@
 
     <style>
         body {
-          margin: 0;
-          padding: 0;
-          font-family: sans-serif;
+            margin: 0;
+            padding: 0;
+            font-family: sans-serif;
         }
+
         a,
         a:hover,
         a:visited {
-          color: #0071bc;
+            color: #0071bc;
         }
+
         #map {
-          top: 0;
-          height: 100vh;
-          width: 100vw;
-          position: fixed;
+            top: 0;
+            height: 100vh;
+            width: 100vw;
+            position: fixed;
         }
-  
+
         .mapboxgl-popup {
-          max-width: 400px;
-          font: 12px/20px "Helvetica Neue", Arial, Helvetica, sans-serif;
+            max-width: 400px;
+            font: 12px/20px "Helvetica Neue", Arial, Helvetica, sans-serif;
         }
+
         /* #mapInset {
           bottom: 50px;
           right: 30px;
@@ -46,533 +51,608 @@
           pointer-events: none;
         } */
         #header {
-          margin: auto;
-          width: 100%;
-          position: relative;
-          z-index: 5;
+            margin: auto;
+            width: 100%;
+            position: relative;
+            z-index: 5;
         }
+
         #header h1,
         #header h2,
         #header p {
-          margin: 0;
-          padding: 2vh 2vw;
-          text-align: center;
+            margin: 0;
+            padding: 2vh 2vw;
+            text-align: center;
         }
+
         #footer {
-          width: 100%;
-          min-height: 5vh;
-          padding-top: 2vh;
-          padding-bottom: 2vh;
-          text-align: center;
-          line-height: 25px;
-          font-size: 13px;
-          position: relative;
-          z-index: 5;
+            width: 100%;
+            min-height: 5vh;
+            padding-top: 2vh;
+            padding-bottom: 2vh;
+            text-align: center;
+            line-height: 25px;
+            font-size: 13px;
+            position: relative;
+            z-index: 5;
         }
+
         #features {
-          padding-top: 10vh;
-          padding-bottom: 10vh;
+            padding-top: 10vh;
+            padding-bottom: 10vh;
         }
+
         .hidden {
-          visibility: hidden;
+            visibility: hidden;
         }
+
         .centered {
-          width: 80vw;
-          margin: 0 auto;
-        }
-        .lefty {
-          width: 470px;
-          margin-left: 3vw;
-        }
-        .righty {
-          width: 45vw;
-          margin-left: 55vw;
-        }
-        .fully {
-          width: 100%;
-          margin: auto;
-        }
-        .light {
-          color: #444;
-          background-color: #fafafa;
-        }
-        .dark {
-          color: #fafafa;
-          background-color: #444;
-        }
-        .step {
-          padding-bottom: 50vh;
-          /* margin-bottom: 10vh; */
-          opacity: 0.25;
-        }
-        .step.active {
-          opacity: 0.9;
-        }
-  
-        .step div:nth-child(1) {
-          padding: 10px 10px;
-          line-height: 25px;
-          font-size: 13px;
-        }
-  
-        .step img {
-          width: 100%;
-        }
-  
-        @media (max-width: 550px) {
-          .centered,
-          .lefty
-          .righty,
-          .fully {
-            width: 90vw;
+            width: 80vw;
             margin: 0 auto;
-          }
         }
-  
+
+        .lefty {
+            width: 470px;
+            margin-left: 3vw;
+        }
+
+        .righty {
+            width: 45vw;
+            margin-left: 55vw;
+        }
+
+        .fully {
+            width: 100%;
+            margin: auto;
+        }
+
+        .light {
+            color: #444;
+            background-color: #fafafa;
+        }
+
+        .dark {
+            color: #fafafa;
+            background-color: #444;
+        }
+
+        .step {
+            padding-bottom: 50vh;
+            /* margin-bottom: 10vh; */
+            opacity: 0.25;
+        }
+
+        .step.active {
+            opacity: 0.9;
+        }
+
+        .step div:nth-child(1) {
+            padding: 10px 10px;
+            line-height: 25px;
+            font-size: 13px;
+        }
+
+        .step img {
+            width: 100%;
+        }
+
+        @media (max-width: 550px) {
+
+            .centered,
+            .lefty .righty,
+            .fully {
+                width: 90vw;
+                margin: 0 auto;
+            }
+        }
+
         /* Fix issue on mobile browser where scroll breaks  */
         .mapboxgl-canvas-container.mapboxgl-touch-zoom-rotate.mapboxgl-touch-drag-pan,
-        .mapboxgl-canvas-container.mapboxgl-touch-zoom-rotate.mapboxgl-touch-drag-pan
-        .mapboxgl-canvas {
-          touch-action: unset;
+        .mapboxgl-canvas-container.mapboxgl-touch-zoom-rotate.mapboxgl-touch-drag-pan .mapboxgl-canvas {
+            touch-action: unset;
         }
-      </style>
-<!-- Animate a point along a route -->
-      
-      <style>
-          .overlay {
-          position: absolute;
-          top: 10px;
-          left: 10px;
-          }
-  
-          .overlay button {
-          font: 600 12px/20px 'Helvetica Neue', Arial, Helvetica, sans-serif;
-          background-color: #3386c0;
-          color: #fff;
-          display: inline-block;
-          margin: 0;
-          padding: 10px 20px;
-          border: none;
-          cursor: pointer;
-          border-radius: 3px;
-          }
-  
-          .overlay button:hover {
-          background-color: #4ea0da;
-          }
-      </style>
-      
-<!-- Animate a point along a route -->
-      <script src="https://unpkg.com/@turf/turf@6/turf.min.js"></script>
-      
-  </head>
-    
-  <body>
+
+        .mapboxgl-popup {
+            max-width: 400px;
+            min-width: 180px;
+            font: 12px/20px 'Helvetica Neue', Arial, Helvetica, sans-serif;
+            padding: 0;
+            margin: 0, 0, 0, 20px;
+        }
+
+        .mapboxgl-popup-tip-container {
+            width: 0px;
+            height: 0px;
+            margin: 0 auto;
+            position: relative;
+        }
+
+        .mapboxgl-popup-tip {
+            width: 0;
+            height: 0;
+            margin: 0;
+            border-left: 0 solid transparent;
+            border-right: 0 solid transparent;
+            border-top: 0 solid transparent;
+            box-shadow: none;
+        }
+    </style>
+    <!-- Animate a point along a route -->
+
+    <style>
+        .overlay {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+        }
+
+        .overlay button {
+            font: 600 12px/20px 'Helvetica Neue', Arial, Helvetica, sans-serif;
+            background-color: #3386c0;
+            color: #fff;
+            display: inline-block;
+            margin: 0;
+            padding: 10px 20px;
+            border: none;
+            cursor: pointer;
+            border-radius: 3px;
+        }
+
+        .overlay button:hover {
+            background-color: #4ea0da;
+        }
+    </style>
+
+    <!-- Animate a point along a route -->
+    <script src="https://unpkg.com/@turf/turf@6/turf.min.js"></script>
+
+</head>
+
+<body>
     <div id="map"></div>
     <div id="mapInset"></div>
     <div id="story">
-      <div id="features">
-       <!-- UK -->
-        <div id="slug-style-id" class="step lefty active" data-scrollama-index="0" >
-          <div class="light">
-              <h1>United Kingdom</h1>
-            <p style = text-indent:25px;>
-                In 2020 United Kingdom was the number 5 economy in the world in terms of GDP (current US$), the number 11 in total exports,
-                the number 4 in total imports, the number 24 economy in terms of GDP per capita (current US$) and the number 13 most complex economy according to the Economic Complexity Index (ECI).
-            </p><p style = text-indent:25px>
-                The top imports of United Kingdom are Gold ($83.7B), Cars ($32.8B), Broadcasting Equipment ($15.8B), Packaged Medicaments ($14.8B), and Crude Petroleum ($14.8B), importing mostly from Germany ($74.4B), China ($73.1B), United States ($48.6B), Netherlands ($40.3B), and France ($30.3B).
-            </p><p style = text-indent:25px>
-                In 2020, United Kingdom was the world's biggest importer of Preserved Meat ($878M), Fermented Milk Products ($531M), Ceramic Bricks ($139M), Other Vegetable Residues and Waste ($126M), and Non-Retail Carded Wool Yarn ($64M).
-            </p>
-        </div>            
-        </div>  
-        <!-- Asia -->
-        <!-- China -->
-            <div id="first-identifier" class="step lefty active" data-scrollama-index="1">
-            <div class="light"> 
-              <div
-                id="AS"
-                class="chart-container"
-                style="width: 500px; height: 300px;">
-                <p><iframe id="barchart" src="chart/china.html" frameBorder="0" height="350px" width="500px" ></iframe></p>
+        <div id="features">
+            <!-- UK -->
+            <div id="slug-style-id" class="step lefty active" data-scrollama-index="0">
+                <div class="light">
+                    <h1>United Kingdom</h1>
+                    <p style=text-indent:25px;>
+                        In 2020 United Kingdom was the number 5 economy in the world in terms of GDP (current US$), the
+                        number 11 in total exports,
+                        the number 4 in total imports, the number 24 economy in terms of GDP per capita (current US$)
+                        and the number 13 most complex economy according to the Economic Complexity Index (ECI).
+                    </p>
+                    <p style=text-indent:25px>
+                        The top imports of United Kingdom are Gold ($83.7B), Cars ($32.8B), Broadcasting Equipment
+                        ($15.8B), Packaged Medicaments ($14.8B), and Crude Petroleum ($14.8B), importing mostly from
+                        Germany ($74.4B), China ($73.1B), United States ($48.6B), Netherlands ($40.3B), and France
+                        ($30.3B).
+                    </p>
+                    <p style=text-indent:25px>
+                        In 2020, United Kingdom was the world's biggest importer of Preserved Meat ($878M), Fermented
+                        Milk Products ($531M), Ceramic Bricks ($139M), Other Vegetable Residues and Waste ($126M), and
+                        Non-Retail Carded Wool Yarn ($64M).
+                    </p>
+                </div>
             </div>
-                <h1>China</h1>
-                <p style = text-indent:25px>
-                In 2020, China exported $73.1B to United Kingdom. The main products that 
-                China exported to United Kingdom are Broadcasting Equipment ($7.28B), Computers ($6.62B), and Other Cloth Articles ($4.43B). During the last 25 years the exports of China to United Kingdom have increased at an annualized rate of 13.4%, from $3.18B in 1995 to $73.1B in 2020.
-                </p><p style = text-indent:25px>
-                In November 2021, the top exports of China to United Kingdom were Telephones ($744M), Computers ($670M), Cars ($267M), Light Fixtures ($236M), and Models and Stuffed Animals ($192M). In November 2021 the top imports of China from United Kingdom were Cars ($627M), Crude Petroleum ($593M), Beauty Products ($216M), Packaged Medicaments ($138M), and Gas Turbines ($64M).</br>
-                 </p>
-              </div>
+            <!-- Asia -->
+            <!-- China -->
+            <div id="first-identifier" class="step lefty active" data-scrollama-index="1">
+                <div class="light">
+                    <div id="AS" class="chart-container" style="width: 500px; height: 300px;">
+                        <p><iframe id="barchart" src="chart/china.html" frameBorder="0" height="350px"
+                                width="500px"></iframe></p>
+                    </div>
+                    <h1>China</h1>
+                    <p style=text-indent:25px>
+                        In 2020, China exported $73.1B to United Kingdom. The main products that
+                        China exported to United Kingdom are Broadcasting Equipment ($7.28B), Computers ($6.62B), and
+                        Other Cloth Articles ($4.43B). During the last 25 years the exports of China to United Kingdom
+                        have increased at an annualized rate of 13.4%, from $3.18B in 1995 to $73.1B in 2020.
+                    </p>
+                    <p style=text-indent:25px>
+                        In November 2021, the top exports of China to United Kingdom were Telephones ($744M), Computers
+                        ($670M), Cars ($267M), Light Fixtures ($236M), and Models and Stuffed Animals ($192M). In
+                        November 2021 the top imports of China from United Kingdom were Cars ($627M), Crude Petroleum
+                        ($593M), Beauty Products ($216M), Packaged Medicaments ($138M), and Gas Turbines ($64M).</br>
+                    </p>
+                </div>
             </div>
 
-        <!-- Singapore -->
+            <!-- Singapore -->
             <div id="third-identifier" class="step lefty active" data-scrollama-index="3">
-          <div class="light">
-            <div
-            id="AS2"
-            class="chart-container"
-            style="width: 500px; height: 300px;">
-            <p><iframe id="singapore" src="chart/sin.html" frameBorder="0" height="350px" width="500px" ></iframe></p>
-        </div>
-                
-            <h1>Singapore</h1>
-              <p style = text-indent:25px>
-                In 2020, Singapore exported $2.86B to United Kingdom. 
-                The main products that Singapore exported to United Kingdom are Gold ($1.28B), Gas Turbines ($370M), and Precious Metal Scraps ($131M). 
-                During the last 25 years the exports of Singapore to United Kingdom have decreased at an annualized rate of 0.83%, from $3.52B in 1995 to $2.86B in 2020.</br>
-                </p>
-              </div>      
+                <div class="light">
+                    <div id="AS2" class="chart-container" style="width: 500px; height: 300px;">
+                        <p><iframe id="singapore" src="chart/sin.html" frameBorder="0" height="350px"
+                                width="500px"></iframe></p>
+                    </div>
+
+                    <h1>Singapore</h1>
+                    <p style=text-indent:25px>
+                        In 2020, Singapore exported $2.86B to United Kingdom.
+                        The main products that Singapore exported to United Kingdom are Gold ($1.28B), Gas Turbines
+                        ($370M), and Precious Metal Scraps ($131M).
+                        During the last 25 years the exports of Singapore to United Kingdom have decreased at an
+                        annualized rate of 0.83%, from $3.52B in 1995 to $2.86B in 2020.</br>
+                    </p>
+                </div>
             </div>
-             </div>
+        </div>
 
         <!-- North America -->
         <!-- US -->
-            <div id="fourth-identifier" class="step lefty active" data-scrollama-index="4" >
-          <div class="light">
-              <div
-                id="NA"
-                class="chart-container"
-                style="width: 500px; height: 300px">
-                <p><iframe id="US" src="chart/US.html" frameBorder="0" height="350px" width="500px" ></iframe></p>
-              </div>
-              <h1 >United States</h1>
-                <p style = text-indent:25px>
-                In 2020, United States exported $48.6B to United Kingdom. The main products that United States exported to United Kingdom are Gold ($6.31B), Crude Petroleum ($3.89B), and Gas Turbines ($3.25B). During the last 25 years the exports of United States to United Kingdom have increased at an annualized rate of 2.05%, from $29.3B in 1995 to $48.6B in 2020.</br>
-              </p><p style = text-indent:25px>
-                In January 2022, the top exports of United States to United Kingdom were Gold ($605M), Crude Petroleum ($590M), Aircraft Parts ($522M), Petroleum Gas ($458M), and Packaged Medicaments ($291M). In January 2022 the top imports of United States from United Kingdom were Cars ($388M), Commodities not elsewhere specified ($332M), Packaged Medicaments ($213M), Gas Turbines ($166M), and Crude Petroleum ($136M).</br>
-              </p>
-              </div>
-              
-            </div>
-          </div>
-
-        <!-- Canada -->
-            <div id="fifth-identifier" class="step lefty active" data-scrollama-index="5">
-          <div class="light">
-
-              <div
-                id="NA1"
-                class="chart-container"
-                style="width: 500px; height: 300px"
-                ><p><iframe id="US" src="chart/canada.html" frameBorder="0" height="350px" width="500px" ></iframe></p>
-              </div>
-                <h1>Canada</h1>
-                <p style = text-indent:25px>
-                In 2020, Canada exported $13.2B to United Kingdom. The main products that Canada exported to United Kingdom are Gold ($9.62B), Crude Petroleum ($424M), and Iron Ore ($270M). During the last 25 years the exports of Canada to United Kingdom have increased at an annualized rate of 5.88%, from $3.16B in 1995 to $13.2B in 2020.</br>
-                </p><p style = text-indent:25px>
-                In November 2021, the top exports of Canada to United Kingdom were Gold (C$854M), Planes, Helicopters, and/or Spacecraft (C$85.2M), Crude Petroleum (C$69.9M), Radioactive Chemicals (C$39.3M), and Wheat (C$19.5M). In November 2021 the top imports of Canada from United Kingdom were Cars (C$83.6M), Silver (C$51M), Gas Turbines (C$48.3M), Packaged Medicaments (C$45.5M), and Hard Liquor (C$31.3M).</br>              
-              </p>
-              </div>
-              
-            </div>
-          </div>
-        
-        <!-- Europe -->
-        <!-- Germany -->
-            <div id="sixth-identifier" class="step lefty active" data-scrollama-index="6">
+        <div id="fourth-identifier" class="step lefty active" data-scrollama-index="4">
             <div class="light">
-              <div
-                id="EU"
-                class="chart-container"
-                style="width: 500px; height: 300px"
-                ><p><iframe id="US" src="chart/Germany.html" frameBorder="0" height="350px" width="500px" ></iframe></p></div>
-                <h1>Germany</h1>
-                <p style = text-indent:25px>
-                In 2020, Germany exported $74.4B to United Kingdom. The main products that Germany exported to United Kingdom are Cars ($13.3B), Vehicle Parts ($2.88B), and Packaged Medicaments ($2.53B). During the last 25 years the exports of Germany to United Kingdom have increased at an annualized rate of 2.55%, from $39.6B in 1995 to $74.4B in 2020. </br>
-                </p><p style = text-indent:25px>
-                In November 2021, the top exports of Germany to United Kingdom were Motor cars and motor caravans (€806M), Chassis, bodies, engines etc. for motor... (€535M), Pharmaceutical products (€332M), Machinery for electricity production, distribution (€241M), and Articles of plastic (€199M). In November 2021 the top imports of Germany from United Kingdom were Motor cars and motor caravans (€312M), Petroleum oil and petroleum gases (€281M), Pharmaceutical products (€219M), Aircraft (€105M), and Chassis, bodies, engines etc. for motor vehicles (€99.5M).
-                 </br>
+                <div id="NA" class="chart-container" style="width: 500px; height: 300px">
+                    <p><iframe id="US" src="chart/US.html" frameBorder="0" height="350px" width="500px"></iframe></p>
+                </div>
+                <h1>United States</h1>
+                <p style=text-indent:25px>
+                    In 2020, United States exported $48.6B to United Kingdom. The main products that United States
+                    exported to United Kingdom are Gold ($6.31B), Crude Petroleum ($3.89B), and Gas Turbines ($3.25B).
+                    During the last 25 years the exports of United States to United Kingdom have increased at an
+                    annualized rate of 2.05%, from $29.3B in 1995 to $48.6B in 2020.</br>
                 </p>
-              </div>
+                <p style=text-indent:25px>
+                    In January 2022, the top exports of United States to United Kingdom were Gold ($605M), Crude
+                    Petroleum ($590M), Aircraft Parts ($522M), Petroleum Gas ($458M), and Packaged Medicaments ($291M).
+                    In January 2022 the top imports of United States from United Kingdom were Cars ($388M), Commodities
+                    not elsewhere specified ($332M), Packaged Medicaments ($213M), Gas Turbines ($166M), and Crude
+                    Petroleum ($136M).</br>
+                </p>
             </div>
+
+        </div>
+    </div>
+
+    <!-- Canada -->
+    <div id="fifth-identifier" class="step lefty active" data-scrollama-index="5">
+        <div class="light">
+
+            <div id="NA1" class="chart-container" style="width: 500px; height: 300px">
+                <p><iframe id="US" src="chart/canada.html" frameBorder="0" height="350px" width="500px"></iframe></p>
             </div>
-        
-        <!-- Netherlands -->
-            <div id="seventh-identifier" class="step lefty active" data-scrollama-index="7">
-            <div class="light">
-              <div
-                id="EU1"
-                class="chart-container"
-                style="width:500px; height: 300px"
-                >
-                <p><iframe id="EUchart" src="chart/Netherlands.html" frameBorder="0" height="380px" width="500px" ></iframe></p>
+            <h1>Canada</h1>
+            <p style=text-indent:25px>
+                In 2020, Canada exported $13.2B to United Kingdom. The main products that Canada exported to United
+                Kingdom are Gold ($9.62B), Crude Petroleum ($424M), and Iron Ore ($270M). During the last 25 years the
+                exports of Canada to United Kingdom have increased at an annualized rate of 5.88%, from $3.16B in 1995
+                to $13.2B in 2020.</br>
+            </p>
+            <p style=text-indent:25px>
+                In November 2021, the top exports of Canada to United Kingdom were Gold (C$854M), Planes, Helicopters,
+                and/or Spacecraft (C$85.2M), Crude Petroleum (C$69.9M), Radioactive Chemicals (C$39.3M), and Wheat
+                (C$19.5M). In November 2021 the top imports of Canada from United Kingdom were Cars (C$83.6M), Silver
+                (C$51M), Gas Turbines (C$48.3M), Packaged Medicaments (C$45.5M), and Hard Liquor (C$31.3M).</br>
+            </p>
+        </div>
+
+    </div>
+    </div>
+
+    <!-- Europe -->
+    <!-- Germany -->
+    <div id="sixth-identifier" class="step lefty active" data-scrollama-index="6">
+        <div class="light">
+            <div id="EU" class="chart-container" style="width: 500px; height: 300px">
+                <p><iframe id="US" src="chart/Germany.html" frameBorder="0" height="350px" width="500px"></iframe></p>
+            </div>
+            <h1>Germany</h1>
+            <p style=text-indent:25px>
+                In 2020, Germany exported $74.4B to United Kingdom. The main products that Germany exported to United
+                Kingdom are Cars ($13.3B), Vehicle Parts ($2.88B), and Packaged Medicaments ($2.53B). During the last 25
+                years the exports of Germany to United Kingdom have increased at an annualized rate of 2.55%, from
+                $39.6B in 1995 to $74.4B in 2020. </br>
+            </p>
+            <p style=text-indent:25px>
+                In November 2021, the top exports of Germany to United Kingdom were Motor cars and motor caravans
+                (€806M), Chassis, bodies, engines etc. for motor... (€535M), Pharmaceutical products (€332M), Machinery
+                for electricity production, distribution (€241M), and Articles of plastic (€199M). In November 2021 the
+                top imports of Germany from United Kingdom were Motor cars and motor caravans (€312M), Petroleum oil and
+                petroleum gases (€281M), Pharmaceutical products (€219M), Aircraft (€105M), and Chassis, bodies, engines
+                etc. for motor vehicles (€99.5M).
+                </br>
+            </p>
+        </div>
+    </div>
+    </div>
+
+    <!-- Netherlands -->
+    <div id="seventh-identifier" class="step lefty active" data-scrollama-index="7">
+        <div class="light">
+            <div id="EU1" class="chart-container" style="width:500px; height: 300px">
+                <p><iframe id="EUchart" src="chart/Netherlands.html" frameBorder="0" height="380px"
+                        width="500px"></iframe></p>
             </div>
             <h1>Netherlands</h1>
-            <p style = text-indent:25px>
-                In 2020, Netherlands exported $40.3B to United Kingdom. The main products that Netherlands exported to United Kingdom are Broadcasting Equipment ($2.58B), Refined Petroleum ($1.48B), and Computers ($1.48B). During the last 25 years the exports of Netherlands to United Kingdom have increased at an annualized rate of 3.65%, from $16.4B in 1995 to $40.3B in 2020.</br>
-              </p>
-              </div>
-            </div>
-            </div>
+            <p style=text-indent:25px>
+                In 2020, Netherlands exported $40.3B to United Kingdom. The main products that Netherlands exported to
+                United Kingdom are Broadcasting Equipment ($2.58B), Refined Petroleum ($1.48B), and Computers ($1.48B).
+                During the last 25 years the exports of Netherlands to United Kingdom have increased at an annualized
+                rate of 3.65%, from $16.4B in 1995 to $40.3B in 2020.</br>
+            </p>
+        </div>
+    </div>
+    </div>
 
-        <!-- France -->
-            <div id="eighth-identifier" class="step lefty active" data-scrollama-index="8">
-            <div class="light">
-              <div
-                id="EU2"
-                class="chart-container"
-                style="width: 500px; height: 300px"
-                ><p><iframe id="US" src="chart/France.html" frameBorder="0" height="350px" width="500px" ></iframe></p></div>
-                <h1>France</h1>
-                <p style = text-indent:25px>
-                In 2020, France exported $30.3B to United Kingdom. The main products that France exported to United Kingdom are Planes, Helicopters, and/or Spacecraft ($1.66B), Wine ($1.34B), and Packaged Medicaments ($1.19B). During the last 25 years the exports of France to United Kingdom have increased at an annualized rate of 0.56%, from $26.4B in 1995 to $30.3B in 2020.</br>
-              </p>
-              </div>
+    <!-- France -->
+    <div id="eighth-identifier" class="step lefty active" data-scrollama-index="8">
+        <div class="light">
+            <div id="EU2" class="chart-container" style="width: 500px; height: 300px">
+                <p><iframe id="US" src="chart/France.html" frameBorder="0" height="350px" width="500px"></iframe></p>
             </div>
-            </div>
+            <h1>France</h1>
+            <p style=text-indent:25px>
+                In 2020, France exported $30.3B to United Kingdom. The main products that France exported to United
+                Kingdom are Planes, Helicopters, and/or Spacecraft ($1.66B), Wine ($1.34B), and Packaged Medicaments
+                ($1.19B). During the last 25 years the exports of France to United Kingdom have increased at an
+                annualized rate of 0.56%, from $26.4B in 1995 to $30.3B in 2020.</br>
+            </p>
+        </div>
+    </div>
+    </div>
 
-        <!-- South America -->
-        <!-- Brazil -->
-            <div id="ninth-identifier" class="step lefty active" data-scrollama-index="9">
-          <div class="light">
-              <div
-                id="SA"
-                class="chart-container"
-                style="width: 500px; height: 300px"
-                ><p><iframe id="Brazil" src="chart/Brazil.html" frameBorder="0" height="350px" width="500px" ></iframe></p>
-              </div>
-                    <h1>Brazil</br></h1>
-                    <p style = text-indent:25px>
-                    In 2020, Brazil exported $2.61B to United Kingdom. The main products that Brazil exported to United Kingdom are Gold ($653M), Soybeans ($218M), and Other Prepared Meat ($211M). During the last 25 years the exports of Brazil to United Kingdom have increased at an annualized rate of 2.47%, from $1.42B in 1995 to $2.61B in 2020. In March 2022, the top exports of Brazil to United Kingdom were Gold ($73.8M), Soybeans ($28.4M), Hydrogen ($21.8M), Coffee ($18M), and Other Prepared Meat ($16.6M). In March 2022 the top imports of Brazil from United Kingdom were Petroleum Gas ($31.5M), Packaged Medicaments ($17.5M), Hard Liquor ($10.6M), Nitrile Compounds ($8.84M), and Machinery Having Individual Functions ($6.56M).</br>
-                  </p>
-                  </div>
-            
+    <!-- South America -->
+    <!-- Brazil -->
+    <div id="ninth-identifier" class="step lefty active" data-scrollama-index="9">
+        <div class="light">
+            <div id="SA" class="chart-container" style="width: 500px; height: 300px">
+                <p><iframe id="Brazil" src="chart/Brazil.html" frameBorder="0" height="350px" width="500px"></iframe>
+                </p>
             </div>
-          </div>
+            <h1>Brazil</br></h1>
+            <p style=text-indent:25px>
+                In 2020, Brazil exported $2.61B to United Kingdom. The main products that Brazil exported to United
+                Kingdom are Gold ($653M), Soybeans ($218M), and Other Prepared Meat ($211M). During the last 25 years
+                the exports of Brazil to United Kingdom have increased at an annualized rate of 2.47%, from $1.42B in
+                1995 to $2.61B in 2020. In March 2022, the top exports of Brazil to United Kingdom were Gold ($73.8M),
+                Soybeans ($28.4M), Hydrogen ($21.8M), Coffee ($18M), and Other Prepared Meat ($16.6M). In March 2022 the
+                top imports of Brazil from United Kingdom were Petroleum Gas ($31.5M), Packaged Medicaments ($17.5M),
+                Hard Liquor ($10.6M), Nitrile Compounds ($8.84M), and Machinery Having Individual Functions
+                ($6.56M).</br>
+            </p>
+        </div>
 
-        <!-- Chile -->
-            <div id="tenth-identifier" class="step lefty active" data-scrollama-index="10">
-          <div class="light">
-              <div
-                id="SA1"
-                class="chart-container"
-                style="width: 500px; height: 300px"
-                ><p><iframe id="Chile" src="chart/Chile.html" frameBorder="0" height="350px" width="500px" ></iframe></p>
-              </div>
-                    <h1>Chile</h1>
-                    <p style = text-indent:25px>
-                    In 2020, Chile exported $614M to United Kingdom. The main products that Chile exported to United Kingdom are Wine ($221M), Other Fruits ($68.1M), and Grapes ($60.7M). During the last 25 years the exports of Chile to United Kingdom have decreased at an annualized rate of 2.23%, from $1.08B in 1995 to $614M in 2020.In September 2021, the top exports of Chile to United Kingdom were Wine ($19.1M), Commodities not elsewhere specified ($3.93M), Precious Metal Scraps ($3.92M), Tropical Fruits ($2.93M), and Kaolin Coated Paper ($2.59M). In September 2021 the top imports of Chile from United Kingdom were Tractors ($10.1M), Delivery Trucks ($5.41M), Packaged Medicaments ($4.15M), Non-Knit Women's Suits ($3.28M), and Other Edible Preparations ($2.95M).</br>
-                  </p>
-                  </div>
-                </div>
+    </div>
+    </div>
+
+    <!-- Chile -->
+    <div id="tenth-identifier" class="step lefty active" data-scrollama-index="10">
+        <div class="light">
+            <div id="SA1" class="chart-container" style="width: 500px; height: 300px">
+                <p><iframe id="Chile" src="chart/Chile.html" frameBorder="0" height="350px" width="500px"></iframe></p>
             </div>
-          </div>
- 
-        <!-- Africa -->
-        <!-- Kenya -->
-            <div id="eleventh-identifier" class="step lefty active" data-scrollama-index="11">
-          <div class="light">
-              <div
-                id="AF"
-                class="chart-container"
-                style="width: 500px; height: 300px"
-                ><p><iframe id="Kenya" src="chart/AF.html" frameBorder="0" height="350px" width="500px" ></iframe></p>
-              </div>
-              <h1>Kenya</br></h1>
-              <p style = text-indent:25px>
-                In 2020, Kenya exported $435M to United Kingdom. The main products that Kenya exported to United Kingdom are Tea ($141M), Cut Flowers ($108M), and Legumes ($30.5M). During the last 25 years the exports of Kenya to United Kingdom have increased at an annualized rate of 2.45%, from $238M in 1995 to $435M in 2020.</br>
-              </p>
-              </div>
-            
+            <h1>Chile</h1>
+            <p style=text-indent:25px>
+                In 2020, Chile exported $614M to United Kingdom. The main products that Chile exported to United Kingdom
+                are Wine ($221M), Other Fruits ($68.1M), and Grapes ($60.7M). During the last 25 years the exports of
+                Chile to United Kingdom have decreased at an annualized rate of 2.23%, from $1.08B in 1995 to $614M in
+                2020.In September 2021, the top exports of Chile to United Kingdom were Wine ($19.1M), Commodities not
+                elsewhere specified ($3.93M), Precious Metal Scraps ($3.92M), Tropical Fruits ($2.93M), and Kaolin
+                Coated Paper ($2.59M). In September 2021 the top imports of Chile from United Kingdom were Tractors
+                ($10.1M), Delivery Trucks ($5.41M), Packaged Medicaments ($4.15M), Non-Knit Women's Suits ($3.28M), and
+                Other Edible Preparations ($2.95M).</br>
+            </p>
+        </div>
+    </div>
+    </div>
+    </div>
+
+    <!-- Africa -->
+    <!-- Kenya -->
+    <div id="eleventh-identifier" class="step lefty active" data-scrollama-index="11">
+        <div class="light">
+            <div id="AF" class="chart-container" style="width: 500px; height: 300px">
+                <p><iframe id="Kenya" src="chart/AF.html" frameBorder="0" height="350px" width="500px"></iframe></p>
             </div>
-          </div>
+            <h1>Kenya</br></h1>
+            <p style=text-indent:25px>
+                In 2020, Kenya exported $435M to United Kingdom. The main products that Kenya exported to United Kingdom
+                are Tea ($141M), Cut Flowers ($108M), and Legumes ($30.5M). During the last 25 years the exports of
+                Kenya to United Kingdom have increased at an annualized rate of 2.45%, from $238M in 1995 to $435M in
+                2020.</br>
+            </p>
+        </div>
 
-        <!-- Oceania -->
-        <!-- Australia -->
-            <div id="twelfth-identifier" class="step lefty active" data-scrollama-index="12">
-          <div class="light">
+    </div>
+    </div>
 
-              <div
-                id="OC"
-                class="chart-container"
-                style="width: 500px; height: 300px"
-                ><p><iframe id="Australia" src="chart/OC.html" frameBorder="0" height="350px" width="500px" ></iframe></p>
-              </div>
-              <h1>
+    <!-- Oceania -->
+    <!-- Australia -->
+    <div id="twelfth-identifier" class="step lefty active" data-scrollama-index="12">
+        <div class="light">
+
+            <div id="OC" class="chart-container" style="width: 500px; height: 300px">
+                <p><iframe id="Australia" src="chart/OC.html" frameBorder="0" height="350px" width="500px"></iframe></p>
+            </div>
+            <h1>
                 Australia</br></h1>
-                <p style = text-indent:25px>
-                In 2020, Australia exported $10B to United Kingdom. The main products that Australia exported to United Kingdom are Gold ($8.25B), Wine ($350M), and Raw Lead ($336M). During the last 25 years the exports of Australia to United Kingdom have increased at an annualized rate of 7.35%, from $1.71B in 1995 to $10B in 2020.</br>
-              </p>
-              </div>
-            
-            </div>
-          </div>
+            <p style=text-indent:25px>
+                In 2020, Australia exported $10B to United Kingdom. The main products that Australia exported to United
+                Kingdom are Gold ($8.25B), Wine ($350M), and Raw Lead ($336M). During the last 25 years the exports of
+                Australia to United Kingdom have increased at an annualized rate of 7.35%, from $1.71B in 1995 to $10B
+                in 2020.</br>
+            </p>
+        </div>
 
-      </div>
+    </div>
+    </div>
+
+    </div>
     </div>
 
     <script src="./config.js"> </script>
 
-            <script>
-                  var initLoad = true;
-                  var layerTypes = {
-                    fill: ["fill-opacity"],
-                    line: ["line-opacity"],
-                    circle: ["circle-opacity", "circle-stroke-opacity"],
-                    symbol: ["icon-opacity", "text-opacity"],
-                    raster: ["raster-opacity"],
-                    "fill-extrusion": ["fill-extrusion-opacity"],
-                    heatmap: ["heatmap-opacity"],
-                  };
+    <script>
+        var initLoad = true;
+        var layerTypes = {
+            fill: ["fill-opacity"],
+            line: ["line-opacity"],
+            circle: ["circle-opacity", "circle-stroke-opacity"],
+            symbol: ["icon-opacity", "text-opacity"],
+            raster: ["raster-opacity"],
+            "fill-extrusion": ["fill-extrusion-opacity"],
+            heatmap: ["heatmap-opacity"],
+        };
 
-                  var alignments = {
-                    left: "lefty",
-                    center: "centered",
-                    right: "righty",
-                    full: "fully",
-                  };
+        var alignments = {
+            left: "lefty",
+            center: "centered",
+            right: "righty",
+            full: "fully",
+        };
 
-                  function getLayerPaintType(layer) {
-                    var layerType = map.getLayer(layer).type;
-                    return layerTypes[layerType];
-                  }
+        function getLayerPaintType(layer) {
+            var layerType = map.getLayer(layer).type;
+            return layerTypes[layerType];
+        }
 
-                  function setLayerOpacity(layer) {
-                    var paintProps = getLayerPaintType(layer.layer);
-                    paintProps.forEach(function (prop) {
-                      var options = {};
-                      if (layer.duration) {
-                        var transitionProp = prop + "-transition";
-                        options = { duration: layer.duration };
-                        map.setPaintProperty(layer.layer, transitionProp, options);
-                      }
-                      map.setPaintProperty(layer.layer, prop, layer.opacity, options);
-                    });
-                  }
+        function setLayerOpacity(layer) {
+            var paintProps = getLayerPaintType(layer.layer);
+            paintProps.forEach(function (prop) {
+                var options = {};
+                if (layer.duration) {
+                    var transitionProp = prop + "-transition";
+                    options = { duration: layer.duration };
+                    map.setPaintProperty(layer.layer, transitionProp, options);
+                }
+                map.setPaintProperty(layer.layer, prop, layer.opacity, options);
+            });
+        }
 
-                  var story = document.getElementById("story");
-                  var features = document.createElement("div");
-                  features.setAttribute("id", "features");
+        var story = document.getElementById("story");
+        var features = document.createElement("div");
+        features.setAttribute("id", "features");
 
-                  var header = document.createElement("div");
+        var header = document.createElement("div");
 
-                  if (config.title) {
-                    var titleText = document.createElement("h1");
-                    titleText.innerText = config.title;
-                    header.appendChild(titleText);
-                  }
+        if (config.title) {
+            var titleText = document.createElement("h1");
+            titleText.innerText = config.title;
+            header.appendChild(titleText);
+        }
 
-                  if (config.subtitle) {
-                    var subtitleText = document.createElement("h2");
-                    subtitleText.innerText = config.subtitle;
-                    header.appendChild(subtitleText);
-                  }
+        if (config.subtitle) {
+            var subtitleText = document.createElement("h2");
+            subtitleText.innerText = config.subtitle;
+            header.appendChild(subtitleText);
+        }
 
-                  if (config.byline) {
-                    var bylineText = document.createElement("p");
-                    bylineText.innerText = config.byline;
-                    header.appendChild(bylineText);
-                  }
+        if (config.byline) {
+            var bylineText = document.createElement("p");
+            bylineText.innerText = config.byline;
+            header.appendChild(bylineText);
+        }
 
-                  if (header.innerText.length > 0) {
-                    header.classList.add(config.theme);
-                    header.setAttribute("id", "header");
-                    story.appendChild(header);
-                  }
+        if (header.innerText.length > 0) {
+            header.classList.add(config.theme);
+            header.setAttribute("id", "header");
+            story.appendChild(header);
+        }
 
-                  mapboxgl.accessToken = config.accessToken;
+        mapboxgl.accessToken = config.accessToken;
 
-                  const transformRequest = (url) => {
-                    const hasQuery = url.indexOf("?") !== -1;
-                    const suffix = hasQuery
-                      ? "&pluginName=scrollytellingV2"
-                      : "?pluginName=scrollytellingV2";
-                    return {
-                      url: url + suffix,
-                    };
-                  };
+        const transformRequest = (url) => {
+            const hasQuery = url.indexOf("?") !== -1;
+            const suffix = hasQuery
+                ? "&pluginName=scrollytellingV2"
+                : "?pluginName=scrollytellingV2";
+            return {
+                url: url + suffix,
+            };
+        };
 
-                  var map = new mapboxgl.Map({
-                    container: "map",
-                    style: config.style,
-                    center: config.chapters[0].location.center,
-                    zoom: config.chapters[0].location.zoom,
-                    bearing: config.chapters[0].location.bearing,
-                    pitch: config.chapters[0].location.pitch,
-                    interactive: false,
-                    transformRequest: transformRequest,
-                    projection: config.projection,
-                  });
+        var map = new mapboxgl.Map({
+            container: "map",
+            style: config.style,
+            center: config.chapters[0].location.center,
+            zoom: config.chapters[0].location.zoom,
+            bearing: config.chapters[0].location.bearing,
+            pitch: config.chapters[0].location.pitch,
+            interactive: false,
+            transformRequest: transformRequest,
+            projection: config.projection,
+        });
 
-                    // Create a inset map if enabled in config.js
-                    if (config.inset) {
-                    var insetMap = new mapboxgl.Map({
-                      container: "mapInset", // container id
-                      style: "mapbox://styles/mapbox/light-v10", //hosted style id
-                      center: config.chapters[0].location.center,
-                      // Hardcode above center value if you want insetMap to be static.
-                      zoom: 1.4, // starting zoom
-                      hash: false,
-                      interactive: false,
-                      attributionControl: false,
-                      //Future: Once official mapbox-gl-js has globe view enabled,
-                      //insetmap can be a globe with the following parameter.
-                      //projection: 'globe'
-                    });
-                  }
+        // Create a inset map if enabled in config.js
+        if (config.inset) {
+            var insetMap = new mapboxgl.Map({
+                container: "mapInset", // container id
+                style: "mapbox://styles/mapbox/light-v10", //hosted style id
+                center: config.chapters[0].location.center,
+                // Hardcode above center value if you want insetMap to be static.
+                zoom: 1.4, // starting zoom
+                hash: false,
+                interactive: false,
+                attributionControl: false,
+                //Future: Once official mapbox-gl-js has globe view enabled,
+                //insetmap can be a globe with the following parameter.
+                //projection: 'globe'
+            });
+        }
 
-                  if (config.showMarkers) {
-                    var marker = new mapboxgl.Marker({ color: config.markerColor });
-                    marker.setLngLat(config.chapters[0].location.center).addTo(map);
-                  }
+        if (config.showMarkers) {
+            var marker = new mapboxgl.Marker({ color: config.markerColor });
+            marker.setLngLat(config.chapters[0].location.center).addTo(map);
+        }
 
-                  // instantiate the scrollama
-                  var scroller = scrollama();
+        // instantiate the scrollama
+        var scroller = scrollama();
 
 
-                  map.on("load", function () {
-                    if (config.use3dTerrain) {
-                      map.addSource("mapbox-dem", {
-                        type: "raster-dem",
-                        url: "mapbox://styles/swpractice22/cl24evbdi000f14o5qhv8bege",
-                        tileSize: 512,
-                        maxzoom: 14,
-                      });
-                      // add the DEM source as a terrain layer with exaggerated height
-                      map.setTerrain({ source: "mapbox-dem", exaggeration: 1.5 });
+        map.on("load", function () {
+            if (config.use3dTerrain) {
+                map.addSource("mapbox-dem", {
+                    type: "raster-dem",
+                    url: "mapbox://styles/swpractice22/cl24evbdi000f14o5qhv8bege",
+                    tileSize: 512,
+                    maxzoom: 14,
+                });
+                // add the DEM source as a terrain layer with exaggerated height
+                map.setTerrain({ source: "mapbox-dem", exaggeration: 1.5 });
 
-                      // add a sky layer that will show when the map is highly pitched
-                      map.addLayer({
-                        id: "sky",
-                        type: "sky",
-                        paint: {
-                          "sky-type": "atmosphere",
-                          "sky-atmosphere-sun": [0.0, 0.0],
-                          "sky-atmosphere-sun-intensity": 15,
-                        },
-                      });
-                    }
- 
-                    map.on("mouseenter", "places", (e) => {
-                      // Change the cursor style as a UI indicator.
-                      map.getCanvas().style.cursor = "pointer";
+                // add a sky layer that will show when the map is highly pitched
+                map.addLayer({
+                    id: "sky",
+                    type: "sky",
+                    paint: {
+                        "sky-type": "atmosphere",
+                        "sky-atmosphere-sun": [0.0, 0.0],
+                        "sky-atmosphere-sun-intensity": 15,
+                    },
+                });
+            }
 
-                      // Copy coordinates array.
-                      const coordinates = e.features[0].geometry.coordinates.slice();
-                      const description = e.features[0].properties.description;
+            map.on("mouseenter", "places", (e) => {
+                // Change the cursor style as a UI indicator.
+                map.getCanvas().style.cursor = "pointer";
 
-                      // Ensure that if the map is zoomed out such that multiple
-                      // copies of the feature are visible, the popup appears
-                      // over the copy being pointed to.
-                      while (Math.abs(e.lngLat.lng - coordinates[0]) > 180) {
-                        coordinates[0] += e.lngLat.lng > coordinates[0] ? 360 : -360;
-                      }
+                // Copy coordinates array.
+                const coordinates = e.features[0].geometry.coordinates.slice();
+                const description = e.features[0].properties.COUNTRY;
 
-                      // Populate the popup and set its coordinates
-                      // based on the feature found.
-                      popup.setLngLat(coordinates).setHTML(description).addTo(map);
-                    });
+                // Ensure that if the map is zoomed out such that multiple
+                // copies of the feature are visible, the popup appears
+                // over the copy being pointed to.
+                while (Math.abs(e.lngLat.lng - coordinates[0]) > 180) {
+                    coordinates[0] += e.lngLat.lng > coordinates[0] ? 360 : -360;
+                }
 
-                    // Create a popup, but don't add it to the map yet.
-                    const popup = new mapboxgl.Popup({
-                      closeButton: false,
-                      closeOnClick: false,
-                    });
-                    map.on("mouseleave", "places", () => {
-                      map.getCanvas().style.cursor = "";
-                      popup.remove();
-                    });
+                // Populate the popup and set its coordinates
+                // based on the feature found.
+                popup.setLngLat(coordinates).setHTML(description).addTo(map);
+            });
+
+            // Create a popup, but don't add it to the map yet.
+            const popup = new mapboxgl.Popup({
+                closeButton: false,
+                closeOnClick: false,
+            });
+            map.on("mouseleave", "places", () => {
+                map.getCanvas().style.cursor = "";
+                popup.remove();
+            });
 
             /*        map.on("mouseleave", "Singapore", () => {
                       map.getCanvas().style.cursor = "";
@@ -581,1399 +661,1394 @@
             */
             // As the map moves, grab and update bounds in inset map.
             if (config.inset) {
-                      map.on("move", getInsetBounds);
-                    }
-                    // setup the instance, pass callback functions
-                    scroller
-                      .setup({
-                        step: ".step",
-                        offset: 0.5,
-                        progress: true,
-                      })
-                      .onStepEnter(async (response) => {
-                        var chapter = config.chapters.find(
-                          (chap) => chap.id === response.element.id
-                        );
-                        response.element.classList.add("active");
-                        map[chapter.mapAnimation || "flyTo"](chapter.location);
+                map.on("move", getInsetBounds);
+            }
+            // setup the instance, pass callback functions
+            scroller
+                .setup({
+                    step: ".step",
+                    offset: 0.5,
+                    progress: true,
+                })
+                .onStepEnter(async (response) => {
+                    var chapter = config.chapters.find(
+                        (chap) => chap.id === response.element.id
+                    );
+                    response.element.classList.add("active");
+                    map[chapter.mapAnimation || "flyTo"](chapter.location);
 
-                        if (config.inset) {
-                          if (chapter.location.zoom < 5) {
+                    if (config.inset) {
+                        if (chapter.location.zoom < 5) {
                             insetMap.flyTo({ center: chapter.location.center, zoom: 0 });
-                          } else {
+                        } else {
                             insetMap.flyTo({ center: chapter.location.center, zoom: 3 });
-                          }
                         }
-                        if (config.showMarkers) {
-                          marker.setLngLat(chapter.location.center);
-                        }
-                        if (chapter.onChapterEnter.length > 0) {
-                          chapter.onChapterEnter.forEach(setLayerOpacity);
-                        }
-                        if (chapter.callback) {
-                          window[chapter.callback]();
-                        }
-                        if (chapter.rotateAnimation) {
-                          map.once("moveend", () => {
+                    }
+                    if (config.showMarkers) {
+                        marker.setLngLat(chapter.location.center);
+                    }
+                    if (chapter.onChapterEnter.length > 0) {
+                        chapter.onChapterEnter.forEach(setLayerOpacity);
+                    }
+                    if (chapter.callback) {
+                        window[chapter.callback]();
+                    }
+                    if (chapter.rotateAnimation) {
+                        map.once("moveend", () => {
                             const rotateNumber = map.getBearing();
                             map.rotateTo(rotateNumber + 180, {
-                              duration: 30000,
-                              easing: function (t) {
-                                return t;
-                              },
+                                duration: 30000,
+                                easing: function (t) {
+                                    return t;
+                                },
                             });
-                          });
-                        }
-                      })
-                      .onStepExit((response) => {
-                        var chapter = config.chapters.find(
-                          (chap) => chap.id === response.element.id
-                        );
-                        response.element.classList.remove("active");
-                        if (chapter.onChapterExit.length > 0) {
-                          chapter.onChapterExit.forEach(setLayerOpacity);
-                        }
-                      });
+                        });
+                    }
+                })
+                .onStepExit((response) => {
+                    var chapter = config.chapters.find(
+                        (chap) => chap.id === response.element.id
+                    );
+                    response.element.classList.remove("active");
+                    if (chapter.onChapterExit.length > 0) {
+                        chapter.onChapterExit.forEach(setLayerOpacity);
+                    }
+                });
 
-                  });
+        });
 
-                  //Helper functions for insetmap
-                  function getInsetBounds() {
-                    let bounds = map.getBounds();
+        //Helper functions for insetmap
+        function getInsetBounds() {
+            let bounds = map.getBounds();
 
-                    let boundsJson = {
-                      type: "FeatureCollection",
-                      features: [
-                        {
-                          type: "Feature",
-                          properties: {},
-                          geometry: {
+            let boundsJson = {
+                type: "FeatureCollection",
+                features: [
+                    {
+                        type: "Feature",
+                        properties: {},
+                        geometry: {
                             type: "Polygon",
                             coordinates: [
-                              [
-                                [bounds._sw.lng, bounds._sw.lat],
-                                [bounds._ne.lng, bounds._sw.lat],
-                                [bounds._ne.lng, bounds._ne.lat],
-                                [bounds._sw.lng, bounds._ne.lat],
-                                [bounds._sw.lng, bounds._sw.lat],
-                              ],
+                                [
+                                    [bounds._sw.lng, bounds._sw.lat],
+                                    [bounds._ne.lng, bounds._sw.lat],
+                                    [bounds._ne.lng, bounds._ne.lat],
+                                    [bounds._sw.lng, bounds._ne.lat],
+                                    [bounds._sw.lng, bounds._sw.lat],
+                                ],
                             ],
-                          },
                         },
-                      ],
-                    };
+                    },
+                ],
+            };
 
-                    if (initLoad) {
-                      addInsetLayer(boundsJson);
-                      initLoad = false;
-                    } else {
-                      updateInsetLayer(boundsJson);
-                    }
-                  }
-
-                  function addInsetLayer(bounds) {
-                    insetMap.addSource("boundsSource", {
-                      type: "geojson",
-                      data: bounds,
-                    });
-
-                    insetMap.addLayer({
-                      id: "boundsLayer",
-                      type: "fill",
-                      source: "boundsSource", // reference the data source
-                      layout: {},
-                      paint: {
-                        "fill-color": "#fff", 
-                        "fill-opacity": 0.2,
-                      },
-                    });
-                    // Add a black outline around the polygon.
-                    insetMap.addLayer({
-                      id: "outlineLayer",
-                      type: "line",
-                      source: "boundsSource",
-                      layout: {},
-                      paint: {
-                        "line-color": "#000",
-                        "line-width": 1,
-                      },
-                    });
-                  }
-
-                  function updateInsetLayer(bounds) {
-                    insetMap.getSource("boundsSource").setData(bounds);
-                  }
-
-                  // setup resize event
-                  window.addEventListener("resize", scroller.resize);
-            </script>
-
-    <!-- Animate a point along a route -->   
-            <div id="map1"></div>
-            <div class="overlay">
-                    <button id="replay">Replay</button>
-                    </div>
-            <script>
-                        mapboxgl.accessToken = 'pk.eyJ1Ijoic3dwcmFjdGljZTIyIiwiYSI6ImNsMjRmODJtYzB5YzgzYm1teGJkazI0MnAifQ.Zr3rQpkx7dplU_KDYkBz5A';
-                        const map1 = new mapboxgl.Map({
-                            container: 'map1',
-                            style: 'mapbox://styles/mapbox/streets-v11',
-                            center: [-2.30685, 54.25695],
-                            zoom: 3
-                        });
-
-                        // China
-                        const origin = [105.88597, 35.14203] ;
-                        // Japan
-                        const origin1 = [140.32102, 36.20331] ; 
-                        // Singapore
-                        const origin2 = [103.85338, 1.33280] ;
-                        // US
-                        const origin3 = [-98.02535, 39.05059] ;
-                        // Canada
-                        const origin4 = [-109.15288, 59.85914] ; 
-                        // Germany
-                        const origin5 = [10.65355, 50.96338] ;
-                        // Netherlands
-                        const origin6 = [5.73171, 52.05367] ;
-                        // France
-                        const origin7 = [3.95916, 47.20650] ; 
-                        // Brazil
-                        const origin8 = [-52.54898, -13.01003] ;
-                        // Chile
-                        const origin9 = [-70.32699, -25.91699] ; 
-                        // Kenya
-                        const origin10 = [37.99519, 0.06608] ;
-                        // Australia
-                        const origin11 = [137.33283, -24.80944] ; 
-                            
-                        // UK
-                        const destination = [-2.30685, 54.25695];
-
-                        // A simple line from origin to destination.
-                        const route = {
-                            'type': 'FeatureCollection',
-                            'features': [
-                                {
-                                    'type': 'Feature',
-                                    'geometry': {
-                                        'type': 'LineString',
-                                        'coordinates': [origin, destination]
-                                    }
-                                }
-                            ]
-                        };
-                        const route1 = {
-                            'type': 'FeatureCollection',
-                            'features': [
-                                {
-                                    'type': 'Feature',
-                                    'geometry': {
-                                        'type': 'LineString',
-                                        'coordinates': [origin1, destination]
-                                    }
-                                }
-                            ]
-                        };
-                        const route2 = {
-                            'type': 'FeatureCollection',
-                            'features': [
-                                {
-                                    'type': 'Feature',
-                                    'geometry': {
-                                        'type': 'LineString',
-                                        'coordinates': [origin2, destination]
-                                    }
-                                }
-                            ]
-                        };
-                        const route3 = {
-                            'type': 'FeatureCollection',
-                            'features': [
-                                {
-                                    'type': 'Feature',
-                                    'geometry': {
-                                        'type': 'LineString',
-                                        'coordinates': [origin3, destination]
-                                    }
-                                }
-                            ]
-                        };
-                        const route4 = {
-                            'type': 'FeatureCollection',
-                            'features': [
-                                {
-                                    'type': 'Feature',
-                                    'geometry': {
-                                        'type': 'LineString',
-                                        'coordinates': [origin4, destination]
-                                    }
-                                }
-                            ]
-                        };
-                        const route5 = {
-                            'type': 'FeatureCollection',
-                            'features': [
-                                {
-                                    'type': 'Feature',
-                                    'geometry': {
-                                        'type': 'LineString',
-                                        'coordinates': [origin5, destination]
-                                    }
-                                }
-                            ]
-                        };
-                        const route6 = {
-                            'type': 'FeatureCollection',
-                            'features': [
-                                {
-                                    'type': 'Feature',
-                                    'geometry': {
-                                        'type': 'LineString',
-                                        'coordinates': [origin6, destination]
-                                    }
-                                }
-                            ]
-                        };
-                        const route7 = {
-                            'type': 'FeatureCollection',
-                            'features': [
-                                {
-                                    'type': 'Feature',
-                                    'geometry': {
-                                        'type': 'LineString',
-                                        'coordinates': [origin7, destination]
-                                    }
-                                }
-                            ]
-                        };
-                        const route8 = {
-                            'type': 'FeatureCollection',
-                            'features': [
-                                {
-                                    'type': 'Feature',
-                                    'geometry': {
-                                        'type': 'LineString',
-                                        'coordinates': [origin8, destination]
-                                    }
-                                }
-                            ]
-                        };
-                        const route9 = {
-                            'type': 'FeatureCollection',
-                            'features': [
-                                {
-                                    'type': 'Feature',
-                                    'geometry': {
-                                        'type': 'LineString',
-                                        'coordinates': [origin9, destination]
-                                    }
-                                }
-                            ]
-                        };
-                        const route10 = {
-                            'type': 'FeatureCollection',
-                            'features': [
-                                {
-                                    'type': 'Feature',
-                                    'geometry': {
-                                        'type': 'LineString',
-                                        'coordinates': [origin10, destination]
-                                    }
-                                }
-                            ]
-                        };
-                        const route11 = {
-                            'type': 'FeatureCollection',
-                            'features': [
-                                {
-                                    'type': 'Feature',
-                                    'geometry': {
-                                        'type': 'LineString',
-                                        'coordinates': [origin11, destination]
-                                    }
-                                }
-                            ]
-                        };
-
-                        // Coordinates are initially set to origin.
-                        const point = {
-                            'type': 'FeatureCollection',
-                            'features': [
-                                {
-                                    'type': 'Feature',
-                                    'properties': {},
-                                    'geometry': {
-                                        'type': 'Point',
-                                        'coordinates': origin
-                                    }
-                                }
-                            ]
-                        };
-                        const point1 = {
-                            'type': 'FeatureCollection',
-                            'features': [
-                                {
-                                    'type': 'Feature',
-                                    'properties': {},
-                                    'geometry': {
-                                        'type': 'Point',
-                                        'coordinates': origin1
-                                    }
-                                }
-                            ]
-                        };
-                        const point2 = {
-                            'type': 'FeatureCollection',
-                            'features': [
-                                {
-                                    'type': 'Feature',
-                                    'properties': {},
-                                    'geometry': {
-                                        'type': 'Point',
-                                        'coordinates': origin2
-                                    }
-                                }
-                            ]
-                        };
-                        const point3 = {
-                            'type': 'FeatureCollection',
-                            'features': [
-                                {
-                                    'type': 'Feature',
-                                    'properties': {},
-                                    'geometry': {
-                                        'type': 'Point',
-                                        'coordinates': origin3
-                                    }
-                                }
-                            ]
-                        };
-                        const point4 = {
-                            'type': 'FeatureCollection',
-                            'features': [
-                                {
-                                    'type': 'Feature',
-                                    'properties': {},
-                                    'geometry': {
-                                        'type': 'Point',
-                                        'coordinates': origin4
-                                    }
-                                }
-                            ]
-                        };
-                        const point5 = {
-                            'type': 'FeatureCollection',
-                            'features': [
-                                {
-                                    'type': 'Feature',
-                                    'properties': {},
-                                    'geometry': {
-                                        'type': 'Point',
-                                        'coordinates': origin5
-                                    }
-                                }
-                            ]
-                        };
-                        const point6 = {
-                            'type': 'FeatureCollection',
-                            'features': [
-                                {
-                                    'type': 'Feature',
-                                    'properties': {},
-                                    'geometry': {
-                                        'type': 'Point',
-                                        'coordinates': origin6
-                                    }
-                                }
-                            ]
-                        };
-                        const point7 = {
-                            'type': 'FeatureCollection',
-                            'features': [
-                                {
-                                    'type': 'Feature',
-                                    'properties': {},
-                                    'geometry': {
-                                        'type': 'Point',
-                                        'coordinates': origin7
-                                    }
-                                }
-                            ]
-                        };
-                        const point8 = {
-                            'type': 'FeatureCollection',
-                            'features': [
-                                {
-                                    'type': 'Feature',
-                                    'properties': {},
-                                    'geometry': {
-                                        'type': 'Point',
-                                        'coordinates': origin8
-                                    }
-                                }
-                            ]
-                        };
-                        const point9 = {
-                            'type': 'FeatureCollection',
-                            'features': [
-                                {
-                                    'type': 'Feature',
-                                    'properties': {},
-                                    'geometry': {
-                                        'type': 'Point',
-                                        'coordinates': origin9
-                                    }
-                                }
-                            ]
-                        };
-                        const point10 = {
-                            'type': 'FeatureCollection',
-                            'features': [
-                                {
-                                    'type': 'Feature',
-                                    'properties': {},
-                                    'geometry': {
-                                        'type': 'Point',
-                                        'coordinates': origin10
-                                    }
-                                }
-                            ]
-                        };
-                        const point11 = {
-                            'type': 'FeatureCollection',
-                            'features': [
-                                {
-                                    'type': 'Feature',
-                                    'properties': {},
-                                    'geometry': {
-                                        'type': 'Point',
-                                        'coordinates': origin11
-                                    }
-                                }
-                            ]
-                        };
-                        // Calculate the distance in kilometers between route start/end point.
-                        const lineDistance = turf.length(route.features[0]);
-                        const lineDistance1 = turf.length(route1.features[0]);
-                        const lineDistance2 = turf.length(route2.features[0]);
-                        const lineDistance3 = turf.length(route3.features[0]);
-                        const lineDistance4 = turf.length(route4.features[0]);
-                        const lineDistance5 = turf.length(route5.features[0]);
-                        const lineDistance6 = turf.length(route6.features[0]);
-                        const lineDistance7 = turf.length(route7.features[0]);
-                        const lineDistance8 = turf.length(route8.features[0]);
-                        const lineDistance9 = turf.length(route9.features[0]);
-                        const lineDistance10 = turf.length(route10.features[0]);
-                        const lineDistance11 = turf.length(route11.features[0]);
-
-                        const arc = [];
-                        const arc1 = [];
-                        const arc2 = []; 
-                        const arc3 = [];
-                        const arc4 = [];
-                        const arc5 = [];
-                        const arc6 = [];
-                        const arc7 = [];
-                        const arc8 = [];
-                        const arc9 = [];
-                        const arc10 = [];
-                        const arc11 = [];    
-
-                        // Number of steps to use in the arc and animation, more steps means
-                        // a smoother arc and animation, but too many steps will result in a
-                        // low frame rate
-                        const steps = 500;
-                        const steps1 = 500;
-                        const steps2 = 500;
-                        const steps3 = 500;
-                        const steps4 = 500;
-                        const steps5 = 500;
-                        const steps6 = 500;
-                        const steps7 = 500;
-                        const steps8 = 500;
-                        const steps9 = 500;
-                        const steps10 = 500;
-                        const steps11 = 500;
-                        
-                        // Draw an arc between the `origin` & `destination` of the two points
-                        for (let i = 0; i < lineDistance; i += lineDistance / steps) {
-                            const segment = turf.along(route.features[0], i);
-                            arc.push(segment.geometry.coordinates);
-                        }
-                        for (let i = 0; i < lineDistance1; i += lineDistance1 / steps1) {
-                            const segment1 = turf.along(route1.features[0], i);
-                            arc1.push(segment1.geometry.coordinates);
-                        }
-                        for (let i = 0; i < lineDistance2; i += lineDistance2 / steps2) {
-                            const segment2 = turf.along(route2.features[0], i);
-                            arc2.push(segment2.geometry.coordinates);
-                        }
-                        for (let i = 0; i < lineDistance3; i += lineDistance3 / steps3) {
-                            const segment3 = turf.along(route3.features[0], i);
-                            arc3.push(segment3.geometry.coordinates);
-                        }
-                        for (let i = 0; i < lineDistance4; i += lineDistance4 / steps4) {
-                            const segment4 = turf.along(route4.features[0], i);
-                            arc4.push(segment4.geometry.coordinates);
-                        }
-                        for (let i = 0; i < lineDistance5; i += lineDistance5 / steps5) {
-                            const segment5 = turf.along(route5.features[0], i);
-                            arc5.push(segment5.geometry.coordinates);
-                        }
-                        for (let i = 0; i < lineDistance6; i += lineDistance6 / steps6) {
-                            const segment6 = turf.along(route6.features[0], i);
-                            arc6.push(segment6.geometry.coordinates);
-                        }
-                        for (let i = 0; i < lineDistance7; i += lineDistance7 / steps7) {
-                            const segment7 = turf.along(route7.features[0], i);
-                            arc7.push(segment7.geometry.coordinates);
-                        }
-                        for (let i = 0; i < lineDistance8; i += lineDistance8 / steps8) {
-                            const segment8 = turf.along(route8.features[0], i);
-                            arc8.push(segment8.geometry.coordinates);
-                        }
-                        for (let i = 0; i < lineDistance9; i += lineDistance9 / steps9) {
-                            const segment9 = turf.along(route9.features[0], i);
-                            arc9.push(segment9.geometry.coordinates);
-                        }
-                        for (let i = 0; i < lineDistance10; i += lineDistance10 / steps10) {
-                            const segment10 = turf.along(route10.features[0], i);
-                            arc10.push(segment10.geometry.coordinates);
-                        }    
-                        for (let i = 0; i < lineDistance11; i += lineDistance11 / steps11) {
-                            const segment11 = turf.along(route11.features[0], i);
-                            arc11.push(segment11.geometry.coordinates);
-                        }
-                        
-                        console.log(arc)
-                        console.log(arc1)
-                        console.log(arc2)
-                        console.log(arc3)
-                        console.log(arc4)
-                        console.log(arc5)
-                        console.log(arc6)
-                        console.log(arc7)
-                        console.log(arc8)
-                        console.log(arc9)
-                        console.log(arc10)
-                        console.log(arc11)
-
-                        // Update the route with calculated arc coordinates
-                        route.features[0].geometry.coordinates = arc;
-                        route1.features[0].geometry.coordinates = arc1;
-                        route2.features[0].geometry.coordinates = arc2;
-                        route3.features[0].geometry.coordinates = arc3;
-                        route4.features[0].geometry.coordinates = arc4;
-                        route5.features[0].geometry.coordinates = arc5;
-                        route6.features[0].geometry.coordinates = arc6;
-                        route7.features[0].geometry.coordinates = arc7;  
-                        route8.features[0].geometry.coordinates = arc8;
-                        route9.features[0].geometry.coordinates = arc9;
-                        route10.features[0].geometry.coordinates = arc10;  
-                        route11.features[0].geometry.coordinates = arc11;
-                            
-                        // Used to increment the value of the point measurement against the route.
-                        let counter = 0;
-                        let counter1 = 0;
-                        let counter2 = 0;
-                        let counter3 = 0;
-                        let counter4 = 0;
-                        let counter5 = 0;
-                        let counter6 = 0;
-                        let counter7 = 0;
-                        let counter8 = 0;
-                        let counter9 = 0;
-                        let counter10 = 0;
-                        let counter11 = 0;    
-
-
-                        map.on('load', () => {
-
-
-                    // Add a source and layer displaying a point which will be animated in a circle.
-                            map.addSource('route', {
-                                'type': 'geojson',
-                                'data': route
-                            });
-                            map.addSource('route1', {
-                                'type': 'geojson',
-                                'data': route1
-                            });
-                            map.addSource('route2', {
-                                'type': 'geojson',
-                                'data': route2
-                            });
-                            map.addSource('route3', {
-                                'type': 'geojson',
-                                'data': route3
-                            });
-                            map.addSource('route4', {
-                                'type': 'geojson',
-                                'data': route4
-                            });
-                            map.addSource('route5', {
-                                'type': 'geojson',
-                                'data': route5
-                            });
-                            map.addSource('route6', {
-                                'type': 'geojson',
-                                'data': route6
-                            });
-                            map.addSource('route7', {
-                                'type': 'geojson',
-                                'data': route7
-                            });
-                            map.addSource('route8', {
-                                'type': 'geojson',
-                                'data': route8
-                            });
-                            map.addSource('route9', {
-                                'type': 'geojson',
-                                'data': route9
-                            });
-                            map.addSource('route10', {
-                                'type': 'geojson',
-                                'data': route10
-                            });
-                            map.addSource('route11', {
-                                'type': 'geojson',
-                                'data': route11
-                            });
-                            
-                            map.addSource('point', {
-                                'type': 'geojson',
-                                'data': point
-                            });
-                            map.addSource('point1', {
-                                'type': 'geojson',
-                                'data': point1
-                            });
-                            map.addSource('point2', {
-                                'type': 'geojson',
-                                'data': point2
-                            });
-                            map.addSource('point3', {
-                                'type': 'geojson',
-                                'data': point3
-                            });
-                            map.addSource('point4', {
-                                'type': 'geojson',
-                                'data': point4
-                            });
-                            map.addSource('point5', {
-                                'type': 'geojson',
-                                'data': point5
-                            });
-                            map.addSource('point6', {
-                                'type': 'geojson',
-                                'data': point6
-                            });
-                            map.addSource('point7', {
-                                'type': 'geojson',
-                                'data': point7
-                            });
-                            map.addSource('point8', {
-                                'type': 'geojson',
-                                'data': point8
-                            });
-                            map.addSource('point9', {
-                                'type': 'geojson',
-                                'data': point9
-                            });
-                            map.addSource('point10', {
-                                'type': 'geojson',
-                                'data': point10
-                            });
-                            map.addSource('point11', {
-                                'type': 'geojson',
-                                'data': point11
-                            });
-
-                            map.addLayer({
-                                'id': 'route',
-                                'source': 'route',
-                                'type': 'line',
-                                'paint': {
-                                    'line-width': 2,
-                                    'line-color': '#007cbf'
-                                }
-                            });
-                            map.addLayer({
-                                'id': 'route1',
-                                'source': 'route1',
-                                'type': 'line',
-                                'paint': {
-                                    'line-width': 2,
-                                    'line-color': '#007cbf'
-                                }
-                            });
-                            map.addLayer({
-                                'id': 'route2',
-                                'source': 'route2',
-                                'type': 'line',
-                                'paint': {
-                                    'line-width': 2,
-                                    'line-color': '#007cbf'
-                                }
-                            });
-                            map.addLayer({
-                                'id': 'route3',
-                                'source': 'route3',
-                                'type': 'line',
-                                'paint': {
-                                    'line-width': 2,
-                                    'line-color': '#007cbf'
-                                }
-                            });
-                            map.addLayer({
-                                'id': 'route4',
-                                'source': 'route4',
-                                'type': 'line',
-                                'paint': {
-                                    'line-width': 2,
-                                    'line-color': '#007cbf'
-                                }
-                            });
-                            map.addLayer({
-                                'id': 'route5',
-                                'source': 'route5',
-                                'type': 'line',
-                                'paint': {
-                                    'line-width': 2,
-                                    'line-color': '#007cbf'
-                                }
-                            });
-                            map.addLayer({
-                                'id': 'route6',
-                                'source': 'route6',
-                                'type': 'line',
-                                'paint': {
-                                    'line-width': 2,
-                                    'line-color': '#007cbf'
-                                }
-                            });
-                            map.addLayer({
-                                'id': 'route7',
-                                'source': 'route7',
-                                'type': 'line',
-                                'paint': {
-                                    'line-width': 2,
-                                    'line-color': '#007cbf'
-                                }
-                            });
-                            map.addLayer({
-                                'id': 'route8',
-                                'source': 'route8',
-                                'type': 'line',
-                                'paint': {
-                                    'line-width': 2,
-                                    'line-color': '#007cbf'
-                                }
-                            });
-                            map.addLayer({
-                                'id': 'route9',
-                                'source': 'route9',
-                                'type': 'line',
-                                'paint': {
-                                    'line-width': 2,
-                                    'line-color': '#007cbf'
-                                }
-                            });
-                            map.addLayer({
-                                'id': 'route10',
-                                'source': 'route10',
-                                'type': 'line',
-                                'paint': {
-                                    'line-width': 2,
-                                    'line-color': '#007cbf'
-                                }
-                            });
-                            map.addLayer({
-                                'id': 'route11',
-                                'source': 'route11',
-                                'type': 'line',
-                                'paint': {
-                                    'line-width': 2,
-                                    'line-color': '#007cbf'
-                                }
-                            });
-
-                            //add airplane symbol
-                            map.addLayer({
-                                'id': 'point',
-                                'source': 'point',
-                                'type': 'symbol',
-                                'layout': {
-                                    'icon-image': 'airport-15',
-                                    'icon-rotate': ['get', 'bearing'],
-                                    'icon-rotation-alignment': 'map',
-                                    'icon-allow-overlap': true,
-                                    'icon-ignore-placement': true
-                                }
-                            });
-                            map.addLayer({
-                                'id': 'point1',
-                                'source': 'point1',
-                                'type': 'symbol',
-                                'layout': {
-                                    'icon-image': 'airport-15',
-                                    'icon-rotate': ['get', 'bearing'],
-                                    'icon-rotation-alignment': 'map',
-                                    'icon-allow-overlap': true,
-                                    'icon-ignore-placement': true
-                                }
-                            });
-                            map.addLayer({
-                                'id': 'point2',
-                                'source': 'point2',
-                                'type': 'symbol',
-                                'layout': {
-                                    'icon-image': 'airport-15',
-                                    'icon-rotate': ['get', 'bearing'],
-                                    'icon-rotation-alignment': 'map',
-                                    'icon-allow-overlap': true,
-                                    'icon-ignore-placement': true
-                                }
-                            });
-                            map.addLayer({
-                                'id': 'point3',
-                                'source': 'point3',
-                                'type': 'symbol',
-                                'layout': {
-                                    'icon-image': 'airport-15',
-                                    'icon-rotate': ['get', 'bearing'],
-                                    'icon-rotation-alignment': 'map',
-                                    'icon-allow-overlap': true,
-                                    'icon-ignore-placement': true
-                                }
-                            });
-                            map.addLayer({
-                                'id': 'point4',
-                                'source': 'point4',
-                                'type': 'symbol',
-                                'layout': {
-                                    'icon-image': 'airport-15',
-                                    'icon-rotate': ['get', 'bearing'],
-                                    'icon-rotation-alignment': 'map',
-                                    'icon-allow-overlap': true,
-                                    'icon-ignore-placement': true
-                                }
-                            });
-                            map.addLayer({
-                                'id': 'point5',
-                                'source': 'point5',
-                                'type': 'symbol',
-                                'layout': {
-                                    'icon-image': 'airport-15',
-                                    'icon-rotate': ['get', 'bearing'],
-                                    'icon-rotation-alignment': 'map',
-                                    'icon-allow-overlap': true,
-                                    'icon-ignore-placement': true
-                                }
-                            });
-                            map.addLayer({
-                                'id': 'poin6t',
-                                'source': 'point6',
-                                'type': 'symbol',
-                                'layout': {
-                                    'icon-image': 'airport-15',
-                                    'icon-rotate': ['get', 'bearing'],
-                                    'icon-rotation-alignment': 'map',
-                                    'icon-allow-overlap': true,
-                                    'icon-ignore-placement': true
-                                }
-                            });
-                            map.addLayer({
-                                'id': 'point7',
-                                'source': 'point7',
-                                'type': 'symbol',
-                                'layout': {
-                                    'icon-image': 'airport-15',
-                                    'icon-rotate': ['get', 'bearing'],
-                                    'icon-rotation-alignment': 'map',
-                                    'icon-allow-overlap': true,
-                                    'icon-ignore-placement': true
-                                }
-                            });
-                            map.addLayer({
-                                'id': 'point8',
-                                'source': 'point8',
-                                'type': 'symbol',
-                                'layout': {
-                                    'icon-image': 'airport-15',
-                                    'icon-rotate': ['get', 'bearing'],
-                                    'icon-rotation-alignment': 'map',
-                                    'icon-allow-overlap': true,
-                                    'icon-ignore-placement': true
-                                }
-                            });
-                            map.addLayer({
-                                'id': 'point9',
-                                'source': 'point9',
-                                'type': 'symbol',
-                                'layout': {
-                                    'icon-image': 'airport-15',
-                                    'icon-rotate': ['get', 'bearing'],
-                                    'icon-rotation-alignment': 'map',
-                                    'icon-allow-overlap': true,
-                                    'icon-ignore-placement': true
-                                }
-                            });
-                            map.addLayer({
-                                'id': 'point10',
-                                'source': 'point10',
-                                'type': 'symbol',
-                                'layout': {
-                                    'icon-image': 'airport-15',
-                                    'icon-rotate': ['get', 'bearing'],
-                                    'icon-rotation-alignment': 'map',
-                                    'icon-allow-overlap': true,
-                                    'icon-ignore-placement': true
-                                }
-                            });
-                            map.addLayer({
-                                'id': 'point11',
-                                'source': 'point11',
-                                'type': 'symbol',
-                                'layout': {
-                                    'icon-image': 'airport-15',
-                                    'icon-rotate': ['get', 'bearing'],
-                                    'icon-rotation-alignment': 'map',
-                                    'icon-allow-overlap': true,
-                                    'icon-ignore-placement': true
-                                }
-                            });
-
-                            function animate() {
-                                const start =
-                                    route.features[0].geometry.coordinates[
-                                        counter >= steps ? counter - 1 : counter
-                                        ];
-                                const end =
-                                    route.features[0].geometry.coordinates[
-                                        counter >= steps ? counter : counter + 1
-                                        ];
-                                if (!start || !end) return;
-                    // Update point geometry to a new position based on counter denoting
-                    // the index to access the arc
-                                point.features[0].geometry.coordinates =
-                                    route.features[0].geometry.coordinates[counter];
-                                point1.features[0].geometry.coordinates =
-                                    route1.features[0].geometry.coordinates[counter];
-                    // Calculate the bearing to ensure the icon is rotated to match the route arc
-                    // The bearing is calculated between the current point and the next point, except
-                    // at the end of the arc, which uses the previous point and the current point
-                                point.features[0].properties.bearing = turf.bearing(
-                                    turf.point(start),
-                                    turf.point(end)
-                                );
-                    // Update the source with this new data
-                                map.getSource('point').setData(point);
-
-                    // Request the next frame of animation as long as the end has not been reached
-                                if (counter < steps) {
-                                    requestAnimationFrame(animate);
-                                }
-                                counter = counter + 1;
-                            }
-                            function animate1() {
-                                const start1 =
-                                    route1.features[0].geometry.coordinates[
-                                        counter1 >= steps1 ? counter1 - 1 : counter1
-                                        ];
-                                const end1 =
-                                    route1.features[0].geometry.coordinates[
-                                        counter1 >= steps1 ? counter1 : counter1+ 1
-                                        ];
-                                if (!start1 || !end1) return;
-                                point1.features[0].geometry.coordinates =
-                                    route1.features[0].geometry.coordinates[counter1];
-                                point1.features[0].properties.bearing = turf.bearing(
-                                    turf.point(start1),
-                                    turf.point(end1)
-                                );
-                                map.getSource('point1').setData(point1);
-                                if (counter1 < steps1) {
-                                    requestAnimationFrame(animate1);
-                                }
-                                counter1 = counter1 + 1;
-                            }
-                            function animate2() {
-                                const start2 =
-                                    route2.features[0].geometry.coordinates[
-                                        counter2 >= steps2 ? counter2 - 1 : counter2
-                                        ];
-                                const end2 =
-                                    route2.features[0].geometry.coordinates[
-                                        counter2 >= steps2 ? counter2 : counter2+ 1
-                                        ];
-                                if (!start2 || !end2) return;
-                                point2.features[0].geometry.coordinates =
-                                    route2.features[0].geometry.coordinates[counter2];
-                                point2.features[0].properties.bearing = turf.bearing(
-                                    turf.point(start2),
-                                    turf.point(end2)
-                                );
-                                map.getSource('point2').setData(point2);
-                                if (counter2 < steps2) {
-                                    requestAnimationFrame(animate2);
-                                }
-                                counter2 = counter2 + 1;
-                            }
-                            function animate3() {
-                                const start3 =
-                                    route3.features[0].geometry.coordinates[
-                                        counter3 >= steps3 ? counter3 - 1 : counter3
-                                        ];
-                                const end3 =
-                                    route3.features[0].geometry.coordinates[
-                                        counter3 >= steps3 ? counter3 : counter3+ 1
-                                        ];
-                                if (!start3 || !end3) return;
-                                point3.features[0].geometry.coordinates =
-                                    route3.features[0].geometry.coordinates[counter3];
-                                point3.features[0].properties.bearing = turf.bearing(
-                                    turf.point(start3),
-                                    turf.point(end3)
-                                );
-                                map.getSource('point3').setData(point3);
-                                if (counter3 < steps3) {
-                                    requestAnimationFrame(animate3);
-                                }
-                                counter3 = counter3 + 1;
-                            }
-                            function animate4() {
-                                const start4 =
-                                    route4.features[0].geometry.coordinates[
-                                        counter4 >= steps4 ? counter4 - 1 : counter4
-                                        ];
-                                const end4 =
-                                    route4.features[0].geometry.coordinates[
-                                        counter4 >= steps4 ? counter4 : counter4+ 1
-                                        ];
-                                if (!start4 || !end4) return;
-                                point4.features[0].geometry.coordinates =
-                                    route4.features[0].geometry.coordinates[counter4];
-                                point4.features[0].properties.bearing = turf.bearing(
-                                    turf.point(start4),
-                                    turf.point(end4)
-                                );
-                                map.getSource('point4').setData(point4);
-                                if (counter4 < steps4) {
-                                    requestAnimationFrame(animate4);
-                                }
-                                counter4 = counter4 + 1;
-                            }
-                            function animate5() {
-                                const start5 =
-                                    route5.features[0].geometry.coordinates[
-                                        counter5 >= steps5 ? counter5 - 1 : counter5
-                                        ];
-                                const end5 =
-                                    route5.features[0].geometry.coordinates[
-                                        counter5 >= steps5 ? counter5 : counter5+ 1
-                                        ];
-                                if (!start5 || !end5) return;
-                                point5.features[0].geometry.coordinates =
-                                    route5.features[0].geometry.coordinates[counter5];
-                                point5.features[0].properties.bearing = turf.bearing(
-                                    turf.point(start5),
-                                    turf.point(end5)
-                                );
-                                map.getSource('point5').setData(point5);
-                                if (counter5 < steps5) {
-                                    requestAnimationFrame(animate5);
-                                }
-                                counter5 = counter5 + 1;
-                            }
-                            function animate6() {
-                                const start6 =
-                                    route6.features[0].geometry.coordinates[
-                                        counter6 >= steps6 ? counter6 - 1 : counter6
-                                        ];
-                                const end6 =
-                                    route6.features[0].geometry.coordinates[
-                                        counter6 >= steps6 ? counter6 : counter6+ 1
-                                        ];
-                                if (!start6 || !end6) return;
-                                point6.features[0].geometry.coordinates =
-                                    route6.features[0].geometry.coordinates[counter6];
-                                point6.features[0].properties.bearing = turf.bearing(
-                                    turf.point(start6),
-                                    turf.point(end6)
-                                );
-                                map.getSource('point6').setData(point6);
-                                if (counter6 < steps6) {
-                                    requestAnimationFrame(animate6);
-                                }
-                                counter6 = counter6 + 1;
-                            }
-                            function animate7() {
-                                const start7 =
-                                    route7.features[0].geometry.coordinates[
-                                        counter7 >= steps7 ? counter7 - 1 : counter7
-                                        ];
-                                const end7 =
-                                    route7.features[0].geometry.coordinates[
-                                        counter7 >= steps7 ? counter7 : counter7+ 1
-                                        ];
-                                if (!start7 || !end7) return;
-                                point7.features[0].geometry.coordinates =
-                                    route7.features[0].geometry.coordinates[counter7];
-                                point7.features[0].properties.bearing = turf.bearing(
-                                    turf.point(start7),
-                                    turf.point(end7)
-                                );
-                                map.getSource('point7').setData(point7);
-                                if (counter7 < steps7) {
-                                    requestAnimationFrame(animate7);
-                                }
-                                counter7 = counter7 + 1;
-                            }
-                            function animate8() {
-                                const start8 =
-                                    route8.features[0].geometry.coordinates[
-                                        counter8 >= steps8 ? counter8 - 1 : counter8
-                                        ];
-                                const end8 =
-                                    route8.features[0].geometry.coordinates[
-                                        counter8 >= steps8 ? counter8 : counter8+ 1
-                                        ];
-                                if (!start8 || !end8) return;
-                                point8.features[0].geometry.coordinates =
-                                    route8.features[0].geometry.coordinates[counter8];
-                                point8.features[0].properties.bearing = turf.bearing(
-                                    turf.point(start8),
-                                    turf.point(end8)
-                                );
-                                map.getSource('point8').setData(point8);
-                                if (counter8 < steps8) {
-                                    requestAnimationFrame(animate8);
-                                }
-                                counter8 = counter8 + 1;
-                            }
-                            function animate9() {
-                                const start9 =
-                                    route9.features[0].geometry.coordinates[
-                                        counter9 >= steps9 ? counter9 - 1 : counter9
-                                        ];
-                                const end9 =
-                                    route9.features[0].geometry.coordinates[
-                                        counter9 >= steps9 ? counter9 : counter9+ 1
-                                        ];
-                                if (!start9 || !end9) return;
-                                point9.features[0].geometry.coordinates =
-                                    route9.features[0].geometry.coordinates[counter9];
-                                point9.features[0].properties.bearing = turf.bearing(
-                                    turf.point(start9),
-                                    turf.point(end9)
-                                );
-                                map.getSource('point9').setData(point9);
-                                if (counter9 < steps9) {
-                                    requestAnimationFrame(animate9);
-                                }
-                                counter9 = counter9 + 1;
-                            }
-                            function animate10() {
-                                const start10 =
-                                    route10.features[0].geometry.coordinates[
-                                        counter10 >= steps10 ? counter10 - 1 : counter10
-                                        ];
-                                const end10 =
-                                    route10.features[0].geometry.coordinates[
-                                        counter10 >= steps10 ? counter10 : counter10+ 1
-                                        ];
-                                if (!start10 || !end10) return;
-                                point10.features[0].geometry.coordinates =
-                                    route10.features[0].geometry.coordinates[counter10];
-                                point10.features[0].properties.bearing = turf.bearing(
-                                    turf.point(start10),
-                                    turf.point(end10)
-                                );
-                                map.getSource('point10').setData(point10);
-                                if (counter10 < steps10) {
-                                    requestAnimationFrame(animate10);
-                                }
-                                counter10 = counter10 + 1;
-                            }
-                            function animate11() {
-                                const start11 =
-                                    route11.features[0].geometry.coordinates[
-                                        counter11 >= steps11 ? counter11 - 1 : counter11
-                                        ];
-                                const end11 =
-                                    route11.features[0].geometry.coordinates[
-                                        counter11 >= steps11 ? counter11 : counter11+ 1
-                                        ];
-                                if (!start11 || !end11) return;
-                                point11.features[0].geometry.coordinates =
-                                    route11.features[0].geometry.coordinates[counter11];
-                                point11.features[0].properties.bearing = turf.bearing(
-                                    turf.point(start11),
-                                    turf.point(end11)
-                                );
-                                map.getSource('point11').setData(point11);
-                                if (counter11 < steps11) {
-                                    requestAnimationFrame(animate11);
-                                }
-                                counter11 = counter11 + 1;
-                            }
-
-                            document.getElementById('replay').addEventListener('click', () => {
-                    // Set the coordinates of the original point back to origin
-                                point.features[0].geometry.coordinates = origin;
-                    // Update the source layer
-                                map.getSource('point').setData(point);
-                    // Reset the counter
-                                counter = 0;
-                    // Restart the animation
-                                animate(counter);
-                            });
-                            document.getElementById('replay').addEventListener('click', () => {
-                                point1.features[0].geometry.coordinates = origin1;
-                                map.getSource('point1').setData(point1);
-                                counter1 = 0;
-                                animate1(counter1);
-                            });
-                            document.getElementById('replay').addEventListener('click', () => {
-                                point2.features[0].geometry.coordinates = origin2;
-                                map.getSource('point2').setData(point2);
-                                counter2 = 0;
-                                animate2(counter2);
-                            });
-                            document.getElementById('replay').addEventListener('click', () => {
-                                point3.features[0].geometry.coordinates = origin3;
-                                map.getSource('point3').setData(point3);
-                                counter3 = 0;
-                                animate3(counter3);
-                            });
-                            document.getElementById('replay').addEventListener('click', () => {
-                                point4.features[0].geometry.coordinates = origin4;
-                                map.getSource('point4').setData(point4);
-                                counter4 = 0;
-                                animate4(counter4);
-                            });
-                            document.getElementById('replay').addEventListener('click', () => {
-                                point5.features[0].geometry.coordinates = origin5;
-                                map.getSource('point5').setData(point5);
-                                counter5 = 0;
-                                animate5(counter5);
-                            });
-                            document.getElementById('replay').addEventListener('click', () => {
-                                point6.features[0].geometry.coordinates = origin6;
-                                map.getSource('point6').setData(point6);
-                                counter6 = 0;
-                                animate6(counter6);
-                            });
-                            document.getElementById('replay').addEventListener('click', () => {
-                                point7.features[0].geometry.coordinates = origin7;
-                                map.getSource('point7').setData(point7);
-                                counter7 = 0;
-                                animate7(counter7);
-                            });
-                            document.getElementById('replay').addEventListener('click', () => {
-                                point8.features[0].geometry.coordinates = origin8;
-                                map.getSource('point8').setData(point8);
-                                counter8 = 0;
-                                animate8(counter8);
-                            });
-                            document.getElementById('replay').addEventListener('click', () => {
-                                point9.features[0].geometry.coordinates = origin9;
-                                map.getSource('point9').setData(point9);
-                                counter9 = 0;
-                                animate9(counter9);
-                            });
-                            document.getElementById('replay').addEventListener('click', () => {
-                                point10.features[0].geometry.coordinates = origin10;
-                                map.getSource('point10').setData(point10);
-                                counter10 = 0;
-                                animate10(counter10);
-                            });
-                            document.getElementById('replay').addEventListener('click', () => {
-                                point11.features[0].geometry.coordinates = origin11;
-                                map.getSource('point11').setData(point11);
-                                counter11 = 0;
-                                animate11(counter11);
-                            });
-
-                    // Start the animation
-                            animate(counter);
-                            animate1(counter1);
-                            animate2(counter2);
-                            animate3(counter3);
-                            animate4(counter4);
-                            animate5(counter5);
-                            animate6(counter6);
-                            animate7(counter7);
-                            animate8(counter8);
-                            animate9(counter9);
-                            animate10(counter10);
-                            animate11(counter11);
-                        });
-                    </script>
-
-    <!-- Show polygon information on click --> 
-            <style>
-            .mapboxgl-popup {
-            max-width: 400px;
-            font: 12px/20px 'Helvetica Neue', Arial, Helvetica, sans-serif;
+            if (initLoad) {
+                addInsetLayer(boundsJson);
+                initLoad = false;
+            } else {
+                updateInsetLayer(boundsJson);
             }
-            </style>
-            <div id="map2"></div>
-            <script>
-                mapboxgl.accessToken = 'pk.eyJ1Ijoic3dwcmFjdGljZTIyIiwiYSI6ImNsMjRmODJtYzB5YzgzYm1teGJkazI0MnAifQ.Zr3rQpkx7dplU_KDYkBz5A';
-            // Create a new map.
-            const map2 = new mapboxgl.Map({
+        }
+
+        function addInsetLayer(bounds) {
+            insetMap.addSource("boundsSource", {
+                type: "geojson",
+                data: bounds,
+            });
+
+            insetMap.addLayer({
+                id: "boundsLayer",
+                type: "fill",
+                source: "boundsSource", // reference the data source
+                layout: {},
+                paint: {
+                    "fill-color": "#fff",
+                    "fill-opacity": 0.2,
+                },
+            });
+            // Add a black outline around the polygon.
+            insetMap.addLayer({
+                id: "outlineLayer",
+                type: "line",
+                source: "boundsSource",
+                layout: {},
+                paint: {
+                    "line-color": "#000",
+                    "line-width": 1,
+                },
+            });
+        }
+
+        function updateInsetLayer(bounds) {
+            insetMap.getSource("boundsSource").setData(bounds);
+        }
+
+        // setup resize event
+        window.addEventListener("resize", scroller.resize);
+    </script>
+
+    <!-- Animate a point along a route -->
+    <div id="map1"></div>
+    <div class="overlay">
+        <button id="replay">Replay</button>
+    </div>
+    <script>
+        mapboxgl.accessToken = 'pk.eyJ1Ijoic3dwcmFjdGljZTIyIiwiYSI6ImNsMjRmODJtYzB5YzgzYm1teGJkazI0MnAifQ.Zr3rQpkx7dplU_KDYkBz5A';
+        const map1 = new mapboxgl.Map({
+            container: 'map1',
+            style: 'mapbox://styles/mapbox/streets-v11',
+            center: [-2.30685, 54.25695],
+            zoom: 3
+        });
+
+        // China
+        const origin = [105.88597, 35.14203];
+        // Japan
+        const origin1 = [140.32102, 36.20331];
+        // Singapore
+        const origin2 = [103.85338, 1.33280];
+        // US
+        const origin3 = [-98.02535, 39.05059];
+        // Canada
+        const origin4 = [-109.15288, 59.85914];
+        // Germany
+        const origin5 = [10.65355, 50.96338];
+        // Netherlands
+        const origin6 = [5.73171, 52.05367];
+        // France
+        const origin7 = [3.95916, 47.20650];
+        // Brazil
+        const origin8 = [-52.54898, -13.01003];
+        // Chile
+        const origin9 = [-70.32699, -25.91699];
+        // Kenya
+        const origin10 = [37.99519, 0.06608];
+        // Australia
+        const origin11 = [137.33283, -24.80944];
+
+        // UK
+        const destination = [-2.30685, 54.25695];
+
+        // A simple line from origin to destination.
+        const route = {
+            'type': 'FeatureCollection',
+            'features': [
+                {
+                    'type': 'Feature',
+                    'geometry': {
+                        'type': 'LineString',
+                        'coordinates': [origin, destination]
+                    }
+                }
+            ]
+        };
+        const route1 = {
+            'type': 'FeatureCollection',
+            'features': [
+                {
+                    'type': 'Feature',
+                    'geometry': {
+                        'type': 'LineString',
+                        'coordinates': [origin1, destination]
+                    }
+                }
+            ]
+        };
+        const route2 = {
+            'type': 'FeatureCollection',
+            'features': [
+                {
+                    'type': 'Feature',
+                    'geometry': {
+                        'type': 'LineString',
+                        'coordinates': [origin2, destination]
+                    }
+                }
+            ]
+        };
+        const route3 = {
+            'type': 'FeatureCollection',
+            'features': [
+                {
+                    'type': 'Feature',
+                    'geometry': {
+                        'type': 'LineString',
+                        'coordinates': [origin3, destination]
+                    }
+                }
+            ]
+        };
+        const route4 = {
+            'type': 'FeatureCollection',
+            'features': [
+                {
+                    'type': 'Feature',
+                    'geometry': {
+                        'type': 'LineString',
+                        'coordinates': [origin4, destination]
+                    }
+                }
+            ]
+        };
+        const route5 = {
+            'type': 'FeatureCollection',
+            'features': [
+                {
+                    'type': 'Feature',
+                    'geometry': {
+                        'type': 'LineString',
+                        'coordinates': [origin5, destination]
+                    }
+                }
+            ]
+        };
+        const route6 = {
+            'type': 'FeatureCollection',
+            'features': [
+                {
+                    'type': 'Feature',
+                    'geometry': {
+                        'type': 'LineString',
+                        'coordinates': [origin6, destination]
+                    }
+                }
+            ]
+        };
+        const route7 = {
+            'type': 'FeatureCollection',
+            'features': [
+                {
+                    'type': 'Feature',
+                    'geometry': {
+                        'type': 'LineString',
+                        'coordinates': [origin7, destination]
+                    }
+                }
+            ]
+        };
+        const route8 = {
+            'type': 'FeatureCollection',
+            'features': [
+                {
+                    'type': 'Feature',
+                    'geometry': {
+                        'type': 'LineString',
+                        'coordinates': [origin8, destination]
+                    }
+                }
+            ]
+        };
+        const route9 = {
+            'type': 'FeatureCollection',
+            'features': [
+                {
+                    'type': 'Feature',
+                    'geometry': {
+                        'type': 'LineString',
+                        'coordinates': [origin9, destination]
+                    }
+                }
+            ]
+        };
+        const route10 = {
+            'type': 'FeatureCollection',
+            'features': [
+                {
+                    'type': 'Feature',
+                    'geometry': {
+                        'type': 'LineString',
+                        'coordinates': [origin10, destination]
+                    }
+                }
+            ]
+        };
+        const route11 = {
+            'type': 'FeatureCollection',
+            'features': [
+                {
+                    'type': 'Feature',
+                    'geometry': {
+                        'type': 'LineString',
+                        'coordinates': [origin11, destination]
+                    }
+                }
+            ]
+        };
+
+        // Coordinates are initially set to origin.
+        const point = {
+            'type': 'FeatureCollection',
+            'features': [
+                {
+                    'type': 'Feature',
+                    'properties': {},
+                    'geometry': {
+                        'type': 'Point',
+                        'coordinates': origin
+                    }
+                }
+            ]
+        };
+        const point1 = {
+            'type': 'FeatureCollection',
+            'features': [
+                {
+                    'type': 'Feature',
+                    'properties': {},
+                    'geometry': {
+                        'type': 'Point',
+                        'coordinates': origin1
+                    }
+                }
+            ]
+        };
+        const point2 = {
+            'type': 'FeatureCollection',
+            'features': [
+                {
+                    'type': 'Feature',
+                    'properties': {},
+                    'geometry': {
+                        'type': 'Point',
+                        'coordinates': origin2
+                    }
+                }
+            ]
+        };
+        const point3 = {
+            'type': 'FeatureCollection',
+            'features': [
+                {
+                    'type': 'Feature',
+                    'properties': {},
+                    'geometry': {
+                        'type': 'Point',
+                        'coordinates': origin3
+                    }
+                }
+            ]
+        };
+        const point4 = {
+            'type': 'FeatureCollection',
+            'features': [
+                {
+                    'type': 'Feature',
+                    'properties': {},
+                    'geometry': {
+                        'type': 'Point',
+                        'coordinates': origin4
+                    }
+                }
+            ]
+        };
+        const point5 = {
+            'type': 'FeatureCollection',
+            'features': [
+                {
+                    'type': 'Feature',
+                    'properties': {},
+                    'geometry': {
+                        'type': 'Point',
+                        'coordinates': origin5
+                    }
+                }
+            ]
+        };
+        const point6 = {
+            'type': 'FeatureCollection',
+            'features': [
+                {
+                    'type': 'Feature',
+                    'properties': {},
+                    'geometry': {
+                        'type': 'Point',
+                        'coordinates': origin6
+                    }
+                }
+            ]
+        };
+        const point7 = {
+            'type': 'FeatureCollection',
+            'features': [
+                {
+                    'type': 'Feature',
+                    'properties': {},
+                    'geometry': {
+                        'type': 'Point',
+                        'coordinates': origin7
+                    }
+                }
+            ]
+        };
+        const point8 = {
+            'type': 'FeatureCollection',
+            'features': [
+                {
+                    'type': 'Feature',
+                    'properties': {},
+                    'geometry': {
+                        'type': 'Point',
+                        'coordinates': origin8
+                    }
+                }
+            ]
+        };
+        const point9 = {
+            'type': 'FeatureCollection',
+            'features': [
+                {
+                    'type': 'Feature',
+                    'properties': {},
+                    'geometry': {
+                        'type': 'Point',
+                        'coordinates': origin9
+                    }
+                }
+            ]
+        };
+        const point10 = {
+            'type': 'FeatureCollection',
+            'features': [
+                {
+                    'type': 'Feature',
+                    'properties': {},
+                    'geometry': {
+                        'type': 'Point',
+                        'coordinates': origin10
+                    }
+                }
+            ]
+        };
+        const point11 = {
+            'type': 'FeatureCollection',
+            'features': [
+                {
+                    'type': 'Feature',
+                    'properties': {},
+                    'geometry': {
+                        'type': 'Point',
+                        'coordinates': origin11
+                    }
+                }
+            ]
+        };
+        // Calculate the distance in kilometers between route start/end point.
+        const lineDistance = turf.length(route.features[0]);
+        const lineDistance1 = turf.length(route1.features[0]);
+        const lineDistance2 = turf.length(route2.features[0]);
+        const lineDistance3 = turf.length(route3.features[0]);
+        const lineDistance4 = turf.length(route4.features[0]);
+        const lineDistance5 = turf.length(route5.features[0]);
+        const lineDistance6 = turf.length(route6.features[0]);
+        const lineDistance7 = turf.length(route7.features[0]);
+        const lineDistance8 = turf.length(route8.features[0]);
+        const lineDistance9 = turf.length(route9.features[0]);
+        const lineDistance10 = turf.length(route10.features[0]);
+        const lineDistance11 = turf.length(route11.features[0]);
+
+        const arc = [];
+        const arc1 = [];
+        const arc2 = [];
+        const arc3 = [];
+        const arc4 = [];
+        const arc5 = [];
+        const arc6 = [];
+        const arc7 = [];
+        const arc8 = [];
+        const arc9 = [];
+        const arc10 = [];
+        const arc11 = [];
+
+        // Number of steps to use in the arc and animation, more steps means
+        // a smoother arc and animation, but too many steps will result in a
+        // low frame rate
+        const steps = 500;
+        const steps1 = 500;
+        const steps2 = 500;
+        const steps3 = 500;
+        const steps4 = 500;
+        const steps5 = 500;
+        const steps6 = 500;
+        const steps7 = 500;
+        const steps8 = 500;
+        const steps9 = 500;
+        const steps10 = 500;
+        const steps11 = 500;
+
+        // Draw an arc between the `origin` & `destination` of the two points
+        for (let i = 0; i < lineDistance; i += lineDistance / steps) {
+            const segment = turf.along(route.features[0], i);
+            arc.push(segment.geometry.coordinates);
+        }
+        for (let i = 0; i < lineDistance1; i += lineDistance1 / steps1) {
+            const segment1 = turf.along(route1.features[0], i);
+            arc1.push(segment1.geometry.coordinates);
+        }
+        for (let i = 0; i < lineDistance2; i += lineDistance2 / steps2) {
+            const segment2 = turf.along(route2.features[0], i);
+            arc2.push(segment2.geometry.coordinates);
+        }
+        for (let i = 0; i < lineDistance3; i += lineDistance3 / steps3) {
+            const segment3 = turf.along(route3.features[0], i);
+            arc3.push(segment3.geometry.coordinates);
+        }
+        for (let i = 0; i < lineDistance4; i += lineDistance4 / steps4) {
+            const segment4 = turf.along(route4.features[0], i);
+            arc4.push(segment4.geometry.coordinates);
+        }
+        for (let i = 0; i < lineDistance5; i += lineDistance5 / steps5) {
+            const segment5 = turf.along(route5.features[0], i);
+            arc5.push(segment5.geometry.coordinates);
+        }
+        for (let i = 0; i < lineDistance6; i += lineDistance6 / steps6) {
+            const segment6 = turf.along(route6.features[0], i);
+            arc6.push(segment6.geometry.coordinates);
+        }
+        for (let i = 0; i < lineDistance7; i += lineDistance7 / steps7) {
+            const segment7 = turf.along(route7.features[0], i);
+            arc7.push(segment7.geometry.coordinates);
+        }
+        for (let i = 0; i < lineDistance8; i += lineDistance8 / steps8) {
+            const segment8 = turf.along(route8.features[0], i);
+            arc8.push(segment8.geometry.coordinates);
+        }
+        for (let i = 0; i < lineDistance9; i += lineDistance9 / steps9) {
+            const segment9 = turf.along(route9.features[0], i);
+            arc9.push(segment9.geometry.coordinates);
+        }
+        for (let i = 0; i < lineDistance10; i += lineDistance10 / steps10) {
+            const segment10 = turf.along(route10.features[0], i);
+            arc10.push(segment10.geometry.coordinates);
+        }
+        for (let i = 0; i < lineDistance11; i += lineDistance11 / steps11) {
+            const segment11 = turf.along(route11.features[0], i);
+            arc11.push(segment11.geometry.coordinates);
+        }
+
+        console.log(arc)
+        console.log(arc1)
+        console.log(arc2)
+        console.log(arc3)
+        console.log(arc4)
+        console.log(arc5)
+        console.log(arc6)
+        console.log(arc7)
+        console.log(arc8)
+        console.log(arc9)
+        console.log(arc10)
+        console.log(arc11)
+
+        // Update the route with calculated arc coordinates
+        route.features[0].geometry.coordinates = arc;
+        route1.features[0].geometry.coordinates = arc1;
+        route2.features[0].geometry.coordinates = arc2;
+        route3.features[0].geometry.coordinates = arc3;
+        route4.features[0].geometry.coordinates = arc4;
+        route5.features[0].geometry.coordinates = arc5;
+        route6.features[0].geometry.coordinates = arc6;
+        route7.features[0].geometry.coordinates = arc7;
+        route8.features[0].geometry.coordinates = arc8;
+        route9.features[0].geometry.coordinates = arc9;
+        route10.features[0].geometry.coordinates = arc10;
+        route11.features[0].geometry.coordinates = arc11;
+
+        // Used to increment the value of the point measurement against the route.
+        let counter = 0;
+        let counter1 = 0;
+        let counter2 = 0;
+        let counter3 = 0;
+        let counter4 = 0;
+        let counter5 = 0;
+        let counter6 = 0;
+        let counter7 = 0;
+        let counter8 = 0;
+        let counter9 = 0;
+        let counter10 = 0;
+        let counter11 = 0;
+
+
+        map.on('load', () => {
+
+
+            // Add a source and layer displaying a point which will be animated in a circle.
+            map.addSource('route', {
+                'type': 'geojson',
+                'data': route
+            });
+            map.addSource('route1', {
+                'type': 'geojson',
+                'data': route1
+            });
+            map.addSource('route2', {
+                'type': 'geojson',
+                'data': route2
+            });
+            map.addSource('route3', {
+                'type': 'geojson',
+                'data': route3
+            });
+            map.addSource('route4', {
+                'type': 'geojson',
+                'data': route4
+            });
+            map.addSource('route5', {
+                'type': 'geojson',
+                'data': route5
+            });
+            map.addSource('route6', {
+                'type': 'geojson',
+                'data': route6
+            });
+            map.addSource('route7', {
+                'type': 'geojson',
+                'data': route7
+            });
+            map.addSource('route8', {
+                'type': 'geojson',
+                'data': route8
+            });
+            map.addSource('route9', {
+                'type': 'geojson',
+                'data': route9
+            });
+            map.addSource('route10', {
+                'type': 'geojson',
+                'data': route10
+            });
+            map.addSource('route11', {
+                'type': 'geojson',
+                'data': route11
+            });
+
+            map.addSource('point', {
+                'type': 'geojson',
+                'data': point
+            });
+            map.addSource('point1', {
+                'type': 'geojson',
+                'data': point1
+            });
+            map.addSource('point2', {
+                'type': 'geojson',
+                'data': point2
+            });
+            map.addSource('point3', {
+                'type': 'geojson',
+                'data': point3
+            });
+            map.addSource('point4', {
+                'type': 'geojson',
+                'data': point4
+            });
+            map.addSource('point5', {
+                'type': 'geojson',
+                'data': point5
+            });
+            map.addSource('point6', {
+                'type': 'geojson',
+                'data': point6
+            });
+            map.addSource('point7', {
+                'type': 'geojson',
+                'data': point7
+            });
+            map.addSource('point8', {
+                'type': 'geojson',
+                'data': point8
+            });
+            map.addSource('point9', {
+                'type': 'geojson',
+                'data': point9
+            });
+            map.addSource('point10', {
+                'type': 'geojson',
+                'data': point10
+            });
+            map.addSource('point11', {
+                'type': 'geojson',
+                'data': point11
+            });
+
+            map.addLayer({
+                'id': 'route',
+                'source': 'route',
+                'type': 'line',
+                'paint': {
+                    'line-width': 2,
+                    'line-color': '#007cbf'
+                }
+            });
+            map.addLayer({
+                'id': 'route1',
+                'source': 'route1',
+                'type': 'line',
+                'paint': {
+                    'line-width': 2,
+                    'line-color': '#007cbf'
+                }
+            });
+            map.addLayer({
+                'id': 'route2',
+                'source': 'route2',
+                'type': 'line',
+                'paint': {
+                    'line-width': 2,
+                    'line-color': '#007cbf'
+                }
+            });
+            map.addLayer({
+                'id': 'route3',
+                'source': 'route3',
+                'type': 'line',
+                'paint': {
+                    'line-width': 2,
+                    'line-color': '#007cbf'
+                }
+            });
+            map.addLayer({
+                'id': 'route4',
+                'source': 'route4',
+                'type': 'line',
+                'paint': {
+                    'line-width': 2,
+                    'line-color': '#007cbf'
+                }
+            });
+            map.addLayer({
+                'id': 'route5',
+                'source': 'route5',
+                'type': 'line',
+                'paint': {
+                    'line-width': 2,
+                    'line-color': '#007cbf'
+                }
+            });
+            map.addLayer({
+                'id': 'route6',
+                'source': 'route6',
+                'type': 'line',
+                'paint': {
+                    'line-width': 2,
+                    'line-color': '#007cbf'
+                }
+            });
+            map.addLayer({
+                'id': 'route7',
+                'source': 'route7',
+                'type': 'line',
+                'paint': {
+                    'line-width': 2,
+                    'line-color': '#007cbf'
+                }
+            });
+            map.addLayer({
+                'id': 'route8',
+                'source': 'route8',
+                'type': 'line',
+                'paint': {
+                    'line-width': 2,
+                    'line-color': '#007cbf'
+                }
+            });
+            map.addLayer({
+                'id': 'route9',
+                'source': 'route9',
+                'type': 'line',
+                'paint': {
+                    'line-width': 2,
+                    'line-color': '#007cbf'
+                }
+            });
+            map.addLayer({
+                'id': 'route10',
+                'source': 'route10',
+                'type': 'line',
+                'paint': {
+                    'line-width': 2,
+                    'line-color': '#007cbf'
+                }
+            });
+            map.addLayer({
+                'id': 'route11',
+                'source': 'route11',
+                'type': 'line',
+                'paint': {
+                    'line-width': 2,
+                    'line-color': '#007cbf'
+                }
+            });
+
+            //add airplane symbol
+            map.addLayer({
+                'id': 'point',
+                'source': 'point',
+                'type': 'symbol',
+                'layout': {
+                    'icon-image': 'airport-15',
+                    'icon-rotate': ['get', 'bearing'],
+                    'icon-rotation-alignment': 'map',
+                    'icon-allow-overlap': true,
+                    'icon-ignore-placement': true
+                }
+            });
+            map.addLayer({
+                'id': 'point1',
+                'source': 'point1',
+                'type': 'symbol',
+                'layout': {
+                    'icon-image': 'airport-15',
+                    'icon-rotate': ['get', 'bearing'],
+                    'icon-rotation-alignment': 'map',
+                    'icon-allow-overlap': true,
+                    'icon-ignore-placement': true
+                }
+            });
+            map.addLayer({
+                'id': 'point2',
+                'source': 'point2',
+                'type': 'symbol',
+                'layout': {
+                    'icon-image': 'airport-15',
+                    'icon-rotate': ['get', 'bearing'],
+                    'icon-rotation-alignment': 'map',
+                    'icon-allow-overlap': true,
+                    'icon-ignore-placement': true
+                }
+            });
+            map.addLayer({
+                'id': 'point3',
+                'source': 'point3',
+                'type': 'symbol',
+                'layout': {
+                    'icon-image': 'airport-15',
+                    'icon-rotate': ['get', 'bearing'],
+                    'icon-rotation-alignment': 'map',
+                    'icon-allow-overlap': true,
+                    'icon-ignore-placement': true
+                }
+            });
+            map.addLayer({
+                'id': 'point4',
+                'source': 'point4',
+                'type': 'symbol',
+                'layout': {
+                    'icon-image': 'airport-15',
+                    'icon-rotate': ['get', 'bearing'],
+                    'icon-rotation-alignment': 'map',
+                    'icon-allow-overlap': true,
+                    'icon-ignore-placement': true
+                }
+            });
+            map.addLayer({
+                'id': 'point5',
+                'source': 'point5',
+                'type': 'symbol',
+                'layout': {
+                    'icon-image': 'airport-15',
+                    'icon-rotate': ['get', 'bearing'],
+                    'icon-rotation-alignment': 'map',
+                    'icon-allow-overlap': true,
+                    'icon-ignore-placement': true
+                }
+            });
+            map.addLayer({
+                'id': 'poin6t',
+                'source': 'point6',
+                'type': 'symbol',
+                'layout': {
+                    'icon-image': 'airport-15',
+                    'icon-rotate': ['get', 'bearing'],
+                    'icon-rotation-alignment': 'map',
+                    'icon-allow-overlap': true,
+                    'icon-ignore-placement': true
+                }
+            });
+            map.addLayer({
+                'id': 'point7',
+                'source': 'point7',
+                'type': 'symbol',
+                'layout': {
+                    'icon-image': 'airport-15',
+                    'icon-rotate': ['get', 'bearing'],
+                    'icon-rotation-alignment': 'map',
+                    'icon-allow-overlap': true,
+                    'icon-ignore-placement': true
+                }
+            });
+            map.addLayer({
+                'id': 'point8',
+                'source': 'point8',
+                'type': 'symbol',
+                'layout': {
+                    'icon-image': 'airport-15',
+                    'icon-rotate': ['get', 'bearing'],
+                    'icon-rotation-alignment': 'map',
+                    'icon-allow-overlap': true,
+                    'icon-ignore-placement': true
+                }
+            });
+            map.addLayer({
+                'id': 'point9',
+                'source': 'point9',
+                'type': 'symbol',
+                'layout': {
+                    'icon-image': 'airport-15',
+                    'icon-rotate': ['get', 'bearing'],
+                    'icon-rotation-alignment': 'map',
+                    'icon-allow-overlap': true,
+                    'icon-ignore-placement': true
+                }
+            });
+            map.addLayer({
+                'id': 'point10',
+                'source': 'point10',
+                'type': 'symbol',
+                'layout': {
+                    'icon-image': 'airport-15',
+                    'icon-rotate': ['get', 'bearing'],
+                    'icon-rotation-alignment': 'map',
+                    'icon-allow-overlap': true,
+                    'icon-ignore-placement': true
+                }
+            });
+            map.addLayer({
+                'id': 'point11',
+                'source': 'point11',
+                'type': 'symbol',
+                'layout': {
+                    'icon-image': 'airport-15',
+                    'icon-rotate': ['get', 'bearing'],
+                    'icon-rotation-alignment': 'map',
+                    'icon-allow-overlap': true,
+                    'icon-ignore-placement': true
+                }
+            });
+
+            function animate() {
+                const start =
+                    route.features[0].geometry.coordinates[
+                    counter >= steps ? counter - 1 : counter
+                    ];
+                const end =
+                    route.features[0].geometry.coordinates[
+                    counter >= steps ? counter : counter + 1
+                    ];
+                if (!start || !end) return;
+                // Update point geometry to a new position based on counter denoting
+                // the index to access the arc
+                point.features[0].geometry.coordinates =
+                    route.features[0].geometry.coordinates[counter];
+                point1.features[0].geometry.coordinates =
+                    route1.features[0].geometry.coordinates[counter];
+                // Calculate the bearing to ensure the icon is rotated to match the route arc
+                // The bearing is calculated between the current point and the next point, except
+                // at the end of the arc, which uses the previous point and the current point
+                point.features[0].properties.bearing = turf.bearing(
+                    turf.point(start),
+                    turf.point(end)
+                );
+                // Update the source with this new data
+                map.getSource('point').setData(point);
+
+                // Request the next frame of animation as long as the end has not been reached
+                if (counter < steps) {
+                    requestAnimationFrame(animate);
+                }
+                counter = counter + 1;
+            }
+            function animate1() {
+                const start1 =
+                    route1.features[0].geometry.coordinates[
+                    counter1 >= steps1 ? counter1 - 1 : counter1
+                    ];
+                const end1 =
+                    route1.features[0].geometry.coordinates[
+                    counter1 >= steps1 ? counter1 : counter1 + 1
+                    ];
+                if (!start1 || !end1) return;
+                point1.features[0].geometry.coordinates =
+                    route1.features[0].geometry.coordinates[counter1];
+                point1.features[0].properties.bearing = turf.bearing(
+                    turf.point(start1),
+                    turf.point(end1)
+                );
+                map.getSource('point1').setData(point1);
+                if (counter1 < steps1) {
+                    requestAnimationFrame(animate1);
+                }
+                counter1 = counter1 + 1;
+            }
+            function animate2() {
+                const start2 =
+                    route2.features[0].geometry.coordinates[
+                    counter2 >= steps2 ? counter2 - 1 : counter2
+                    ];
+                const end2 =
+                    route2.features[0].geometry.coordinates[
+                    counter2 >= steps2 ? counter2 : counter2 + 1
+                    ];
+                if (!start2 || !end2) return;
+                point2.features[0].geometry.coordinates =
+                    route2.features[0].geometry.coordinates[counter2];
+                point2.features[0].properties.bearing = turf.bearing(
+                    turf.point(start2),
+                    turf.point(end2)
+                );
+                map.getSource('point2').setData(point2);
+                if (counter2 < steps2) {
+                    requestAnimationFrame(animate2);
+                }
+                counter2 = counter2 + 1;
+            }
+            function animate3() {
+                const start3 =
+                    route3.features[0].geometry.coordinates[
+                    counter3 >= steps3 ? counter3 - 1 : counter3
+                    ];
+                const end3 =
+                    route3.features[0].geometry.coordinates[
+                    counter3 >= steps3 ? counter3 : counter3 + 1
+                    ];
+                if (!start3 || !end3) return;
+                point3.features[0].geometry.coordinates =
+                    route3.features[0].geometry.coordinates[counter3];
+                point3.features[0].properties.bearing = turf.bearing(
+                    turf.point(start3),
+                    turf.point(end3)
+                );
+                map.getSource('point3').setData(point3);
+                if (counter3 < steps3) {
+                    requestAnimationFrame(animate3);
+                }
+                counter3 = counter3 + 1;
+            }
+            function animate4() {
+                const start4 =
+                    route4.features[0].geometry.coordinates[
+                    counter4 >= steps4 ? counter4 - 1 : counter4
+                    ];
+                const end4 =
+                    route4.features[0].geometry.coordinates[
+                    counter4 >= steps4 ? counter4 : counter4 + 1
+                    ];
+                if (!start4 || !end4) return;
+                point4.features[0].geometry.coordinates =
+                    route4.features[0].geometry.coordinates[counter4];
+                point4.features[0].properties.bearing = turf.bearing(
+                    turf.point(start4),
+                    turf.point(end4)
+                );
+                map.getSource('point4').setData(point4);
+                if (counter4 < steps4) {
+                    requestAnimationFrame(animate4);
+                }
+                counter4 = counter4 + 1;
+            }
+            function animate5() {
+                const start5 =
+                    route5.features[0].geometry.coordinates[
+                    counter5 >= steps5 ? counter5 - 1 : counter5
+                    ];
+                const end5 =
+                    route5.features[0].geometry.coordinates[
+                    counter5 >= steps5 ? counter5 : counter5 + 1
+                    ];
+                if (!start5 || !end5) return;
+                point5.features[0].geometry.coordinates =
+                    route5.features[0].geometry.coordinates[counter5];
+                point5.features[0].properties.bearing = turf.bearing(
+                    turf.point(start5),
+                    turf.point(end5)
+                );
+                map.getSource('point5').setData(point5);
+                if (counter5 < steps5) {
+                    requestAnimationFrame(animate5);
+                }
+                counter5 = counter5 + 1;
+            }
+            function animate6() {
+                const start6 =
+                    route6.features[0].geometry.coordinates[
+                    counter6 >= steps6 ? counter6 - 1 : counter6
+                    ];
+                const end6 =
+                    route6.features[0].geometry.coordinates[
+                    counter6 >= steps6 ? counter6 : counter6 + 1
+                    ];
+                if (!start6 || !end6) return;
+                point6.features[0].geometry.coordinates =
+                    route6.features[0].geometry.coordinates[counter6];
+                point6.features[0].properties.bearing = turf.bearing(
+                    turf.point(start6),
+                    turf.point(end6)
+                );
+                map.getSource('point6').setData(point6);
+                if (counter6 < steps6) {
+                    requestAnimationFrame(animate6);
+                }
+                counter6 = counter6 + 1;
+            }
+            function animate7() {
+                const start7 =
+                    route7.features[0].geometry.coordinates[
+                    counter7 >= steps7 ? counter7 - 1 : counter7
+                    ];
+                const end7 =
+                    route7.features[0].geometry.coordinates[
+                    counter7 >= steps7 ? counter7 : counter7 + 1
+                    ];
+                if (!start7 || !end7) return;
+                point7.features[0].geometry.coordinates =
+                    route7.features[0].geometry.coordinates[counter7];
+                point7.features[0].properties.bearing = turf.bearing(
+                    turf.point(start7),
+                    turf.point(end7)
+                );
+                map.getSource('point7').setData(point7);
+                if (counter7 < steps7) {
+                    requestAnimationFrame(animate7);
+                }
+                counter7 = counter7 + 1;
+            }
+            function animate8() {
+                const start8 =
+                    route8.features[0].geometry.coordinates[
+                    counter8 >= steps8 ? counter8 - 1 : counter8
+                    ];
+                const end8 =
+                    route8.features[0].geometry.coordinates[
+                    counter8 >= steps8 ? counter8 : counter8 + 1
+                    ];
+                if (!start8 || !end8) return;
+                point8.features[0].geometry.coordinates =
+                    route8.features[0].geometry.coordinates[counter8];
+                point8.features[0].properties.bearing = turf.bearing(
+                    turf.point(start8),
+                    turf.point(end8)
+                );
+                map.getSource('point8').setData(point8);
+                if (counter8 < steps8) {
+                    requestAnimationFrame(animate8);
+                }
+                counter8 = counter8 + 1;
+            }
+            function animate9() {
+                const start9 =
+                    route9.features[0].geometry.coordinates[
+                    counter9 >= steps9 ? counter9 - 1 : counter9
+                    ];
+                const end9 =
+                    route9.features[0].geometry.coordinates[
+                    counter9 >= steps9 ? counter9 : counter9 + 1
+                    ];
+                if (!start9 || !end9) return;
+                point9.features[0].geometry.coordinates =
+                    route9.features[0].geometry.coordinates[counter9];
+                point9.features[0].properties.bearing = turf.bearing(
+                    turf.point(start9),
+                    turf.point(end9)
+                );
+                map.getSource('point9').setData(point9);
+                if (counter9 < steps9) {
+                    requestAnimationFrame(animate9);
+                }
+                counter9 = counter9 + 1;
+            }
+            function animate10() {
+                const start10 =
+                    route10.features[0].geometry.coordinates[
+                    counter10 >= steps10 ? counter10 - 1 : counter10
+                    ];
+                const end10 =
+                    route10.features[0].geometry.coordinates[
+                    counter10 >= steps10 ? counter10 : counter10 + 1
+                    ];
+                if (!start10 || !end10) return;
+                point10.features[0].geometry.coordinates =
+                    route10.features[0].geometry.coordinates[counter10];
+                point10.features[0].properties.bearing = turf.bearing(
+                    turf.point(start10),
+                    turf.point(end10)
+                );
+                map.getSource('point10').setData(point10);
+                if (counter10 < steps10) {
+                    requestAnimationFrame(animate10);
+                }
+                counter10 = counter10 + 1;
+            }
+            function animate11() {
+                const start11 =
+                    route11.features[0].geometry.coordinates[
+                    counter11 >= steps11 ? counter11 - 1 : counter11
+                    ];
+                const end11 =
+                    route11.features[0].geometry.coordinates[
+                    counter11 >= steps11 ? counter11 : counter11 + 1
+                    ];
+                if (!start11 || !end11) return;
+                point11.features[0].geometry.coordinates =
+                    route11.features[0].geometry.coordinates[counter11];
+                point11.features[0].properties.bearing = turf.bearing(
+                    turf.point(start11),
+                    turf.point(end11)
+                );
+                map.getSource('point11').setData(point11);
+                if (counter11 < steps11) {
+                    requestAnimationFrame(animate11);
+                }
+                counter11 = counter11 + 1;
+            }
+
+            document.getElementById('replay').addEventListener('click', () => {
+                // Set the coordinates of the original point back to origin
+                point.features[0].geometry.coordinates = origin;
+                // Update the source layer
+                map.getSource('point').setData(point);
+                // Reset the counter
+                counter = 0;
+                // Restart the animation
+                animate(counter);
+            });
+            document.getElementById('replay').addEventListener('click', () => {
+                point1.features[0].geometry.coordinates = origin1;
+                map.getSource('point1').setData(point1);
+                counter1 = 0;
+                animate1(counter1);
+            });
+            document.getElementById('replay').addEventListener('click', () => {
+                point2.features[0].geometry.coordinates = origin2;
+                map.getSource('point2').setData(point2);
+                counter2 = 0;
+                animate2(counter2);
+            });
+            document.getElementById('replay').addEventListener('click', () => {
+                point3.features[0].geometry.coordinates = origin3;
+                map.getSource('point3').setData(point3);
+                counter3 = 0;
+                animate3(counter3);
+            });
+            document.getElementById('replay').addEventListener('click', () => {
+                point4.features[0].geometry.coordinates = origin4;
+                map.getSource('point4').setData(point4);
+                counter4 = 0;
+                animate4(counter4);
+            });
+            document.getElementById('replay').addEventListener('click', () => {
+                point5.features[0].geometry.coordinates = origin5;
+                map.getSource('point5').setData(point5);
+                counter5 = 0;
+                animate5(counter5);
+            });
+            document.getElementById('replay').addEventListener('click', () => {
+                point6.features[0].geometry.coordinates = origin6;
+                map.getSource('point6').setData(point6);
+                counter6 = 0;
+                animate6(counter6);
+            });
+            document.getElementById('replay').addEventListener('click', () => {
+                point7.features[0].geometry.coordinates = origin7;
+                map.getSource('point7').setData(point7);
+                counter7 = 0;
+                animate7(counter7);
+            });
+            document.getElementById('replay').addEventListener('click', () => {
+                point8.features[0].geometry.coordinates = origin8;
+                map.getSource('point8').setData(point8);
+                counter8 = 0;
+                animate8(counter8);
+            });
+            document.getElementById('replay').addEventListener('click', () => {
+                point9.features[0].geometry.coordinates = origin9;
+                map.getSource('point9').setData(point9);
+                counter9 = 0;
+                animate9(counter9);
+            });
+            document.getElementById('replay').addEventListener('click', () => {
+                point10.features[0].geometry.coordinates = origin10;
+                map.getSource('point10').setData(point10);
+                counter10 = 0;
+                animate10(counter10);
+            });
+            document.getElementById('replay').addEventListener('click', () => {
+                point11.features[0].geometry.coordinates = origin11;
+                map.getSource('point11').setData(point11);
+                counter11 = 0;
+                animate11(counter11);
+            });
+
+            // Start the animation
+            animate(counter);
+            animate1(counter1);
+            animate2(counter2);
+            animate3(counter3);
+            animate4(counter4);
+            animate5(counter5);
+            animate6(counter6);
+            animate7(counter7);
+            animate8(counter8);
+            animate9(counter9);
+            animate10(counter10);
+            animate11(counter11);
+        });
+    </script>
+
+    <!-- Show polygon information on click -->
+    <div id="map2"></div>
+    <script>
+        mapboxgl.accessToken = 'pk.eyJ1Ijoic3dwcmFjdGljZTIyIiwiYSI6ImNsMjRmODJtYzB5YzgzYm1teGJkazI0MnAifQ.Zr3rQpkx7dplU_KDYkBz5A';
+        // Create a new map.
+        const map2 = new mapboxgl.Map({
             container: 'map2',
             style: 'mapbox://styles/mapbox/streets-v11',
             center: [-2.30685, 54.25695],
             zoom: 3
-            });
+        });
 
-            map.on('load', () => {
+        map.on('load', () => {
             // Add a source for the country polygons.
             map.addSource('country', {
-            'type': 'geojson',
-            'data': './a.geojson'
+                'type': 'geojson',
+                'data': './a.geojson'
             });
 
             // Add a layer showing the country polygons.
             map.addLayer({
-            'id': 'country-layer',
-            'type': 'fill',
-            'source': 'country',
-            'paint': {
-            'fill-color': 'rgba(107, 184, 174, 0.41)',
-            'fill-outline-color': 'rgba(107, 184, 174, 1)'
-            }
-        }, 
-        'waterway-label'
-        );
+                'id': 'country-layer',
+                'type': 'fill',
+                'source': 'country',
+                'paint': {
+                    'fill-color': 'rgba(107, 184, 174, 0.41)',
+                    'fill-outline-color': 'rgba(107, 184, 174, 1)'
+                }
+            },
+                'waterway-label'
+            );
 
             // When a click event occurs on a feature in the country layer,
             // open a popup at the location of the click, with description
             // HTML from the click event's properties.
             map.on('click', 'country-layer', (e) => {
-            new mapboxgl.Popup()
-            .setLngLat(e.lngLat)
-            .setHTML(e.features[0].properties.name)
-            .addTo(map);
+                new mapboxgl.Popup()
+                    .setLngLat(e.lngLat)
+                    .setHTML("<h3> Country: " + e.features[0].properties.COUNTRY + "</h3>")
+                    .addTo(map);
             });
 
             // Change the cursor to a pointer when
             // the mouse is over the country layer.
             map.on('mouseenter', 'country-layer', () => {
-            map.getCanvas().style.cursor = 'pointer';
+                map.getCanvas().style.cursor = 'pointer';
             });
 
             // Change the cursor back to a pointer
             // when it leaves the country layer.
             map.on('mouseleave', 'country-layer', () => {
-            map.getCanvas().style.cursor = '';
+                map.getCanvas().style.cursor = '';
             });
-            });
-            </script>
+        });
+    </script>
 
-  </body>
+</body>
+
 </html>
