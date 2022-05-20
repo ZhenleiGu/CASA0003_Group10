@@ -234,6 +234,11 @@
                         Milk Products ($531M), Ceramic Bricks ($139M), Other Vegetable Residues and Waste ($126M), and
                         Non-Retail Carded Wool Yarn ($64M).
                     </p>
+                    <p class="credit" style="color:gray; font-size:10px;font-weight: bold; font-family:Monospace;">
+                        Data: <a href="https://wits.worldbank.org/CountryProfile/en/Country/GBR/Year/LTST/TradeFlow/Import/Partner/by-country/Product/16-24_FoodProd" target="_blank" style="color:grey;font-size:9px;">World Bank</a>
+                        &nbsp;&nbsp;&nbsp;&nbsp;
+                        Shape Data: <a href="https://www.naturalearthdata.com/downloads/50m-cultural-vectors/50m-admin-0-countries-2/" style="color:grey; font-size:9px;" target="_blank">Natural Earth</a>
+                    </p>
                 </div>
             </div>
             <!-- Asia -->
@@ -733,9 +738,9 @@
                     if (config.showMarkers) {
                         marker.setLngLat(chapter.location.center);
                     }
-                    if (chapter.onChapterEnter.length > 0) {
-                        chapter.onChapterEnter.forEach(setLayerOpacity);
-                    }
+                    // if (chapter.onChapterEnter.length > 0) {
+                    //     chapter.onChapterEnter.forEach(setLayerOpacity);
+                    // }
                     if (chapter.callback) {
                         window[chapter.callback]();
                     }
@@ -751,15 +756,15 @@
                         });
                     }
                 })
-                .onStepExit((response) => {
-                    var chapter = config.chapters.find(
-                        (chap) => chap.id === response.element.id
-                    );
-                    response.element.classList.remove("active");
-                    if (chapter.onChapterExit.length > 0) {
-                        chapter.onChapterExit.forEach(setLayerOpacity);
-                    }
-                });
+                // .onStepExit((response) => {
+                //     var chapter = config.chapters.find(
+                //         (chap) => chap.id === response.element.id
+                //     );
+                //     response.element.classList.remove("active");
+                //     if (chapter.onChapterExit.length > 0) {
+                //         chapter.onChapterExit.forEach(setLayerOpacity);
+                //     }
+                // });
 
         });
 
