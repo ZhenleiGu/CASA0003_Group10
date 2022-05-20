@@ -337,10 +337,10 @@ The toggleSidebar() function removes this class from the element in order to exp
         map.on('load', () => {
             // Add a geojson point source.
             // Heatmap layers also work with a vector tile source.
-            map.addSource('restr', {
-                'type': 'geojson',
-                'data': './filtered_res_data.geojson'
-            });
+            // map.addSource('restr', {
+            //     'type': 'geojson',
+            //     'data': './filtered_res_data.geojson'
+            // });
 
             const filterGroup = document.getElementById('filter-group');
             var list = [
@@ -527,7 +527,7 @@ The toggleSidebar() function removes this class from the element in order to exp
         });
 
 
-        new mapboxgl.Marker().setLngLat(center).addTo(map);
+        // new mapboxgl.Marker().setLngLat(center).addTo(map);
 
         function toggleSidebar(id) {
             const elem = document.getElementById(id);
