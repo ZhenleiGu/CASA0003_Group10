@@ -38,6 +38,41 @@
             margin-right: 5px;
             width: 10px;
         }
+
+        .legend-box {
+            position: relative;
+            /* bottom: 20px;
+            left: 200px; */
+            z-index: 1;
+            display: flex;
+            color:black;
+        }
+
+        .legend-item {
+            width: 30px;
+            height: 10px;
+            border: 1px solid #a5a5a5;
+        }
+
+        .row {
+			height: 10px;
+			width: 100%;
+		}
+
+        .label {
+			width: 15%;
+			display: inline-block;
+			text-align: center;
+            font-size: 10px;
+            /* transform: rotate(20deg); */
+            font-weight: bold;
+		}
+
+        .colors {
+			background: linear-gradient(to right, #ffffe5, #fff7bc, #fee391, #fec44f, #fe9929, #ec7014,#cc4c02,#993404,#662506);
+			margin-bottom: 2px;
+		}
+
     </style>
 
 
@@ -307,6 +342,29 @@
                         Milk Products ($531M), Ceramic Bricks ($139M), Other Vegetable Residues and Waste ($126M), and
                         Non-Retail Carded Wool Yarn ($64M).
                     </p>
+                    <div class='session' id='heatlegend'>
+                        <h3>Export trade value</h3>
+                        <div class='row colors'>
+                        <!-- </div>
+                        <div class='row labels'> -->
+                            <div class='label' style="font-size:10px;">0</div>
+                            <div class='label'>1,000,000K</div>
+                            <div class='label'>2,500,000K</div>
+                            <!-- <div class='label'>3,500,000K</div>
+                            <div class='label'>100,000,00K</div>
+                            <div class='label'>30,000,000K</div>
+                            <div class='label'>50,000,000K</div> -->
+                            <div class='label'>65,000,000K</div>
+                            <div class='label'>70,000,000K</div>
+                            <div class='label'>90,000,000K</div>
+                        </div>
+                    </div>
+                    <br \>
+                    <p class="credit" style="color:gray; font-size:10px;font-weight: bold; font-family:Monospace;">
+                        Data: <a href="https://wits.worldbank.org/CountryProfile/en/Country/GBR/Year/LTST/TradeFlow/Import/Partner/by-country/Product/16-24_FoodProd" target="_blank" style="color:grey;font-size:9px;">World Bank</a>
+                        &nbsp;&nbsp;&nbsp;&nbsp;
+                        Shape Data: <a href="https://www.naturalearthdata.com/downloads/50m-cultural-vectors/50m-admin-0-countries-2/" style="color:grey; font-size:9px;" target="_blank">Natural Earth</a>
+                    </p>
                 </div>
             </div>
             <!-- Asia -->
@@ -334,6 +392,25 @@
                         November 2021 the top imports of China from United Kingdom were Cars ($627M), Crude Petroleum
                         ($593M), Beauty Products ($216M), Packaged Medicaments ($138M), and Gas Turbines ($64M).</br>
                     </p>
+
+                    <div class='session' id='heatlegend'>
+                        <h3>Export trade value</h3>
+                        <div class='row colors'>
+                        <!-- </div>
+                        <div class='row labels'> -->
+                            <div class='label' style="font-size:10px;">0</div>
+                            <div class='label'>1,000,000K</div>
+                            <div class='label'>2,500,000K</div>
+                            <!-- <div class='label'>3,500,000K</div>
+                            <div class='label'>100,000,00K</div>
+                            <div class='label'>30,000,000K</div>
+                            <div class='label'>50,000,000K</div> -->
+                            <div class='label'>65,000,000K</div>
+                            <div class='label'>70,000,000K</div>
+                            <div class='label'>90,000,000K</div>
+                        </div>
+                    </div>
+                    <br \>
                 </div>
             </div>
 
@@ -364,6 +441,25 @@
                             Kingdom were Gas Turbines (¥7.02B), Packaged Medicaments (¥5.35B), Blood, antisera,
                             vaccines, toxins and cultures (¥4.19B), Cars (¥3.13B), and Hard Liquor (¥2.36B).</br>
                         </p>
+
+                        <div class='session' id='heatlegend'>
+                            <h3>Export trade value</h3>
+                            <div class='row colors'>
+                            <!-- </div>
+                            <div class='row labels'> -->
+                                <div class='label' style="font-size:10px;">0</div>
+                                <div class='label'>1,000,000K</div>
+                                <div class='label'>2,500,000K</div>
+                                <!-- <div class='label'>3,500,000K</div>
+                                <div class='label'>100,000,00K</div>
+                                <div class='label'>30,000,000K</div>
+                                <div class='label'>50,000,000K</div> -->
+                                <div class='label'>65,000,000K</div>
+                                <div class='label'>70,000,000K</div>
+                                <div class='label'>90,000,000K</div>
+                            </div>
+                        </div>
+                        <br \>
                     </div>
                 </div>
             </div>
@@ -2243,6 +2339,7 @@
             });
         });
     </script>
+
 
     <div id="country-legend" class="legend">
         <h4>Export trade value</h4>
