@@ -13,6 +13,34 @@
     <script src="https://unpkg.com/scrollama"></script>
     <script type="text/javascript" src="https://assets.pyecharts.org/assets/echarts.min.js"></script>
 
+    <!-- colorbar -->
+    <style>
+        .legend {
+            background-color: rgb(255, 255, 255);
+            border-radius: 3px;
+            bottom: 30px;
+            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+            font: 12px/20px 'Helvetica Neue', Arial, Helvetica, sans-serif;
+            padding: 10px;
+            position: absolute;
+            right: 10px;
+            z-index: 1;
+        }
+
+        .legend h4 {
+            margin: 0 0 10px;
+        }
+
+        .legend div span {
+            border-radius: 50%;
+            display: inline-block;
+            height: 10px;
+            margin-right: 5px;
+            width: 10px;
+        }
+    </style>
+
+
     <style>
         body {
             margin: 0;
@@ -33,10 +61,55 @@
             position: fixed;
         }
 
-        .mapboxgl-popup {
-            max-width: 400px;
-            font: 12px/20px "Helvetica Neue", Arial, Helvetica, sans-serif;
-        }
+        .mapboxgl-popup-content {
+        /* overflow-y: scroll; */
+        max-height: 280px;
+        width: 100%;
+        background-color: #d8d8d8ce;
+        font-family: 'Open Sans', sans-serif;
+        
+    }
+
+    .mapboxgl-popup-content h2 {
+        color:rgb(70, 70, 70);
+    }
+
+    .mapboxgl-popup-content h3 {
+        color:rgb(70, 70, 70);
+    }
+
+    .mapboxgl-popup-content table {
+      /*border:1px solid rgb(92, 91, 91);*/
+      text-align: center;
+      width:33%;
+      color:rgb(70, 70, 70);
+      border-collapse: collapse;
+    }
+
+    .mapboxgl-popup-content tr {
+        border-bottom: 1px solid rgb(224, 224, 224);
+    }
+
+    .mapboxgl-popup-content tr:hover  {
+        background-color: #a3b9b9;
+    }
+
+    .mapboxgl-popup-content th {
+      color:rgb(70, 70, 70);
+      /*border:1px solid rgb(92, 91, 91);*/
+      padding: 5px;
+      text-align: center;
+      width:33%;
+    }
+
+    .mapboxgl-popup-content td {
+      /*border:1px solid rgb(92, 91, 91);*/
+      padding: 5px;
+      text-align: center;
+      width:33%;
+      color:rgb(70, 70, 70);
+    }
+    
 
         /* #mapInset {
           bottom: 50px;
@@ -177,8 +250,8 @@
             box-shadow: none;
         }
     </style>
-    <!-- Animate a point along a route -->
 
+    <!-- Animate a point along a route -->
     <style>
         .overlay {
             position: absolute;
@@ -234,11 +307,6 @@
                         Milk Products ($531M), Ceramic Bricks ($139M), Other Vegetable Residues and Waste ($126M), and
                         Non-Retail Carded Wool Yarn ($64M).
                     </p>
-                    <p class="credit" style="color:gray; font-size:10px;font-weight: bold; font-family:Monospace;">
-                        Data: <a href="https://wits.worldbank.org/CountryProfile/en/Country/GBR/Year/LTST/TradeFlow/Import/Partner/by-country/Product/16-24_FoodProd" target="_blank" style="color:grey;font-size:9px;">World Bank</a>
-                        &nbsp;&nbsp;&nbsp;&nbsp;
-                        Shape Data: <a href="https://www.naturalearthdata.com/downloads/50m-cultural-vectors/50m-admin-0-countries-2/" style="color:grey; font-size:9px;" target="_blank">Natural Earth</a>
-                    </p>
                 </div>
             </div>
             <!-- Asia -->
@@ -246,7 +314,9 @@
             <div id="first-identifier" class="step lefty active" data-scrollama-index="1">
                 <div class="light">
                     <div id="AS" class="chart-container" style="width: 500px; height: 300px;">
-                        <p><h3>Value Changes of UK imports from Asia from 1995 to 2019</h3></p>
+                        <p>
+                        <h3>Value Changes of UK imports from Asia from 1995 to 2019</h3>
+                        </p>
                         <p><iframe id="barchart" src="chart/china.html" frameBorder="0" height="350px"
                                 width="500px"></iframe></p>
                     </div>
@@ -269,31 +339,43 @@
 
 
             <!-- Japan -->
-            <div id="second-identifier" class="step lefty active" data-scrollama-index="2"> 
-            <div class="light">
-              <div id="AS1" class="chart-container" style="width: 500px; height: 300px">
-                <p><h3>Value Changes of UK imports from Asia from 1995 to 2019</h3></p>
-                <p><iframe id="japan" src="chart/japan.html" frameBorder="0" height="350px"
-                        width="500px"></iframe></p>
-            </div>
-                <br \>
-                <div>
-                <h1>Japan</h1>
-                <p style=text-indent:25px>
-                In 2020, Japan exported $10.4B to United Kingdom. The main products that Japan exported to United Kingdom are Gold ($2.38B), Cars ($1.9B), and Gas Turbines ($429M). During the last 25 years the exports of Japan to United Kingdom have decreased at an annualized rate of 1.25%, from $14.3B in 1995 to $10.4B in 2020.</br>
-                </p><p style=text-indent:25px>
-                In February 2022, the top exports of Japan to United Kingdom were Cars (¥16.2B), Commodities not elsewhere specified (¥10.9B), Gold (¥7.03B), Gas Turbines (¥6.05B), and Large Construction Vehicles (¥4.89B). In February 2022 the top imports of Japan from United Kingdom were Gas Turbines (¥7.02B), Packaged Medicaments (¥5.35B), Blood, antisera, vaccines, toxins and cultures (¥4.19B), Cars (¥3.13B), and Hard Liquor (¥2.36B).</br>
-                </p>
+            <div id="second-identifier" class="step lefty active" data-scrollama-index="2">
+                <div class="light">
+                    <div id="AS1" class="chart-container" style="width: 500px; height: 300px">
+                        <p>
+                        <h3>Value Changes of UK imports from Asia from 1995 to 2019</h3>
+                        </p>
+                        <p><iframe id="japan" src="chart/japan.html" frameBorder="0" height="350px"
+                                width="500px"></iframe></p>
+                    </div>
+                    <br \>
+                    <div>
+                        <h1>Japan</h1>
+                        <p style=text-indent:25px>
+                            In 2020, Japan exported $10.4B to United Kingdom. The main products that Japan exported to
+                            United Kingdom are Gold ($2.38B), Cars ($1.9B), and Gas Turbines ($429M). During the last 25
+                            years the exports of Japan to United Kingdom have decreased at an annualized rate of 1.25%,
+                            from $14.3B in 1995 to $10.4B in 2020.</br>
+                        </p>
+                        <p style=text-indent:25px>
+                            In February 2022, the top exports of Japan to United Kingdom were Cars (¥16.2B), Commodities
+                            not elsewhere specified (¥10.9B), Gold (¥7.03B), Gas Turbines (¥6.05B), and Large
+                            Construction Vehicles (¥4.89B). In February 2022 the top imports of Japan from United
+                            Kingdom were Gas Turbines (¥7.02B), Packaged Medicaments (¥5.35B), Blood, antisera,
+                            vaccines, toxins and cultures (¥4.19B), Cars (¥3.13B), and Hard Liquor (¥2.36B).</br>
+                        </p>
+                    </div>
                 </div>
             </div>
-        </div>
 
 
             <!-- Singapore -->
             <div id="third-identifier" class="step lefty active" data-scrollama-index="3">
                 <div class="light">
                     <div id="AS2" class="chart-container" style="width: 500px; height: 300px;">
-                        <p><h3>Value Changes of UK imports from Asia from 1995 to 2019</h3></p>
+                        <p>
+                        <h3>Value Changes of UK imports from Asia from 1995 to 2019</h3>
+                        </p>
                         <p><iframe id="singapore" src="chart/sin.html" frameBorder="0" height="350px"
                                 width="500px"></iframe></p>
                     </div>
@@ -308,14 +390,18 @@
                     </p>
                 </div>
             </div>
+        </div>
 
         <!-- North America -->
         <!-- US -->
         <div id="fourth-identifier" class="step lefty active" data-scrollama-index="4">
             <div class="light">
                 <div id="NA" class="chart-container" style="width: 500px; height: 300px">
-                    <p><h3>Value Changes of UK imports from North America 
-                        <br>from 1995 to 2019</h3></p>
+                    <p>
+                    <h3>Value Changes of UK imports from North America
+                        <br>from 1995 to 2019
+                    </h3>
+                    </p>
                     <p><iframe id="US" src="chart/US.html" frameBorder="0" height="350px" width="500px"></iframe></p>
                 </div>
                 <br \><br \>
@@ -343,9 +429,13 @@
         <div class="light">
 
             <div id="NA1" class="chart-container" style="width: 500px; height: 300px">
-                <p><h3>Value Changes of UK imports from North America 
-                    <br>from 1995 to 2019</h3></p>
-                <p><iframe id="canada" src="chart/canada.html" frameBorder="0" height="350px" width="500px"></iframe></p>
+                <p>
+                <h3>Value Changes of UK imports from North America
+                    <br>from 1995 to 2019
+                </h3>
+                </p>
+                <p><iframe id="canada" src="chart/canada.html" frameBorder="0" height="350px" width="500px"></iframe>
+                </p>
             </div>
             <br \><br \>
             <h1>Canada</h1>
@@ -371,8 +461,11 @@
     <div id="sixth-identifier" class="step lefty active" data-scrollama-index="6">
         <div class="light">
             <div id="EU" class="chart-container" style="width: 500px; height: 300px">
-                <p><h3>Value Changes of UK imports from Europe from 1995 to 2019</h3></p>
-                <p><iframe id="germany" src="chart/Germany.html" frameBorder="0" height="350px" width="500px"></iframe></p>
+                <p>
+                <h3>Value Changes of UK imports from Europe from 1995 to 2019</h3>
+                </p>
+                <p><iframe id="germany" src="chart/Germany.html" frameBorder="0" height="350px" width="500px"></iframe>
+                </p>
             </div>
             <br \>
             <h1>Germany</h1>
@@ -399,7 +492,9 @@
     <div id="seventh-identifier" class="step lefty active" data-scrollama-index="7">
         <div class="light">
             <div id="EU1" class="chart-container" style="width:500px; height: 300px">
-                <p><h3>Value Changes of UK imports from Europe from 1995 to 2019</h3></p>
+                <p>
+                <h3>Value Changes of UK imports from Europe from 1995 to 2019</h3>
+                </p>
                 <p><iframe id="netherlands" src="chart/Netherlands.html" frameBorder="0" height="380px"
                         width="500px"></iframe></p>
             </div>
@@ -419,8 +514,11 @@
     <div id="eighth-identifier" class="step lefty active" data-scrollama-index="8">
         <div class="light">
             <div id="EU2" class="chart-container" style="width: 500px; height: 300px">
-                <p><h3>Value Changes of UK imports from Europe from 1995 to 2019</h3></p>
-                <p><iframe id="france" src="chart/France.html" frameBorder="0" height="350px" width="500px"></iframe></p>
+                <p>
+                <h3>Value Changes of UK imports from Europe from 1995 to 2019</h3>
+                </p>
+                <p><iframe id="france" src="chart/France.html" frameBorder="0" height="350px" width="500px"></iframe>
+                </p>
             </div>
             <br \>
             <h1>France</h1>
@@ -439,8 +537,11 @@
     <div id="ninth-identifier" class="step lefty active" data-scrollama-index="9">
         <div class="light">
             <div id="SA" class="chart-container" style="width: 500px; height: 300px">
-                <p><h3>Value Changes of UK imports from South America 
-                    <br>from 1995 to 2019</h3></p>
+                <p>
+                <h3>Value Changes of UK imports from South America
+                    <br>from 1995 to 2019
+                </h3>
+                </p>
                 <p><iframe id="Brazil" src="chart/Brazil.html" frameBorder="0" height="350px" width="500px"></iframe>
                 </p>
             </div>
@@ -465,8 +566,11 @@
     <div id="tenth-identifier" class="step lefty active" data-scrollama-index="10">
         <div class="light">
             <div id="SA1" class="chart-container" style="width: 500px; height: 300px">
-                <p><h3>Value Changes of UK imports from South America 
-                    <br>from 1995 to 2019</h3></p>
+                <p>
+                <h3>Value Changes of UK imports from South America
+                    <br>from 1995 to 2019
+                </h3>
+                </p>
                 <p><iframe id="Chile" src="chart/Chile.html" frameBorder="0" height="350px" width="500px"></iframe></p>
             </div>
             <br \><br \>
@@ -491,7 +595,9 @@
     <div id="eleventh-identifier" class="step lefty active" data-scrollama-index="11">
         <div class="light">
             <div id="AF" class="chart-container" style="width: 500px; height: 300px">
-                <p><h3>Value Changes of UK imports from Africa from 1995 to 2019</h3></p>
+                <p>
+                <h3>Value Changes of UK imports from Africa from 1995 to 2019</h3>
+                </p>
                 <p><iframe id="Kenya" src="chart/AF.html" frameBorder="0" height="350px" width="500px"></iframe></p>
             </div>
             <br \>
@@ -513,7 +619,9 @@
         <div class="light">
 
             <div id="OC" class="chart-container" style="width: 500px; height: 300px">
-                <p><h3>Value Changes of UK imports from Oceania from 1995 to 2019</h3></p>
+                <p>
+                <h3>Value Changes of UK imports from Oceania from 1995 to 2019</h3>
+                </p>
                 <p><iframe id="Australia" src="chart/OC.html" frameBorder="0" height="350px" width="500px"></iframe></p>
             </div>
             <br \>
@@ -738,9 +846,9 @@
                     if (config.showMarkers) {
                         marker.setLngLat(chapter.location.center);
                     }
-                    // if (chapter.onChapterEnter.length > 0) {
-                    //     chapter.onChapterEnter.forEach(setLayerOpacity);
-                    // }
+                    if (chapter.onChapterEnter.length > 0) {
+                        chapter.onChapterEnter.forEach(setLayerOpacity);
+                    }
                     if (chapter.callback) {
                         window[chapter.callback]();
                     }
@@ -756,15 +864,15 @@
                         });
                     }
                 })
-                // .onStepExit((response) => {
-                //     var chapter = config.chapters.find(
-                //         (chap) => chap.id === response.element.id
-                //     );
-                //     response.element.classList.remove("active");
-                //     if (chapter.onChapterExit.length > 0) {
-                //         chapter.onChapterExit.forEach(setLayerOpacity);
-                //     }
-                // });
+                .onStepExit((response) => {
+                    var chapter = config.chapters.find(
+                        (chap) => chap.id === response.element.id
+                    );
+                    response.element.classList.remove("active");
+                    if (chapter.onChapterExit.length > 0) {
+                        chapter.onChapterExit.forEach(setLayerOpacity);
+                    }
+                });
 
         });
 
@@ -1321,7 +1429,6 @@
 
         map.on('load', () => {
 
-
             // Add a source and layer displaying a point which will be animated in a circle.
             map.addSource('route', {
                 'type': 'geojson',
@@ -1420,115 +1527,139 @@
                 'type': 'geojson',
                 'data': point11
             });
-
-            map.addLayer({
+            // 改线条粗细！！！！！！
+            map.addLayer({ //china
                 'id': 'route',
                 'source': 'route',
                 'type': 'line',
                 'paint': {
-                    'line-width': 2,
-                    'line-color': '#007cbf'
+                    // 'line-width': 7.5,
+                    'line-color': '#a25626'
                 }
-            });
-            map.addLayer({
+            },
+                'waterway-label'
+            );
+            map.addLayer({ //japan
                 'id': 'route1',
                 'source': 'route1',
                 'type': 'line',
                 'paint': {
-                    'line-width': 2,
-                    'line-color': '#007cbf'
+                    // 'line-width': 4.7,
+                    'line-color': '#da9c20'
                 }
-            });
-            map.addLayer({
+            },
+            'waterway-label'
+            );
+            map.addLayer({ //singapore
                 'id': 'route2',
                 'source': 'route2',
                 'type': 'line',
                 'paint': {
-                    'line-width': 2,
-                    'line-color': '#007cbf'
+                    // 'line-width': 2.6,
+                    'line-color': '#eed322'
                 }
-            });
-            map.addLayer({
+            },
+            'waterway-label'
+            );
+            map.addLayer({ //us
                 'id': 'route3',
                 'source': 'route3',
                 'type': 'line',
                 'paint': {
-                    'line-width': 2,
-                    'line-color': '#007cbf'
+                    // 'line-width': 6,
+                    'line-color': '#8b4225'
                 }
-            });
-            map.addLayer({
+            },
+            'waterway-label'
+            );
+            map.addLayer({ //canada
                 'id': 'route4',
                 'source': 'route4',
                 'type': 'line',
                 'paint': {
-                    'line-width': 2,
-                    'line-color': '#007cbf'
+                    // 'line-width': 7,
+                    'line-color': '#ca8323'
                 }
-            });
-            map.addLayer({
+            },
+            'waterway-label'
+            );
+            map.addLayer({ //germany
                 'id': 'route5',
                 'source': 'route5',
                 'type': 'line',
                 'paint': {
-                    'line-width': 2,
-                    'line-color': '#007cbf'
+                    // 'line-width': 8.5,
+                    'line-color': '#723122'
                 }
-            });
-            map.addLayer({
+            },
+            'waterway-label'
+            );
+            map.addLayer({ //Netherlands
                 'id': 'route6',
                 'source': 'route6',
                 'type': 'line',
                 'paint': {
-                    'line-width': 2,
-                    'line-color': '#007cbf'
+                    // 'line-width': 7.7,
+                    'line-color': '#a25626'
                 }
-            });
-            map.addLayer({
+            },
+            'waterway-label'
+            );
+            map.addLayer({ //france
                 'id': 'route7',
                 'source': 'route7',
                 'type': 'line',
                 'paint': {
-                    'line-width': 2,
-                    'line-color': '#007cbf'
+                    // 'line-width': 5.2,
+                    'line-color': '#b86b25'
                 }
-            });
-            map.addLayer({
+            },
+            'waterway-label'
+            );
+            map.addLayer({ //brazil
                 'id': 'route8',
                 'source': 'route8',
                 'type': 'line',
                 'paint': {
-                    'line-width': 2,
-                    'line-color': '#007cbf'
+                    // 'line-width': 3.2,
+                    'line-color': '#e6b71e'
                 }
-            });
-            map.addLayer({
+            },
+            'waterway-label'
+            );
+            map.addLayer({ //chile
                 'id': 'route9',
                 'source': 'route9',
                 'type': 'line',
                 'paint': {
-                    'line-width': 2,
-                    'line-color': '#007cbf'
+                    // 'line-width': 1.4,
+                    'line-color': '#f2f12d'
                 }
-            });
-            map.addLayer({
+            },
+            'waterway-label'
+            );
+            map.addLayer({ //kenya
                 'id': 'route10',
                 'source': 'route10',
                 'type': 'line',
                 'paint': {
-                    'line-width': 2,
-                    'line-color': '#007cbf'
+                    // 'line-width': 1,
+                    'line-color': '#f2f12d'
                 }
-            });
+            },
+            'waterway-label'
+            );
             map.addLayer({
                 'id': 'route11',
                 'source': 'route11',
                 'type': 'line',
                 'paint': {
-                    'line-width': 2,
-                    'line-color': '#007cbf'
+                    // 'line-width': 4.2,
+                    'line-color': '#ca8323'
                 }
-            });
+            },
+            'waterway-label'
+            );
 
             //add airplane symbol
             map.addLayer({
@@ -2060,7 +2191,7 @@
             // Add a source for the country polygons.
             map.addSource('country', {
                 'type': 'geojson',
-                'data': './a.geojson'
+                'data': './b.geojson'
             });
 
             // Add a layer showing the country polygons.
@@ -2069,8 +2200,20 @@
                 'type': 'fill',
                 'source': 'country',
                 'paint': {
-                    'fill-color': 'rgba(107, 184, 174, 0.41)',
-                    'fill-outline-color': 'rgba(107, 184, 174, 1)'
+                    'fill-color': [
+                        'interpolate',
+                        ['linear'], ['get', 'value'],
+                        0, '#F2F12D',
+                        1000000, '#EED322',
+                        2500000, '#E6B71E',
+                        3500000, '#DA9C20',
+                        10000000, '#CA8323',
+                        30000000, '#B86B25',
+                        65000000, '#A25626',
+                        70000000, '#8B4225',
+                        90000000, '#723122'
+                    ],
+                    'fill-opacity': 0.75
                 }
             },
                 'waterway-label'
@@ -2082,7 +2225,8 @@
             map.on('click', 'country-layer', (e) => {
                 new mapboxgl.Popup()
                     .setLngLat(e.lngLat)
-                    .setHTML("<h3> Country: " + e.features[0].properties.COUNTRY + "</h3>")
+                    .setHTML("<h3> Country: " + e.features[0].properties.COUNTRY + "</h3>"
+                    + "<p> 2019 Expport Value to UK: " + e.features[0].properties.value + "</p>")
                     .addTo(map);
             });
 
@@ -2099,6 +2243,19 @@
             });
         });
     </script>
+
+    <div id="country-legend" class="legend">
+        <h4>Export trade value</h4>
+        <div><span style="background-color: #723122"></span>70,000,000K - 90,000,000K</div>
+        <div><span style="background-color: #8b4225"></span>65,000,000K - 70,000,000K</div>
+        <div><span style="background-color: #a25626"></span>50,000,000K - 65,000,000K</div>
+        <div><span style="background-color: #b86b25"></span>30,000,000K - 50,000,000K</div>
+        <div><span style="background-color: #ca8323"></span>10,000,000K - 30,000,000K</div>
+        <div><span style="background-color: #da9c20"></span>3,500,000K - 100,000,00K</div>
+        <div><span style="background-color: #e6b71e"></span>2,500,000K - 3,500,000K</div>
+        <div><span style="background-color: #eed322"></span>1,000,000K - 2,500,000K</div>
+        <div><span style="background-color: #f2f12d"></span>0K - 1,000,000K</div>
+    </div>
 
 </body>
 
