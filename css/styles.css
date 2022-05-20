@@ -323,7 +323,7 @@ ul.legals li:last-child::after { content: ""; }
 /* ==========================================================================
 FlexSlider Custom CSS
 ========================================================================== */
-#servicesSlider { margin-top: 80px; margin-left: 80px; }
+#servicesSlider { margin-top: 70px; margin-left: 80px; }
 ul.slides li { margin-top: 10px; }
 /* ==========================================================================
 Waypoints
