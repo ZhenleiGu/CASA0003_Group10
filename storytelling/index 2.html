@@ -2287,7 +2287,7 @@
             // Add a source for the country polygons.
             map.addSource('country', {
                 'type': 'geojson',
-                'data': './b.geojson'
+                'data': './c.geojson'
             });
 
             // Add a layer showing the country polygons.
@@ -2298,7 +2298,7 @@
                 'paint': {
                     'fill-color': [
                         'interpolate',
-                        ['linear'], ['get', 'value'],
+                        ['linear'], ['get', '2019'],
                         0, '#F2F12D',
                         1000000, '#EED322',
                         2500000, '#E6B71E',
@@ -2321,8 +2321,30 @@
             map.on('click', 'country-layer', (e) => {
                 new mapboxgl.Popup()
                     .setLngLat(e.lngLat)
-                    .setHTML("<h3> Country: " + e.features[0].properties.COUNTRY + "</h3>"
-                    + "<p> 2019 Expport Value to UK: " + e.features[0].properties.value + "</p>")
+                    .setHTML("<h2>" + e.features[0].properties.COUNTRY +
+                         "</h2> " +
+                        "<table style=width:100%;>"+
+                         "<tr>" + "<th>Year</th>"+
+                                 "<th>Trade Value</th>"+
+                                     "</tr>"+
+                                     "<tr><th>1995</th>"+
+                                     "<td>"+ e.features[0].properties[1995] +
+                                     "k$</td>"+"</tr>"+
+                                     "<tr><th>2000</th>"+
+                                     "<td>"+ e.features[0].properties[2000] +
+                                     "k$</td>"+"</tr>"+
+                                     "<tr><th>2005</th>"+
+                                     "<td>"+ e.features[0].properties[2005] +
+                                     "k$</td>"+"</tr>"+
+                                     "<tr><th>2010</th>"+
+                                     "<td>"+ e.features[0].properties[2010] +
+                                     "k$</td>"+"</tr>"+
+                                     "<tr><th>2015</th>"+
+                                    "<td>"+ e.features[0].properties[2015] +
+                                     "k$</td>"+"</tr>"+
+                                     "<tr><th>2019</th>"+
+                                    "<td>"+ e.features[0].properties[2019] +
+                                     "k$</td>"+"</tr>"+"</table>")
                     .addTo(map);
             });
 
