@@ -311,7 +311,8 @@
                 const d_name = e.features[0].layer.id;
                 const name = list1[d_name];
                 const description = list2[d_name];
-                document.getElementById('d_c').innerHTML = name;
+                const name1 = '<h2>' + name + '</h2>'
+                document.getElementById('d_c').innerHTML = name1;
                 document.getElementById('d').innerHTML = description;
             }
             
@@ -335,18 +336,7 @@
         map.on('mouseleave', c , () => {
             map.getCanvas().style.cursor = '';
         });
-        
-        
-        map.on('click', c , (e) => {
-            d_name = e.features[0].layer.id;
-            const name = list1[d_name];
-            const description = list2[d_name];
-            document.getElementById('d_c').innerHTML = name;
-            document.getElementById('d').innerHTML = description;
             
-        });
-        
-        
         
     }
     });
